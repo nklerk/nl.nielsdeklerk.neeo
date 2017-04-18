@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+    <head>
+    </head>
+    <style>
+        h1 {
+            margin-bottom: 0;
+        }
+        .mi{
+            height: 36px;
+            width: 140px;
+            float: left;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+            padding-left: 10px;
+        }
+        .mi:hover{
+            background-color: #eef;
+        }
+        .mitxt{
+            float: left;
+            transform: translateY(9px);
+            padding-left: 10px;
+        }
+        .miico{
+            float: left;
+            transform: translateY(4px);
+        }
+
+        ul {
+            margin-top: 1em;
+            margin-left: 5%;
+        }
+
+        li {
+            background-color: #eee;
+            border: 5px solid #eee;
+            border-radius: 5px;
+            margin: 2px;
+            float: left;
+            width: 28%;
+        }
+
+        .deletedevice{
+            float: right;
+            color: #ddd;
+        }
+
+        .deletedevice:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .deletecapabilitie{
+            float: right;
+            color: #aaa;
+        }
+
+        .deletecapabilitie:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .addcapabilitie{
+            margin-left: 5%;
+            color: #444;
+        }
+        .addcapabilitie:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .addcapabilitiegroup{
+            margin-left: 5%;
+            color: #444;
+            margin-bottom: 40px;
+        }
+        .addcapabilitiegroup:hover{
+            color: #44f;
+            margin-bottom: 40px;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .savecapabilitie{
+            color: #444;
+            margin-bottom: 40px;
+            margin-right: 40px;
+            float: left;
+        }
+        .savecapabilitie:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .cancelcapabilitie{
+            color: #444;
+            margin-bottom: 40px;
+            float: left
+        }
+        .cancelcapabilitie:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+    </style>
+    <body>
+        <div class="field row">
+            <div class="mi" onclick="window_view('devices')"><div class="miico"><i class="ICON-DEVICE"></i></div><div class="mitxt">Drivers</div></div>
+            <div class="mi" onclick="window_view('adddevice')"><div class="miico"><i class="ICON-ADD"></div><div class="mitxt"></i>Add a device driver</div></div>
+            <div class="mi" onclick="window_view('info')"><div class="miico"><i class="ICON-INFO"></div><div class="mitxt"></i>Info</div></div>
+            <div class="mi" onclick="window_view('settings')"><div class="miico"><i class="ICON-MENU"></div><div class="mitxt"></i>Setting</div></div>
+        </div>
+       
+        
+        <fieldset id="Info_view" style="display: block;">
+            <legend>Super general information</legend>
+            <h1>Neeo Device Database</h1>
+            <br>
+            This APP allows you to add a virtual drivers and offer them as devices to NEEO.<br>
+            <br>
+            First crearte a new device driver. Then add some buttons, sliders or switches (capabilities) to the device driver.<br>
+            <img src="SETTINGS.PNG"/>
+            <br><br>
+            Within the NEEO app you can then add the virtual driver as a new device.
+            Open the NEEO app, go to settings, Go to Devices, tap "Add a device", search for the device, select the device you want to add, Select the room you want to add the device to and your done.<br>
+            <img src="NEEO.PNG"/>
+            <br><br>
+            After you have added the device to NEEO, all the buttons, sliders and switches will trigger the appropreate Homey flows cards.
+        </fieldset>
+        
+
+
+        <fieldset id="AddDevice_view" style="display: none;">
+            <legend>Add a new device</legend>
+            <button id="save_device_button" class="right" onclick="AddDecice_save()" style="position: relative; width: 60px;">Add</button>
+            <button id="Cancel_device_button"   class="right" onclick="AddDecice_clear()" style="top: 40px; right: -60px; position: relative; width: 60px;">Cancel</button>
+            <h1>Add a new device.</h1>
+            <br>
+            <div class="field row">
+                <label for="AddDevice_Type">Device type:</label>
+                <select id="AddDevice_Type" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 260px;">
+                    <option value="TV">Television</option>
+                    <option value="DVD">DVD Player</option>
+                    <option value="VOD">Video on demand</option>
+                    <option value="ACCESSOIRE">Accessoire</option>
+                    <option value="PROJECTOR">Projector</option>
+                    <option value="DVB">DVB</option>
+                    <option value="AVRECEIVER">A/V Receiver</option>
+                    <option value="AUDIO">Audio</option>
+                    <option value="HDMISWITCH">HDMI Switch</option>
+                    <option value="GAMECONSOLE">Game Console</option>
+                    <option value="MEDIAPLAYER">Media Player</option>
+                    <option value="SOUNDBAR">Soundbar</option>
+                    <option value="TUNER">Tuner</option>
+                    <option value="LIGHT">Light</option>
+                    <option value="THERMOSTAT">Thermostat</option>
+                    <option value="CLIMA">climate control</option>
+                </select>
+            </div>
+            <div class="field row">
+                <label for="AddDevice_Name">Device name:</label>
+                <input id="AddDevice_Name" type="text" value="" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/>
+            </div>
+            <div class="field row">
+                <label for="AddDevice_Manufactorer">Device Manufacturer:</label>
+                <input id="AddDevice_Manufactorer" type="text" value="" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/>     
+            </div>
+        </fieldset>
+        
+
+        
+        <fieldset id="Devices_view" style="display: none;">
+            <legend>Device database</legend>
+
+            <div id="Devices"></div>
+        </fieldset>
+
+        <fieldset id="Settings_view" style="display: none;">
+            <legend>Settings</legend>
+            <h2>!WARNING!</h2>
+            Normally you won't need these settings so be carfull in using them. there will be no "Are you sure?" popup messages here!
+            <div><br></div><div><br></div><div><br></div><div><br></div>
+            <h1>JSON formated configuration</h1>
+            Use this text area to backup or restore device database configurations.
+                <textarea id="jsonconfig" style="width: 90%;"></textarea>
+                <button id="settings_btn_save" class="right" onclick="settings_btn_saveconfig()" >Save</button>
+            
+            <div><br></div><div><br></div><div><br></div><div><br></div>
+            <h1>Clear database</h1>
+            !WARNING! Use this button to clear the device database. You will lose all your data without further warning.
+                <button id="settings_btn_deleteall" class="right" onclick="clear_button()">Clear database.</button>
+
+            <div><br></div><div><br></div><div><br></div><div><br></div>
+            <h1>Remove NEEO Brains</h1>
+            !WARNING! Use this button to remove NEEO brain configuration.
+                <button id="settings_btn_deletebrain" class="right" onclick="clear_brain_button()">Clear brain config.</button>
+        </fieldset>
+
+        
+        <script type="text/javascript">
+        // Variables //
+            var Settings_database;
+            var Settings_id;
+            var Settings_ready;
+
+
+
+   
+            function onHomeyReady(){
+                Homey.ready();
+                readsettings();
+            }// HOMEY ready
+
+        // GUI //
+            function window_view(displayWindow){
+                if (displayWindow == 'devices') {
+                    document.getElementById('Devices_view').style.display = 'block';
+                    devices_refresh_display()
+                } else {
+                    document.getElementById('Devices_view').style.display = 'none';
+                }
+                
+                if (displayWindow == 'info') {
+                    document.getElementById('Info_view').style.display = 'block';
+                } else {
+                    document.getElementById('Info_view').style.display = 'none';
+                }
+                
+                if (displayWindow == 'adddevice') {
+                    document.getElementById('AddDevice_view').style.display = 'block';
+                } else {
+                    document.getElementById('AddDevice_view').style.display = 'none';
+                }
+
+               if (displayWindow == 'settings') {
+                    document.getElementById('Settings_view').style.display = 'block';
+                } else {
+                    document.getElementById('Settings_view').style.display = 'none';
+                }
+            }// change active view.
+
+            function AddDecice_save(){
+                var mydevice = newDevice(document.getElementById('AddDevice_Manufactorer').value, document.getElementById('AddDevice_Name').value, document.getElementById('AddDevice_Type').value);
+                Settings_database.push(mydevice);
+                Homey.set('myDevices', Settings_database);
+                AddDecice_clear()
+            }// GUI Add device save button.
+
+            function AddDecice_clear(){
+                document.getElementById('AddDevice_Manufactorer').value = ''
+                document.getElementById('AddDevice_Name').value = ''
+                window_view('devices')
+            }// GUI Add device cancel button.
+
+            function device_cap_view_show(adapterName){
+                document.getElementById('cap_view_' + adapterName).style.display = 'block';
+                document.getElementById('cap_addbtn_' + adapterName).style.display = 'none';
+                document.getElementById('capgrp_addbtn_' + adapterName).style.display = 'none';
+            } // GUI Show the Add capabilitie view
+
+            function device_cap_view_hide(adapterName){
+                document.getElementById('cap_view_' + adapterName).style.display = 'none';
+                document.getElementById('cap_addbtn_' + adapterName).style.display = 'block';
+                document.getElementById('capgrp_addbtn_' + adapterName).style.display = 'block';
+            } // GUI Hide the Add capabilitie view
+
+            function device_capgrp_view_show(adapterName){
+                document.getElementById('capgrp_view_' + adapterName).style.display = 'block';
+                document.getElementById('cap_addbtn_' + adapterName).style.display = 'none';
+                document.getElementById('capgrp_addbtn_' + adapterName).style.display = 'none';
+            } // GUI Show the Add capabilitie view
+
+            function device_capgrp_view_hide(adapterName){
+                document.getElementById('capgrp_view_' + adapterName).style.display = 'none';
+                document.getElementById('cap_addbtn_' + adapterName).style.display = 'block';
+                document.getElementById('capgrp_addbtn_' + adapterName).style.display = 'block';
+            } // GUI Hide the Add capabilitie view
+
+            function device_cap_view_type_change(adapterName){
+                if (document.getElementById('captype_' + adapterName).value == 'slider') {
+                    document.getElementById('capslider_' + adapterName).style.display = 'block';
+                    document.getElementById('capsliderunit_' + adapterName).style.display = 'block';
+                    document.getElementById('capname_' + adapterName).value = 'Volume';
+                } 
+                if (document.getElementById('captype_' + adapterName).value == 'button') {
+                    document.getElementById('capslider_' + adapterName).style.display = 'none';
+                    document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+                    document.getElementById('capname_' + adapterName).value = 'Power On';
+                }
+                if (document.getElementById('captype_' + adapterName).value == 'switch') {
+                    document.getElementById('capslider_' + adapterName).style.display = 'none';
+                    document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+                    document.getElementById('capname_' + adapterName).value = 'Power'
+                }
+            } // GUI change type in the capabilitie view
+
+            function device_cap_save(adapterName){
+                var cname = document.getElementById('capname_' + adapterName).value
+                var ctype = document.getElementById('captype_' + adapterName).value
+                var slmax = document.getElementById('capslider_max_' + adapterName).value
+                var slunit = document.getElementById('capslider_unit_' + adapterName).value
+                device_add_cap(adapterName, cname, ctype, slmax, slunit, true);
+            } // Add, Save Capabilities
+
+            function device_add_cap(adapterName, cname, ctype, slmax, slunit, alert){
+                for (var i in Settings_database) {
+                    if (Settings_database[i].adapterName === adapterName) {
+                        var found = 0
+                        for (var z in Settings_database[i].capabilities) {
+                            if (Settings_database[i].capabilities[z].label == cname){ found = found + 1}
+                        }
+                        if (found > 0) { // Check if capabilitie name allready exist.
+                            if (alert == true) {alert("There is allready a capabilitie named: " + cname);}
+                        }else {
+                            if (ctype == 'slider') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_slider(Settings_database[i], cname, [0,Number(slmax)], slunit)) }
+                            if (ctype == 'button') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_button(Settings_database[i], cname)) }
+                            if (ctype == 'switch') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_switch(Settings_database[i], cname)) }
+                            Homey.set('myDevices', Settings_database);
+                            devices_refresh_display()
+                            window_view('devices')
+                        }
+                    }
+                }
+            }
+
+            function device_capgrp_save(adapterName, capability){
+
+                //mediacontrolls
+                //digits
+                //directions
+                //power
+                        
+                switch (capability) {
+                    case "mediacontrolls":
+                        device_add_cap(adapterName, 'PLAY', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'PAUSE', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'STOP', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'SKIP BACKWARD', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'SKIP FORWARD', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'FORWARD', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'PREVIOUS', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'NEXT', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'REVERSE', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'PLAY PAUSE TOGGLE', 'button', 0, 0, false);
+                        break; // zonder break zou de vergelijking door alle cases gaan vergelijken.
+                    case "digits":
+                        device_add_cap(adapterName, 'DIGIT 0', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 1', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 2', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 3', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 4', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 5', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 6', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 7', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 8', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'DIGIT 9', 'button', 0, 0, false);
+                        break;
+                    case "directions":
+                        device_add_cap(adapterName, 'BACK', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'CURSOR DOWN', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'CURSOR LEFT', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'CURSOR RIGHT', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'CURSOR UP', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'ENTER', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'EXIT', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'HOME', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'MENU', 'button', 0, 0, false);
+                        break;
+                    case "power":
+                        device_add_cap(adapterName, 'POWER OFF', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'POWER ON', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'POWER TOGGLE', 'button', 0, 0, false);
+                        device_add_cap(adapterName, 'REBOOT', 'button', 0, 0, false);
+                        break;
+                    default:
+                        console.log("geen match");
+                }
+            } // Add, Save Capabilities
+            
+            function capabilitie_remove(adapterName, Capname){
+                for (var i in Settings_database) {
+                    if (Settings_database[i].adapterName === adapterName) {
+                        var capabilities = []
+                        for (var z in Settings_database[i].capabilities) {
+                            if (Settings_database[i].capabilities[z].name != Capname && Settings_database[i].capabilities[z].name != Capname + '_SENSOR'){
+                                capabilities.push(Settings_database[i].capabilities[z])
+                            }
+                        }
+                        Settings_database[i].capabilities = capabilities
+                    }
+                }
+                Homey.set('myDevices', Settings_database);
+                devices_refresh_display()
+                window_view('devices')
+            } // remove, Capabilities
+
+            function devices_refresh_display() {
+                var dd = "";
+                for (var i in Settings_database) {
+                    dd = dd + '<h1>'+ Settings_database[i].manufacturer + ', ' + Settings_database[i].name + ' <i style="font-size: 11px;">' + Settings_database[i].type + '</i> <b class="deletedevice" onclick="device_remove(\'' + Settings_database[i].adapterName + '\')">Delete</b></h1>';
+                    
+                    if (Settings_database[i].capabilities.length > 0) { dd = dd + '<div style="width: 100%; margin: 0 auto; overflow: auto;"><ul style="list-style-type: none;">';};
+                    
+                    for (var ic in Settings_database[i].capabilities) {
+                        var ctype = Settings_database[i].capabilities[ic].type;
+                        if (ctype === 'slider' || ctype === 'button' || ctype === 'switch') {
+                            dd = dd + '<li><img src="ico_' + Settings_database[i].capabilities[ic].type + '.png"/>' + Settings_database[i].capabilities[ic].label;
+                            if (ctype === 'slider') { dd = dd + ' (' + Settings_database[i].capabilities[ic].slider.range[0] + '/' + Settings_database[i].capabilities[ic].slider.range[1] + ' ' + Settings_database[i].capabilities[ic].slider.unit + ')';};
+                            dd = dd + '<b class="deletecapabilitie" onclick="capabilitie_remove(\'' + Settings_database[i].adapterName + '\', \'' + Settings_database[i].capabilities[ic].name + '\')">X</b>';
+                            dd = dd + '</li>';
+                        }
+                    }
+                    if (Settings_database[i].capabilities.length > 0) { dd = dd + '</ul></div>'; };
+                    
+                    
+                    var adn = Settings_database[i].adapterName;
+                    dd = dd + '<div id="cap_view_' + adn + '" style="display: none; margin-bottom: 100px;">';
+                    dd = dd + ' <div class="field row">';
+                    dd = dd + ' <label for="captype_' + adn + '">Capabilitie type:</label>';
+                    dd = dd + ' <select id="captype_' + adn + '" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 260px;" onchange="device_cap_view_type_change(\'' + adn + '\')">';
+                    dd = dd + ' <option value="button">Button</option><option value="switch">Switch</option><option value="slider">Slider</option></select></div>';
+                    dd = dd + ' <div class="field row">';
+                    dd = dd + ' <label for="capname_' + adn + '">Capabilitie name:</label>';
+                    dd = dd + ' <input  id="capname_' + adn + '" type="text" value="Power On" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
+                    dd = dd + ' <div class="field row" id="capslider_' + adn + '" style="display: none;">';
+                    dd = dd + ' <label for="capslider_max_' + adn + '">Slider maximum value:</label>';
+                    dd = dd + ' <input  id="capslider_max_' + adn + '" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
+                    dd = dd + ' <div class="field row" id="capsliderunit_' + adn + '" style="display: none;">';
+                    dd = dd + ' <label for="capslider_unit_' + adn + '">Slider unit:</label>';
+                    dd = dd + ' <input  id="capslider_unit_' + adn + '" type="text" value="%" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
+                    dd = dd + '<div class="savecapabilitie" onclick="device_cap_save(\'' + adn + '\')" id="cap_savebtn_' + adn + '">Save</div>';
+                    dd = dd + '<div class="cancelcapabilitie" onclick="device_cap_view_hide(\'' + adn + '\')" id="cap_savebtn_' + adn + '">Cancel</div>';
+                    dd = dd + '</div>';
+                    dd = dd + '<div id="capgrp_view_' + adn + '" style="display: none; margin-bottom: 100px;">';
+                    dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_save(\'' + adn + '\', \'mediacontrolls\')">Add media controlls.</div>';
+                    dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_save(\'' + adn + '\', \'digits\')">Add digits.</div>';
+                    dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_save(\'' + adn + '\', \'directions\')">Add cursor controlls.</div>';
+                    dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_save(\'' + adn + '\', \'power\')">Add power controlls.</div>';
+                    dd = dd + '  <div class="addcapabilitie"><br></div>';
+                    dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_view_hide(\'' + adn + '\')">Cancel</div>';
+                    dd = dd + '</div>';
+                    dd = dd + '<div class="addcapabilitie" onclick="device_cap_view_show(\'' + adn + '\')" id="cap_addbtn_' + adn + '">Add a capebilitie...</div>';
+                    dd = dd + '<div class="addcapabilitiegroup" onclick="device_capgrp_view_show(\'' + adn + '\')" id="capgrp_addbtn_' + adn + '">Add a capebilitie group...</div>';
+                }
+                document.getElementById("jsonconfig").value = JSON.stringify(Settings_database)
+                document.getElementById("Devices").innerHTML = dd;
+            } // Display devices and capabilities on screen.
+
+        function settings_btn_saveconfig(){
+            Settings_database = JSON.parse(document.getElementById("jsonconfig").value)
+            Homey.set('myDevices', Settings_database);
+            devices_refresh_display()
+            window_view('devices')
+        }
+
+
+        // Device Data modifications //
+            function device_remove(adapterName){
+                var newSettings_database = []
+                for (var i in Settings_database) {
+                    if (Settings_database[i].adapterName != adapterName) {newSettings_database.push(Settings_database[i])}
+                }
+                Settings_database = newSettings_database
+                Homey.set('myDevices', Settings_database);
+                devices_refresh_display()
+                window_view('devices')
+            } // remove a device from the database
+
+            function clear_button(){
+                Settings_database = []
+                Settings_id = 0
+                Homey.set('myDevices', Settings_database)
+                Homey.set('myId', Settings_id)
+                devices_refresh_display()
+                window_view('devices')
+            } // Clear device database
+
+             function clear_brain_button(){
+                Homey.set('myNEEOs', []);
+            } // Clear device database
+
+
+        // Homey variable //
+            function readsettings(){
+                readMyDevices()
+                readMyId()
+                if (Settings_database == undefined) {
+                    setTimeout(function() {readsettings()}, 100);
+                } else {
+                    devices_refresh_display();
+                }
+            } // get both ID and Devices from homey
+
+            function readMyDevices() {
+                Homey.get('myDevices', function(err, Devices){
+                    if (Devices != null) {
+                        Settings_database = Devices
+                        
+                    } else {
+                        Settings_database = [];
+                        //Homey.set('myDevices', Settings_database);
+                    }
+                    //document.getElementById('logtextarea').value = JSON.stringify(Settings_database);
+                });
+            } // Get decixe variable from homey.
+            
+            function readMyId() {
+                Homey.get('myId', function(err, id){
+                    if (id != null) {
+                        Settings_id = id;
+                    } else {
+                        Settings_id = 0;
+                    }
+                });
+            } // Get ID Variable from homey.
+
+            function useMyId() {
+                Settings_id = Settings_id + 1;
+                Homey.set('myId', Settings_id);
+                return (Settings_id);
+            } // Get new ID and save Variable in homey.
+
+            function uniqueid(){
+                var rightNow = new Date();
+                var res = rightNow.toISOString().replace(/[\-:TZ.]/g,"");
+            } // Isnt used.
+
+
+        // NEEO Objects ///
+            function newDevice(manufacturer, name, type) {
+                var _newdevice = {};
+                _newdevice.id = useMyId();
+                _newdevice.adapterName = 'homey_' + name.replace(/ /gm,"-") + '_' + _newdevice.id;
+                _newdevice.type = type.toUpperCase();  
+                _newdevice.manufacturer = manufacturer;
+                _newdevice.name = name;
+                _newdevice.tokens = "Homey";
+                _newdevice.device = {name: name, tokens: ["Homey", "Athom"]};
+                _newdevice.setup = {};
+                _newdevice.capabilities = [];
+                return (_newdevice);
+            } // Returns device OBJECT
+
+            function newCapabilitie_button(device, name) {
+                var _newCapabilitie_button = {};
+                _newCapabilitie_button.type = 'button';
+                _newCapabilitie_button.name = name.toUpperCase();
+                _newCapabilitie_button.label = name; //my button
+                _newCapabilitie_button.path = "/device/" + device.adapterName + "/" + _newCapabilitie_button.name;
+                return ([_newCapabilitie_button]);
+            } // Returns device with added button OBJECT
+
+            function newCapabilitie_slider(device, name, range, unit ) {
+                var _newCapabilitie_sensor = {};
+                _newCapabilitie_sensor.type = 'sensor';
+                //_newCapabilitie_sensor.name = name.replace(/ /gm,"-").toUpperCase() + "_SENSOR"; 
+                _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
+                _newCapabilitie_sensor.label = name;
+                _newCapabilitie_sensor.path = "/device/" + device.adapterName + "/" + _newCapabilitie_sensor.name;
+                _newCapabilitie_sensor.sensor = {type:"range"};
+                _newCapabilitie_sensor.sensor.range = range;    //"range":[0,200],  
+                _newCapabilitie_sensor.sensor.unit = unit;      //"unit":"%"
+                _newCapabilitie_sensor.sensor.value = 0;
+
+                var _newCapabilitie_slider = {};
+                _newCapabilitie_slider.type = 'slider';
+                //_newCapabilitie_slider.name = name.replace(/ /gm,"-").toUpperCase();
+                _newCapabilitie_slider.name = name.toUpperCase();
+                _newCapabilitie_slider.label = name;
+                _newCapabilitie_slider.path = "/device/" + device.adapterName + "/" + _newCapabilitie_slider.name;
+                _newCapabilitie_slider.slider = {type:"range"};
+                _newCapabilitie_slider.slider.sensor = _newCapabilitie_sensor.name
+                _newCapabilitie_slider.slider.range = range;    //"range":[0,200],  
+                _newCapabilitie_slider.slider.unit = unit;      //"unit":"%"
+                return ([_newCapabilitie_sensor, _newCapabilitie_slider]);
+            } // Returns device with added slider OBJECTs            
+            
+            function newCapabilitie_switch(device, name ) {
+                var _newCapabilitie_sensor = {};
+                _newCapabilitie_sensor.type = 'sensor';
+                //_newCapabilitie_sensor.name = name.replace(/ /gm,"-").toUpperCase() + "_SENSOR"; 
+                _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
+                _newCapabilitie_sensor.label = name;
+                _newCapabilitie_sensor.path = "/device/" + device.adapterName + "/" + _newCapabilitie_sensor.name;
+                _newCapabilitie_sensor.sensor = {type:"binary"}
+                _newCapabilitie_sensor.sensor.value = false;
+                
+                var _newCapabilitie_switch = {};
+                _newCapabilitie_switch.type = 'switch';
+                //_newCapabilitie_switch.name = name.replace(/ /gm,"-").toUpperCase();
+                _newCapabilitie_switch.name = name.toUpperCase();
+                _newCapabilitie_switch.label = name;
+                _newCapabilitie_switch.path = "/device/" + device.adapterName + "/" + _newCapabilitie_switch.name;
+                _newCapabilitie_switch.sensor = _newCapabilitie_sensor.name
+                
+                return ([_newCapabilitie_sensor, _newCapabilitie_switch]);
+            } // Returns device with added switch OBJECT
+
+        </script>
+    </body>
+</html>

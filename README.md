@@ -57,3 +57,8 @@ Availeble actions:
 ## Version 0.7.1
 
 - First public beta release.
+
+
+## Version 0.7.2
+
+- fixed a bug that caused an issue when using a multi brain setup

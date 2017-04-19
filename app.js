@@ -219,7 +219,7 @@ function neeoBrain_connect(){
 			Homey.log(' NEEO brain [' + i + ']: ' + NEEOBrain.name + '(' + NEEOBrain.addresses + ')  ' + NEEOBrain.txt.reg + ' ' + NEEOBrain.txt.hon);
 			neeoBrain_register_devicedatabase(NEEOBrain);
 			neeoBrain_register_forwarderevents(NEEOBrain);
-			neeoBrain_configuration_download();
+			neeoBrain_configuration_download(NEEOBrain);
 		}
 	}
 } // Connection process to all neeo brains.
@@ -287,38 +287,41 @@ function neeoBrain_register_forwarderevents(NEEOBrain){
 	req.end();
 } // Register as event server in NEEO. (Configuring settings, Neeo Brain, Forward events.)
 
-function neeoBrain_configuration_download(){
+function neeoBrain_configuration_download(NEEOBrain){
 	Homey.manager('settings').set('downloading', true);
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
 	if (NEEOs === undefined || NEEOs.length === 0) {
 		// No NEEO Brains? Must eat brains. must eat brains.....
 	} else {
 		for (var i in NEEOs) {
-			Homey.log (' Downloading Configuration @' + NEEOs[i].addresses + '.');
-
-			var options = {
-				hostname: NEEOs[i].addresses.toString(),
-				port: 3000,
-				path: '/v1/projects/home',
-				method: 'GET',
-				headers: {'Content-Type': 'application/json'}
-			};
-			
-			var req = http.request(options, function(res) {
+			if (!NEEOBrain || NEEOBrain.addresses == NEEOs[i].addresses) {
+				var bid = i;
 				var receivedData = '';
-				res.setEncoding('utf8');
-				res.on('data', function (body) {
-					receivedData = receivedData + body;
+				Homey.log (' Downloading Configuration @' + NEEOs[bid].addresses + '.');
+				
+				var options = {
+					hostname: NEEOs[bid].addresses.toString(),
+					port: 3000,
+					path: '/v1/projects/home',
+					method: 'GET',
+					headers: {'Content-Type': 'application/json'}
+				};
+				
+				var req = http.request(options, function(res) {
+					
+					res.setEncoding('utf8');
+					res.on('data', function (body) {
+						receivedData = receivedData + body;
+					});
+					res.on('end', function () {
+						Homey.log (' Downloading Configuration @' + NEEOs[bid].addresses + ' complete.');
+						var brainConfiguration = JSON.parse(receivedData);
+						NEEOs[bid].brainConfiguration = brainConfiguration;
+					});
 				});
-				res.on('end', function () {
-					Homey.log (' Downloading Configuration @' + NEEOs[i].addresses + ' complete.');
-					var brainConfiguration = JSON.parse(receivedData);
-					NEEOs[i].brainConfiguration = brainConfiguration;
-				});
-			});
-			req.on('error', function(e) { Homey.log('problem with request: ' + e.message); });
-			req.end();
-
+				req.on('error', function(e) { Homey.log('problem with request: ' + e.message); });
+				req.end();
+			}
 		}
 		Homey.manager('settings').set('myNEEOs', NEEOs);
 	}

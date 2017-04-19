@@ -54,6 +54,6 @@ Availeble actions:
 * Inform the NEEO that a switch state of your custom driver has changed. (Visual feedback)
 
 
-## Version 1.0.0
+## Version 0.7.1
 
-- First release.
+- First public beta release.

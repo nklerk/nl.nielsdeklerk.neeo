@@ -212,7 +212,7 @@ function neeoBrain_connect(){
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
 	if (NEEOs === undefined || NEEOs.length === 0) {
 		neeoBrain_discover();
-		setTimeout(neeoBrain_connect, 30000);
+		setTimeout(neeoBrain_connect, 10000);
 	} else {
 		for (var i in NEEOs) {
 			var NEEOBrain = NEEOs[i];
@@ -222,6 +222,7 @@ function neeoBrain_connect(){
 			neeoBrain_configuration_download(NEEOBrain);
 		}
 	}
+	setTimeout(neeoBrain_connect, 600000); // 10 minutes Delay
 } // Connection process to all neeo brains.
 
 function neeoBrain_register_devicedatabase(NEEOBrain) {
@@ -251,7 +252,6 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 	req.on('error', function(e) { Homey.log('problem with request: ' + e.message); });
 	req.write(JSON.stringify(registration));
 	req.end();
-	setTimeout(neeoBrain_register_devicedatabase, 600000, NEEOBrain); // 10 minutes Delay
 } // Register Homey as Device database in NEEO
 
 function neeoBrain_register_forwarderevents(NEEOBrain){
@@ -292,13 +292,14 @@ function neeoBrain_configuration_download(NEEOBrain){
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
 	if (NEEOs === undefined || NEEOs.length === 0) {
 		// No NEEO Brains? Must eat brains. must eat brains.....
+		neeoBrain_discover();
 	} else {
 		for (var i in NEEOs) {
 			if (!NEEOBrain || NEEOBrain.addresses == NEEOs[i].addresses) {
 				var bid = i;
 				var receivedData = '';
 				Homey.log (' Downloading Configuration @' + NEEOs[bid].addresses + '.');
-				
+
 				var options = {
 					hostname: NEEOs[bid].addresses.toString(),
 					port: 3000,
@@ -704,10 +705,10 @@ function init() {
 	}); // Flow,Button dropdown / autocomplete
 	Homey.manager('flow').on('trigger.button_pressed', function (callback, args, state) {
 		if (args.device.adapterName === state.adapterName && args.capabilitie.realname === state.capabilitie) {
-            callback(null, true); // true to make the flow continue, or false to abort
+            Homey.log ('  + A flow is triggered by card "button_pressed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
+			callback(null, true); // true to make the flow continue, or false to abort
             return;
         }
-		Homey.log ('  + A flow is triggered by card "button_pressed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
         callback(null, false); // true to make the flow continue, or false to abort
     }); // Matching defined flow parameters with event parameters
 
@@ -722,10 +723,10 @@ function init() {
 	});
 	Homey.manager('flow').on('trigger.switch_changed', function (callback, args, state) {
  		if (args.device.adapterName === state.adapterName && args.capabilitie.realname === state.capabilitie) {
-            callback(null, true); // true to make the flow continue, or false to abort
+            Homey.log ('  + A flow is triggered by card "switch_changed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
+			callback(null, true); // true to make the flow continue, or false to abort
             return;
         }
-		Homey.log ('  + A flow is triggered by card "switch_changed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
         callback(null, false); // true to make the flow continue, or false to abort
     }); // Matching defined flow parameters with event parameters
 
@@ -740,11 +741,11 @@ function init() {
 	});
 	Homey.manager('flow').on('trigger.slider_changed', function (callback, args, state) {
  		if (args.device.adapterName === state.adapterName && args.capabilitie.realname === state.capabilitie) {
+			Homey.log ('  + A flow is triggered by card "slider_changed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
 			callback(null, true); // true to make the flow continue, or false to abort
             return;
         }
-		Homey.log ('  + A flow is triggered by card "slider_changed" with args: ' + state.adapterName + ', ' + state.capabilitie + '.');
-        callback(null, false); // true to make the flow continue, or false to abort
+		callback(null, false); // true to make the flow continue, or false to abort
     }); // Matching defined flow parameters with event parameters
 
 

@@ -62,3 +62,9 @@ Availeble actions:
 ## Version 0.7.2
 
 - fixed a bug that caused an issue when using a multi brain setup
+
+
+## Version 0.7.3
+
+- minor debug log changes.
+- Changed re registering to rediscovery/reconnect syclus of 10 Minutes.

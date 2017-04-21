@@ -76,7 +76,7 @@ function neeoBrain_request_device(uriparts){
 		Homey.log ('  - Received event for slider: ' + devicename + ', ' + devicefunction + '.  Value: ' + deviceparameter);
 		deviceparameter = parseInt(deviceparameter, 10); // Make sure its an integer
 		var decimalvalue = tools_math_round(deviceparameter / capabilitie.slider.range[1],2);
-		Homey.manager('flow').trigger( 'slider_changed', {'value': deviceparameter, 'decimalvalue': decimalvalue}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){ 
+		Homey.manager('flow').trigger( 'slider_changed', {'value': deviceparameter, 'decimalvalue': decimalvalue}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){
 			if( err ) return Homey.log(err); 
 		});
 		homey_system_token_set(devicename + devicefunction, devicefunction + '('+devicename+')', 'number', deviceparameter);
@@ -85,13 +85,13 @@ function neeoBrain_request_device(uriparts){
 	}
 	else if (capabilitie.type === 'switch') {
 		Homey.log ('  - Received event for switch: ' + devicename + ', ' + devicefunction + '.  Value: ' + deviceparameter);
-		var value = false;
-		if (deviceparameter === 'true') { value = true} 
-		Homey.manager('flow').trigger( 'switch_changed', {'vaue': value}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){
+		if (deviceparameter === 'true') { deviceparameter = true}
+		if (deviceparameter === 'false') { deviceparameter = false} 
+		Homey.manager('flow').trigger( 'switch_changed', {'value': deviceparameter}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){ 
 			if( err ) return Homey.error(err);
 		});
-		homey_system_token_set(devicename+devicefunction, devicefunction, 'boolean', deviceparameter);
-		neeoBrain_sensor_notify(devicename, devicefunction, deviceparameter)
+		homey_system_token_set(devicename + devicefunction, devicefunction + '('+devicename+')', 'boolean', deviceparameter);
+		neeoBrain_sensor_notify(devicename, devicefunction + '_SENSOR', deviceparameter)
 		response_data.content = database_capabilitie_setvalue(devicename, devicefunction, deviceparameter)
 	}
 	else {
@@ -256,8 +256,6 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 
 function neeoBrain_register_forwarderevents(NEEOBrain){
 	Homey.log (' Registering Homey as event server @' + NEEOBrain.addresses + '.');
-	//Homey.log (' - Debug:' + JSON.stringify(NEEOBrain));
-	//Homey.log (' ');
 
 	var registration = {}
 	registration.host = tools_ip_getlocalip();
@@ -452,7 +450,7 @@ function flow_devices_autocomplete_filter(query){
 function flow_brain_rooms_autocomplete_filter(args){
 	if (Homey.manager('settings').get('downloading') != true) {neeoBrain_configuration_download();}
 	var query = tools_string_cleanformatch(args.query)
-	Homey.log ("DEBUG: " + query)
+	//Homey.log ("DEBUG: " + query)
 	var NEEOs = Homey.manager('settings').get('myNEEOs');
 	var foundrooms = [];
 	for (var z in NEEOs) {
@@ -473,7 +471,7 @@ function flow_brain_rooms_autocomplete_filter(args){
 function flow_brain_devices_autocomplete_filter(args){
 	if (Homey.manager('settings').get('downloading') != true) {neeoBrain_configuration_download();}
 	var query = tools_string_cleanformatch(args.query)
-	Homey.log ("DEBUG: " + query)
+	//Homey.log ("DEBUG: " + query)
 	var NEEOs = Homey.manager('settings').get('myNEEOs');
 	var founddevices = [];
 	for (var z in NEEOs) {
@@ -497,7 +495,7 @@ function flow_brain_devices_autocomplete_filter(args){
 function flow_brain_macros_autocomplete_filter(args){
 	if (Homey.manager('settings').get('downloading') != true) {neeoBrain_configuration_download();}
 	var query = tools_string_cleanformatch(args.query)
-	Homey.log ("DEBUG: " + query)
+	//Homey.log ("DEBUG: " + query)
 	var NEEOs = Homey.manager('settings').get('myNEEOs');
 	var foundmacros= [];
 	for (var z in NEEOs) {
@@ -525,7 +523,7 @@ function flow_brain_macros_autocomplete_filter(args){
 function flow_brain_sliders_autocomplete_filter(args){
 	if (Homey.manager('settings').get('downloading') != true) {neeoBrain_configuration_download();}
 	var query = tools_string_cleanformatch(args.query)
-	Homey.log ("DEBUG: " + query)
+	//Homey.log ("DEBUG: " + query)
 	var NEEOs = Homey.manager('settings').get('myNEEOs');
 	var foundsliders= [];
 	for (var z in NEEOs) {
@@ -553,7 +551,7 @@ function flow_brain_sliders_autocomplete_filter(args){
 function flow_brain_switches_autocomplete_filter(args){
 	if (Homey.manager('settings').get('downloading') != true) {neeoBrain_configuration_download();}
 	var query = (args.query)
-	Homey.log ("DEBUG: " + query)
+	//Homey.log ("DEBUG: " + query)
 	var NEEOs = Homey.manager('settings').get('myNEEOs');
 	var foundswitches= [];
 	for (var z in NEEOs) {
@@ -878,6 +876,8 @@ function init() {
 	});
 	Homey.manager('flow').on('action.inform_switch', function (callback, args, state) {
 		Homey.log ('Flow event: action.inform_switch');
+		if (args.value === "true") {args.value = true};
+		if (args.value === "false") {args.value = false};
 		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
 		callback( null, true ); 
     });

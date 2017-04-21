@@ -22,49 +22,49 @@ You may leave me a donation if you love my work.
 
 ## Features
 
-Custom device Drivers:
+virtual devices:
 
-* Create custom drivers and make them availeble to NEEO.
-* Provide custom drivers with a selectable device type.
-* Add buttons to your custom drivers.
-* Add sliders to your custom drivers.
-* Add switches to your custom drivers.
-* Add predefined media buttons to your custom drivers.
-* Add predefined digit buttons to your custom drivers.
-* Add predefined power buttons to your custom drivers.
-* Add predefined navigation buttons to your custom drivers.
+* Create virtual devices and make them available to NEEO.
+* Provide the virtual device with a selectable device type. (light, TV, etc...)
+* Add buttons to your virtual devices.
+* Add sliders to your virtual devices.
+* Add switches to your virtual devices.
+* Add predefined media buttons to your virtual devices.
+* Add predefined digit buttons to your virtual devices.
+* Add predefined power buttons to your virtual devices.
+* Add predefined navigation buttons to your virtual devices.
 
 
 Availeble triggers:
 
-* When a button is pressed of any of your custom device drivers.
-* When a switch changed state of any of your custom device drivers.
-* When a slider changed value of any of your custom device drivers.
-* When a general NEEO event is triggered.
+* When a button is pressed of any of the virtual devices.
+* When a switch changed state of any of the virtual devices.
+* When a slider changed value of any of the virtual devices.
+* When a general NEEO event is triggered. (recipe activated, button pressed, slider changed, etc...)
 
 
 Availeble actions:
 
-* Activate a NEEO Recipe
-* Shutdown a NEEO Recipe (Power off)
-* Press a button
-* Change the state of a switch
-* Change the state of a slider
-* Inform the NEEO that a slider value of your custom driver has changed. (Visual feedback)
-* Inform the NEEO that a switch state of your custom driver has changed. (Visual feedback)
+* Activate a NEEO Recipe.
+* Shutdown a NEEO Recipe (Power off).
+* Press a button.
+* Change the state of a switch.
+* Change the state of a slider.
+* Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
+* Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
 
 
-## Version 0.7.1
 
-- First public beta release.
-
-
-## Version 0.7.2
-
-- fixed a bug that caused an issue when using a multi brain setup
-
+## Version 0.7.4
+- Fixed a bug where switches didn't work.
+- changed name of "drivers" to "Virtual Devices"
 
 ## Version 0.7.3
-
 - minor debug log changes.
 - Changed re registering to rediscovery/reconnect syclus of 10 Minutes.
+
+## Version 0.7.2
+- fixed a bug that caused an issue when using a multi brain setup
+
+## Version 0.7.1
+- First public beta release.

@@ -112,8 +112,8 @@
     </style>
     <body>
         <div class="field row">
-            <div class="mi" onclick="window_view('devices')"><div class="miico"><i class="ICON-DEVICE"></i></div><div class="mitxt">Drivers</div></div>
-            <div class="mi" onclick="window_view('adddevice')"><div class="miico"><i class="ICON-ADD"></div><div class="mitxt"></i>Add a device driver</div></div>
+            <div class="mi" onclick="window_view('devices')"><div class="miico"><i class="ICON-DEVICE"></i></div><div class="mitxt">virtual devices</div></div>
+            <div class="mi" onclick="window_view('adddevice')"><div class="miico"><i class="ICON-ADD"></div><div class="mitxt"></i>Add a virtual device</div></div>
             <div class="mi" onclick="window_view('info')"><div class="miico"><i class="ICON-INFO"></div><div class="mitxt"></i>Info</div></div>
             <div class="mi" onclick="window_view('settings')"><div class="miico"><i class="ICON-MENU"></div><div class="mitxt"></i>Setting</div></div>
         </div>
@@ -121,14 +121,14 @@
         
         <fieldset id="Info_view" style="display: block;">
             <legend>Super general information</legend>
-            <h1>Neeo Device Database</h1>
+            <h1>NEEO</h1>
             <br>
-            This APP allows you to add a virtual drivers and offer them as devices to NEEO.<br>
+            This APP allows you to add a virtual device driver and offer them as a devices to NEEO.<br>
             <br>
-            First crearte a new device driver. Then add some buttons, sliders or switches (capabilities) to the device driver.<br>
+            First crearte a new virtual device. Then add some buttons, sliders or switches (capabilities) to the virtual device.<br>
             <img src="SETTINGS.PNG"/>
             <br><br>
-            Within the NEEO app you can then add the virtual driver as a new device.
+            Within the NEEO app you can then add this virtual device as a new device.
             Open the NEEO app, go to settings, Go to Devices, tap "Add a device", search for the device, select the device you want to add, Select the room you want to add the device to and your done.<br>
             <img src="NEEO.PNG"/>
             <br><br>
@@ -138,10 +138,10 @@
 
 
         <fieldset id="AddDevice_view" style="display: none;">
-            <legend>Add a new device</legend>
+            <legend>Add a new virtual device.</legend>
             <button id="save_device_button" class="right" onclick="AddDecice_save()" style="position: relative; width: 60px;">Add</button>
             <button id="Cancel_device_button"   class="right" onclick="AddDecice_clear()" style="top: 40px; right: -60px; position: relative; width: 60px;">Cancel</button>
-            <h1>Add a new device.</h1>
+            <h1>Add a new virtual device.</h1>
             <br>
             <div class="field row">
                 <label for="AddDevice_Type">Device type:</label>
@@ -177,7 +177,7 @@
 
         
         <fieldset id="Devices_view" style="display: none;">
-            <legend>Device database</legend>
+            <legend>Virtual devices</legend>
 
             <div id="Devices"></div>
         </fieldset>

@@ -198,6 +198,15 @@
           "placeholder":{ "en": "Recipe"}
 			}]
 		},
+    {
+			"id": "poweroff_all_recipes",
+			"title": {
+				"en": "Shutdown all active recipes."
+			},
+      "hint": {
+				"en": "This card will shutdown all active NEEO recipe. (Power off)"
+			}
+		},
 		{
 			"id": "command_button",
 			"title": {

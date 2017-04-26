@@ -396,6 +396,30 @@ function tools_http_get_forget(method, host, port, path, content){
 	req.end();
 } // Download configuration (JSON) from neeo brain
 
+function tools_http_json (method, host, port, path, content, callback){
+	var response_data = "";
+	var options = {
+		hostname: host,
+		port: port,
+		path: path,
+		method: method,
+		headers: {'Content-Type': 'application/json'}
+	};	
+	var req = http.request(options, function(res) {
+		var receivedData = '';
+		res.setEncoding('utf8');
+		res.on('data', function (body) {
+			response_data = response_data + body;
+		});
+		res.on('end', function () {
+			callback(res, response_data);
+		});
+	});
+	req.on('error', function(e) { Homey.log('problem with request: ' + e.message); });
+	if (content) {req.write(JSON.stringify(content));}
+	req.end();
+} // Download configuration (JSON) from neeo brain
+
 function tools_string_cleanformatch(textstring){
 	textstring = textstring.toLowerCase();
 	textstring = textstring.replace(/(\s|\t| |,|\(|\))/gm,""); 
@@ -780,6 +804,27 @@ function init() {
 		Homey.log ('  + Powering off recipe ' + args.recipe.name + '.'); 
 		tools_http_get_forget('GET', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/recipes/' + args.recipe.key + '/execute')
 		callback( null, true ); 
+    });
+
+	Homey.manager('flow').on('action.poweroff_all_recipes', function (callback) {
+		Homey.log ('+ Powering off all recipes.'); 
+		var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
+		for (var i in NEEOs){
+			tools_http_json ('GET', NEEOs[i].referer.address, 3000, '/v1/api/Recipes', null, function(res, recipies){
+				if (typeof recipies !== 'undefined'){
+					recipies = JSON.parse(recipies);
+					var url=require('url');
+					for (var x in recipies) {
+						if (recipies[x].isPoweredOn === true){
+							console.log (' - Powering off '+recipies[x].detail.devicename)
+							var a = url.parse(recipies[x].url.setPowerOff)
+							tools_http_get_forget('GET', a.hostname, a.port, a.pathname)
+						}
+					}
+				}
+				callback( null, true );
+			});
+		} 
     });
 
 	//command_button

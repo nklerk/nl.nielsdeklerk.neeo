@@ -58,6 +58,7 @@ Availeble actions:
 ## Version 0.7.4
 - Fixed a bug where switches didn't work.
 - changed name of "drivers" to "Virtual Devices"
+- Fixed a bug that causes bonjour error's.
 
 ## Version 0.7.3
 - minor debug log changes.

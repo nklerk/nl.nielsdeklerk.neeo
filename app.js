@@ -198,14 +198,19 @@ function neeoBrain_posts_event(body){
 
 function neeoBrain_discover() {
 	Homey.log (" Searching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
-	var Bonjour = require('bonjour');
-	var bonjour = new Bonjour();
-	var found = [];
-	var browser = bonjour.find({type: 'neeo'}, function(service) {
-		Homey.log (' Discovered NEEO brain ' + service.txt.hon + ' (' + service.addresses + ')  Named: ' + service.name );
-		found.push(service);
-		Homey.manager('settings').set( 'myNEEOs', found);
-	})
+	try{
+		var Bonjour = require('bonjour');
+		var bonjour = new Bonjour();
+		var found = [];
+		var browser = bonjour.find({type: 'neeo'}, function(service) {
+			Homey.log (' Discovered NEEO brain ' + service.txt.hon + ' (' + service.addresses + ')  Named: ' + service.name );
+			found.push(service);
+			Homey.manager('settings').set( 'myNEEOs', found);
+		})
+	} catch (err){
+		Homey.log("Warning! bonjour failed.")
+	}
+
 } // Discover NEEO brains
 
 function neeoBrain_connect(){
@@ -409,7 +414,7 @@ function homey_system_token_set(token_id, token_name, token_type, token_value){
 			if (err) return console.error('setValue error:', err);
 		});
 	});
-} // TEST setting a token (named tag in Homey)
+} // setting a token (named tag in Homey)
 
 function flow_capabilitie_autocomplete_filter(args, type){
 	var query = tools_string_cleanformatch(args.query); 
@@ -660,8 +665,7 @@ function database_capabilitie_setvalue(adapterName, capabilities_name, newvalue)
 			for (var y in devices[z].capabilities) {
 				if (devices[z].capabilities[y].name == capabilities_name + "_SENSOR") {
 					Homey.log('  ~ Updating database from old Value: ' + devices[z].capabilities[y].sensor.value + ' to new value: ' + newvalue);
-					devices[z].capabilities[y].sensor.value = newvalue
-					Homey.manager('flow').trigger('rain_start');
+					devices[z].capabilities[y].sensor.value = newvalue;
 				}
 			}
 		}

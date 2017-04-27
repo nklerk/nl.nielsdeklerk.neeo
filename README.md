@@ -52,15 +52,22 @@ Availeble actions:
 * Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
 * Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
 
-## Comming features.
-- A more visual way of pairing. the process is now hidden to the enduser.
+
+
+## Version 0.7.5
+- Default Capabilities will now be added when adding a new virtual device.
+- Settings page look and feel changed.
+- Added a download configuration button so you can make a backup.
+- Added setting to view connected NEEO brains.
+- Added discovery button to manually discover NEEO brains.
+- Added a delete NEEO brain function to settings.
+
 
 ## Version 0.7.4
 - Fixed a bug where switches didn't work.
 - changed name of "drivers" to "Virtual Devices"
 - Fixed a bug that causes bonjour error's.
 - Added a way to turn off all active recipies.
-
 
 ## Version 0.7.3
 - minor debug log changes.

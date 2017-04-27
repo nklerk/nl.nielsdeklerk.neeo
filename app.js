@@ -53,7 +53,7 @@ function neeoBrain_request_db(uriparts){
 	}
 
 	return (response_data);
-}
+} // NEEO request database for devices.
 
 function neeoBrain_request_device(uriparts){
 	var devicename = uriparts[2];
@@ -173,12 +173,12 @@ function neeoBrain_request_capabilities(uriparts){
 	var founddevice = database_capabilitie_getbyadaptername(uriparts[1]);
 	response_data.content = JSON.stringify(founddevice.capabilities);
 	return (response_data);
-}
+} // function to handle request for capabilities
 
 function neeoBrain_request_unknown(uriparts){
 	var response_data = {'code': 500,'Type': {'Content-Type': 'application/json'}, 'content': {'error': 'Unknown request.'}};
 	return (response_data);
-}
+} // function to handle unknown requests
 
 function neeoBrain_posts_event(body){
 	var response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
@@ -194,34 +194,56 @@ function neeoBrain_posts_event(body){
 			
 	Homey.manager('flow').trigger('received_event', { Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body});
 	return (response_data)
-}
+} // function to handle events.
+
+module.exports = {
+	api_neeo_discover: function(callback) {
+		neeoBrain_discover();
+	}
+};
 
 function neeoBrain_discover() {
 	Homey.log (" Searching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
 	try{
 		var Bonjour = require('bonjour');
 		var bonjour = new Bonjour();
-		var found = [];
 		var browser = bonjour.find({type: 'neeo'}, function(service) {
-			Homey.log (' Discovered NEEO brain ' + service.txt.hon + ' (' + service.addresses + ')  Named: ' + service.name );
-			found.push(service);
-			Homey.manager('settings').set( 'myNEEOs', found);
+			Homey.log (' Discovered NEEO brain ' + service.txt.hon + ' (' + service.referer.address + ')  Named: ' + service.name );
+			neeoBrain_Add_to_db(service);
 		})
-	} catch (err){
-		Homey.log("Warning! bonjour failed.")
+	} catch(err){
+		console.log ('ERROR! A Bonjour error happend.')
 	}
+}
 
-} // Discover NEEO brains
+function neeoBrain_Add_to_db(foundbrain) {
+	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
+	var exist = 0;
+	for (var i in NEEOs) {
+		if (NEEOs[i].txt.hon === foundbrain.txt.hon) {
+			console.log(' Updating settings of '+NEEOs[i].txt.hon);
+			NEEOs[i].referer.address = foundbrain.referer.address;
+			NEEOs[i].txt.rel = foundbrain.txt.rel;
+			NEEOs[i].txt.upd = foundbrain.txt.upd;
+			exist = exist + 1;
+		};
+	}
+	if (exist === 0) {
+		console.log(' New NEEO Brain found: ' + foundbrain.name);
+		NEEOs.push(foundbrain);
+	}
+	Homey.manager('settings').set('myNEEOs', NEEOs);
+}
 
 function neeoBrain_connect(){
-	var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
+	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
 	if (NEEOs === undefined || NEEOs.length === 0) {
 		neeoBrain_discover();
 		setTimeout(neeoBrain_connect, 10000);
 	} else {
 		for (var i in NEEOs) {
 			var NEEOBrain = NEEOs[i];
-			Homey.log(' NEEO brain [' + i + ']: ' + NEEOBrain.name + '(' + NEEOBrain.addresses + ')  ' + NEEOBrain.txt.reg + ' ' + NEEOBrain.txt.hon);
+			Homey.log(' NEEO brain [' + i + ']: ' + NEEOBrain.name + '(' + NEEOBrain.referer.address + ')  ' + NEEOBrain.txt.reg + ' ' + NEEOBrain.txt.hon);
 			neeoBrain_register_devicedatabase(NEEOBrain);
 			neeoBrain_register_forwarderevents(NEEOBrain);
 			neeoBrain_configuration_download(NEEOBrain);
@@ -231,13 +253,13 @@ function neeoBrain_connect(){
 } // Connection process to all neeo brains.
 
 function neeoBrain_register_devicedatabase(NEEOBrain) {
-	Homey.log (' Registering Homey as a device server to NEEO @' + NEEOBrain.addresses + '.');
+	Homey.log (' Registering Homey as a device server to NEEO @' + NEEOBrain.referer.address + '.');
 	var registration = {}
 	registration.name = 'Homey_Devicedatabase_' + tools_ip_getlocalip();
 	registration.baseUrl = 'http://' + tools_ip_getlocalip() + ':6336'
 	
 	var options = {
-		hostname: NEEOBrain.addresses.toString(),
+		hostname: NEEOBrain.referer.address,
 		port: 3000,
 		path: '/v1/api/registerSdkDeviceAdapter',
 		method: 'POST',
@@ -249,7 +271,7 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 		res.on('data', function (body) {
 			var reply = JSON.parse(body)
 			if (reply.success === true){
-				Homey.log(' Homey database server is succesfully registerd @' + NEEOBrain.addresses + '.');
+				Homey.log(' Homey database server is succesfully registerd @' + NEEOBrain.referer.address + '.');
 			}
 		});
 	});
@@ -260,7 +282,7 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 } // Register Homey as Device database in NEEO
 
 function neeoBrain_register_forwarderevents(NEEOBrain){
-	Homey.log (' Registering Homey as event server @' + NEEOBrain.addresses + '.');
+	Homey.log (' Registering Homey as event server @' + NEEOBrain.referer.address + '.');
 
 	var registration = {}
 	registration.host = tools_ip_getlocalip();
@@ -268,7 +290,7 @@ function neeoBrain_register_forwarderevents(NEEOBrain){
 	registration.path = "/Homey-By-Niels_de_Klerk"
 
 	var options = {
-		hostname: NEEOBrain.addresses.toString(),
+		hostname: NEEOBrain.referer.address,
 		port: 3000,
 		path: '/v1/forwardactions',
 		method: 'POST',
@@ -280,7 +302,7 @@ function neeoBrain_register_forwarderevents(NEEOBrain){
 		res.on('data', function (body) {
 			var reply = JSON.parse(body)
 			if (reply.success === true){
-				Homey.log(' Homey event server is succesfully registerd @' + NEEOBrain.addresses + '.');
+				Homey.log(' Homey event server is succesfully registerd @' + NEEOBrain.referer.address + '.');
 			}
 		});
 	});
@@ -298,13 +320,13 @@ function neeoBrain_configuration_download(NEEOBrain){
 		neeoBrain_discover();
 	} else {
 		for (var i in NEEOs) {
-			if (!NEEOBrain || NEEOBrain.addresses == NEEOs[i].addresses) {
+			if (!NEEOBrain || NEEOBrain.referer.address == NEEOs[i].referer.address) {
 				var bid = i;
 				var receivedData = '';
-				Homey.log (' Downloading Configuration @' + NEEOs[bid].addresses + '.');
+				Homey.log (' Downloading Configuration @' + NEEOs[bid].referer.address + '.');
 
 				var options = {
-					hostname: NEEOs[bid].addresses.toString(),
+					hostname: NEEOs[bid].referer.address,
 					port: 3000,
 					path: '/v1/projects/home',
 					method: 'GET',
@@ -318,7 +340,7 @@ function neeoBrain_configuration_download(NEEOBrain){
 						receivedData = receivedData + body;
 					});
 					res.on('end', function () {
-						Homey.log (' Downloading Configuration @' + NEEOs[bid].addresses + ' complete.');
+						Homey.log (' Downloading Configuration @' + NEEOs[bid].referer.address + ' complete.');
 						var brainConfiguration = JSON.parse(receivedData);
 						NEEOs[bid].brainConfiguration = brainConfiguration;
 					});
@@ -489,7 +511,7 @@ function flow_brain_rooms_autocomplete_filter(args){
 				var item = {};
 				item.name = NEEOs[z].brainConfiguration.rooms[x].name;
 				item.key = NEEOs[z].brainConfiguration.rooms[x].key;
-				item.brainip = NEEOs[z].addresses.toString();
+				item.brainip = NEEOs[z].referer.address;
 				foundrooms.push(item);
 			}
 		}

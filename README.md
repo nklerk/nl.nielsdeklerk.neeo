@@ -58,10 +58,12 @@ Availeble actions:
 
 
 ## Version 0.7.6
-- Added textlabels as capabilitie
 - Fixed a critical bug that rendered all NEEO flows unusable.
+- Added textlabels as capabilitie, You can now display textual inforamation. like what did homey say :-)
 - Placed all settings java code in a seperate file.
-- changed initial bonjour interva from unlimited every 10 seconds to 10 times 1 minute. 
+- ordered icons on app settings
+- added textlabel icon for app settings.
+- changed initial bonjour interval from unlimited every 10 seconds to 10 times 1 minute.
 
 ## Version 0.7.5
 - Default Capabilities will now be added when adding a new virtual device.

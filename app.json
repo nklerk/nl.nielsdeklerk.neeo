@@ -353,7 +353,7 @@
 			"args": [{
 				"name": "device",
 				"type": "autocomplete",
-        "placeholder":{ "en": "Switch"}
+        "placeholder":{ "en": "Device"}
 			},{
 				"name": "capabilitie",
 				"type": "autocomplete",
@@ -363,6 +363,28 @@
 				"name": "value",
 				"type": "dropdown",
         "values": [ { "id": false, "label": { "en": "False" } },{ "id": true, "label": { "en": "True" } } ]
+			}]
+		},
+    {
+			"id": "inform_textlabel",
+			"title": {
+				"en": "Inform about textlabel change"
+			},
+      "hint": {
+				"en": "This card will inform the NEEO brain that the selected textlabel has a new value."
+			},
+			"args": [{
+				"name": "device",
+				"type": "autocomplete",
+        "placeholder":{ "en": "Device"}
+			},{
+				"name": "capabilitie",
+				"type": "autocomplete",
+        "placeholder":{ "en": "textlabel"}
+			},
+			{
+				"name": "value",
+				"type": "text"
 			}]
 		}]
 	}

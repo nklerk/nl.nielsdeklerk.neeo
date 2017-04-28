@@ -4,7 +4,6 @@
 ////////////////////////////////////////
 'use strict'
 const http = require('http');
-module.exports.init = init;
 
 const neeoBrain_sdk = http.createServer(function(req, res){
 	var response_data = {};
@@ -37,9 +36,28 @@ neeoBrain_sdk.listen(6336, function() {
 	neeoBrain_connect();
 });
 
+
+
+
+
+
+
 ////////////////////////////////////////
-// Functions
+// API
 ////////////////////////////////////////
+
+
+module.exports = {
+	api_neeo_discover: function(callback) {
+		neeoBrain_discover();
+	},
+	init: init()
+};
+
+////////////////////////////////////////
+// Functions NEEO Brain
+////////////////////////////////////////
+
 function neeoBrain_request_db(uriparts){
 	var response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
 	
@@ -104,7 +122,7 @@ function neeoBrain_request_device(uriparts){
 		response_data.code = 400
 	}
 	return (response_data);
-}
+} // neeobrain request a device function.
 
 function neeoBrain_request_subscribe(uriparts, brainIP){
 	brainIP = brainIP.replace(/^.*:/, '')
@@ -134,7 +152,7 @@ function neeoBrain_request_subscribe(uriparts, brainIP){
 
 	var response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': '{"success":true}'};
 	return (response_data);
-}
+} // NEEO brain subscription.
 
 function neeoBrain_request_subscribe_registereventserver(eventregisters, devicename, brainIP) {
 	var devices = Homey.manager('settings').get('myDevices');
@@ -166,7 +184,7 @@ function neeoBrain_request_subscribe_registereventserver(eventregisters, devicen
 		}
 		Homey.manager('settings').set('myDevices', devices);
 	}
-}
+} // Register events the neeo brain requested to be updated on.
 
 function neeoBrain_request_capabilities(uriparts){
 	var response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
@@ -196,13 +214,8 @@ function neeoBrain_posts_event(body){
 	return (response_data)
 } // function to handle events.
 
-module.exports = {
-	api_neeo_discover: function(callback) {
-		neeoBrain_discover();
-	}
-};
-
 function neeoBrain_discover() {
+	
 	Homey.log (" Searching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
 	try{
 		var Bonjour = require('bonjour');
@@ -214,7 +227,8 @@ function neeoBrain_discover() {
 	} catch(err){
 		console.log ('ERROR! A Bonjour error happend.')
 	}
-}
+
+} // Discovery service
 
 function neeoBrain_Add_to_db(foundbrain) {
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
@@ -233,13 +247,15 @@ function neeoBrain_Add_to_db(foundbrain) {
 		NEEOs.push(foundbrain);
 	}
 	Homey.manager('settings').set('myNEEOs', NEEOs);
-}
+} // Adding the discovered brains to the DB (and update existing brains.)
 
-function neeoBrain_connect(){
+function neeoBrain_connect(connectiontries){
+	if (typeof connectiontries === 'undefined') {connectiontries=0;};
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
-	if (NEEOs === undefined || NEEOs.length === 0) {
+	if ((NEEOs === undefined || NEEOs.length === 0) && connectiontries < 10) {
+		connectiontries = connectiontries + 1;
 		neeoBrain_discover();
-		setTimeout(neeoBrain_connect, 10000);
+		setTimeout(neeoBrain_connect, 60000, connectiontries);
 	} else {
 		for (var i in NEEOs) {
 			var NEEOBrain = NEEOs[i];
@@ -377,6 +393,11 @@ function neeoBrain_sensor_notify(adapterName, capabilities_name, value){
 	}
 } // update sensor
 
+
+////////////////////////////////////////
+// Functions Tools
+////////////////////////////////////////
+
 function tools_math_round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 } // round a number on x decimals
@@ -448,6 +469,10 @@ function tools_string_cleanformatch(textstring){
 	return(textstring);
 } // Clean a string so it can be better matched
 
+
+////////////////////////////////////////
+// Functions Homey
+////////////////////////////////////////
 
 function homey_system_token_set(token_id, token_name, token_type, token_value){
 	Homey.manager('flow').unregisterToken(token_id);
@@ -653,6 +678,10 @@ function flow_brain_recepies_autocomplete_filter(args, stype){
 } // Return all and only devices that have a match. (for selection on homey card)
 
 
+////////////////////////////////////////
+// Functions Database
+////////////////////////////////////////
+
 function database_device_search(queery){
 	var queeries = queery.split(" ");
 	var devices = Homey.manager('settings').get('myDevices');
@@ -738,8 +767,9 @@ function database_capabilitie_get(adapterName, capabilities_name){
 
 
 ////////////////////////////////////////
-// Flow Functions
+// Functions for Homey Flows
 ////////////////////////////////////////
+
 function init() { 
 //Triggers
 	//button_pressed
@@ -949,6 +979,21 @@ function init() {
 		Homey.log ('Flow event: action.inform_switch');
 		if (args.value === "true") {args.value = true};
 		if (args.value === "false") {args.value = false};
+		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
+		callback( null, true ); 
+    });
+
+	//inform_switch
+	Homey.manager('flow').on('action.inform_textlabel.device.autocomplete', function( callback, args ){
+		var devices = flow_devices_autocomplete_filter(args.query)
+		callback(null, devices);
+	});
+	Homey.manager('flow').on('action.inform_textlabel.capabilitie.autocomplete', function( callback, args ){
+		var capabilities = flow_capabilitie_autocomplete_filter(args, "custom")
+		callback(null, capabilities);
+	});
+	Homey.manager('flow').on('action.inform_textlabel', function (callback, args, state) {
+		Homey.log ('Flow event: action.inform_textlabel');
 		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
 		callback( null, true ); 
     });

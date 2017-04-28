@@ -28,10 +28,12 @@ virtual devices:
 * Add buttons to your virtual devices.
 * Add sliders to your virtual devices.
 * Add switches to your virtual devices.
+* Add textlabels to your virtual devices.
 * Add predefined media buttons to your virtual devices.
 * Add predefined digit buttons to your virtual devices.
 * Add predefined power buttons to your virtual devices.
 * Add predefined navigation buttons to your virtual devices.
+* Added virtual devices contain a default set of buttons.
 
 
 Availeble triggers:
@@ -51,8 +53,15 @@ Availeble actions:
 * Change the state of a slider.
 * Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
 * Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
+* Inform NEEO that a textlabel value of your virtual device has changed. (Provides visual feedback)
 
 
+
+## Version 0.7.6
+- Added textlabels as capabilitie
+- Fixed a critical bug that rendered all NEEO flows unusable.
+- Placed all settings java code in a seperate file.
+- changed initial bonjour interva from unlimited every 10 seconds to 10 times 1 minute. 
 
 ## Version 0.7.5
 - Default Capabilities will now be added when adding a new virtual device.
@@ -61,7 +70,6 @@ Availeble actions:
 - Added setting to view connected NEEO brains.
 - Added discovery button to manually discover NEEO brains.
 - Added a delete NEEO brain function to settings.
-
 
 ## Version 0.7.4
 - Fixed a bug where switches didn't work.

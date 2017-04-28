@@ -6,7 +6,7 @@
   "tags": {
         "en": [ "NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote" ]
     },
-	"version": "0.7.5",
+	"version": "0.7.6",
 	"compatibility": "0.x || 1.x",
 	"author": {
 		"name": "Niels de Klerk",

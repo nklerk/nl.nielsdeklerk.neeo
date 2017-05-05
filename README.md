@@ -56,6 +56,8 @@ Availeble actions:
 * Inform NEEO that a textlabel value of your virtual device has changed. (Provides visual feedback)
 
 
+## Version 0.7.7
+- Added token support (Tags)
 
 ## Version 0.7.6
 - Fixed a critical bug that rendered all NEEO flows unusable.

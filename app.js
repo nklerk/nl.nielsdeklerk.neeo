@@ -97,7 +97,7 @@ function neeoBrain_request_device(uriparts){
 		Homey.manager('flow').trigger( 'slider_changed', {'value': deviceparameter, 'decimalvalue': decimalvalue}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){
 			if( err ) return Homey.log(err); 
 		});
-		homey_system_token_set(devicename + devicefunction, devicefunction + '('+devicename+')', 'number', deviceparameter);
+		homey_system_token_set(devicename, devicefunction, deviceparameter);
 		neeoBrain_sensor_notify(devicename, devicefunction + '_SENSOR', deviceparameter)
 		response_data.content = database_capabilitie_setvalue(devicename, devicefunction, deviceparameter)
 	}
@@ -108,7 +108,7 @@ function neeoBrain_request_device(uriparts){
 		Homey.manager('flow').trigger( 'switch_changed', {'value': deviceparameter}, {'adapterName': devicename, 'capabilitie': devicefunction}, function(err, result){ 
 			if( err ) return Homey.error(err);
 		});
-		homey_system_token_set(devicename + devicefunction, devicefunction + '('+devicename+')', 'boolean', deviceparameter);
+		homey_system_token_set(devicename, devicefunction, deviceparameter);
 		neeoBrain_sensor_notify(devicename, devicefunction + '_SENSOR', deviceparameter)
 		response_data.content = database_capabilitie_setvalue(devicename, devicefunction, deviceparameter)
 	}
@@ -188,7 +188,7 @@ function neeoBrain_request_subscribe_registereventserver(eventregisters, devicen
 
 function neeoBrain_request_capabilities(uriparts){
 	var response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
-	var founddevice = database_capabilitie_getbyadaptername(uriparts[1]);
+	var founddevice = database_getdevice_byadaptername(uriparts[1]);
 	response_data.content = JSON.stringify(founddevice.capabilities);
 	return (response_data);
 } // function to handle request for capabilities
@@ -263,6 +263,7 @@ function neeoBrain_connect(connectiontries){
 			neeoBrain_register_devicedatabase(NEEOBrain);
 			neeoBrain_register_forwarderevents(NEEOBrain);
 			neeoBrain_configuration_download(NEEOBrain);
+			homey_system_token_set_all();
 		}
 	}
 	setTimeout(neeoBrain_connect, 600000); // 10 minutes Delay
@@ -469,13 +470,28 @@ function tools_string_cleanformatch(textstring){
 	return(textstring);
 } // Clean a string so it can be better matched
 
+function tools_string_normalizename(textstring){
+	var t1 = textstring.subString(0,1).toUpperCase();
+	var t2 = textstring.subString(1,textstring.length).toLowerCase();
+	return t1 + t2;
+}
+
 
 ////////////////////////////////////////
 // Functions Homey
 ////////////////////////////////////////
 
-function homey_system_token_set(token_id, token_name, token_type, token_value){
+function homey_system_token_set(adapterName, capabilities_name, token_value){
+	//args.capabilitie.name + '('+args.device.name+')'
+    capabilities_name = capabilities_name.replace(/(_SENSOR)/gm,""); 
+	var token_id = adapterName+capabilities_name;
+	var token_name = capabilities_name + '('+adapterName+')';
+	token_name = tools_string_normalizename(token_name);
+	var token_type = typeof token_value;
+	console.log ('  [Homey] Adding token "', token_id, '"  With name "', token_name, '"  Of type ', token_type, '  And value ',  token_value);
+
 	Homey.manager('flow').unregisterToken(token_id);
+
 	Homey.manager('flow').registerToken(token_id, {
 		type: token_type, 
 		title: token_name
@@ -485,6 +501,17 @@ function homey_system_token_set(token_id, token_name, token_type, token_value){
 			if (err) return console.error('setValue error:', err);
 		});
 	});
+} // setting a token (named tag in Homey)
+
+function homey_system_token_set_all(){
+	var devices = Homey.manager('settings').get('myDevices');
+	for (var z in devices) {
+		for (var y in devices[z].capabilities) {
+			if (devices[z].capabilities[y].type === 'sensor' && devices[z].capabilities[y].sensor.value){
+				homey_system_token_set(devices[z].name, devices[z].capabilities[y].name, devices[z].capabilities[y].sensor.value);
+			}
+		}
+	}
 } // setting a token (named tag in Homey)
 
 function flow_capabilitie_autocomplete_filter(args, type){
@@ -686,7 +713,7 @@ function database_device_search(queery){
 	var queeries = queery.split(" ");
 	var devices = Homey.manager('settings').get('myDevices');
 	var founddevices = [];
-	//var content = '[{"item":{"id":0,"adapterName":"apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd","type":"LIGHT","manufacturer":"NEEO","name":"simpleDevice1","tokens":"foo","device":{"name":"simpleDevice1","tokens":["foo"]},"setup":{},"capabilities":[{"type":"button","name":"example-button","label":"my button","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-button"},{"type":"sensor","name":"EXAMPLE-SLIDER_SENSOR","label":"my slider","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/EXAMPLE-SLIDER_SENSOR","sensor":{"type":"range","range":[0,200],"unit":"%"}},{"type":"slider","name":"example-slider","label":"my slider","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-slider","slider":{"type":"range","sensor":"EXAMPLE-SLIDER_SENSOR","range":[0,200],"unit":"%"}},{"type":"sensor","name":"EXAMPLE-SWITCH_SENSOR","label":"my switch","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/EXAMPLE-SWITCH_SENSOR","sensor":{"type":"binary"}},{"type":"switch","name":"example-switch","label":"my switch","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-switch","sensor":"EXAMPLE-SWITCH_SENSOR"}]},"score":0,"maxScore":2},{"item":{"id":13,"adapterName":"apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd","type":"LIGHT","manufacturer":"Niels","name":"simpleDevice2","tokens":"foo","device":{"name":"simpleDevice2","tokens":["foo"]},"setup":{},"capabilities":[{"type":"button","name":"example-button","label":"my button","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-button"},{"type":"sensor","name":"EXAMPLE-SLIDER_SENSOR","label":"my slider","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/EXAMPLE-SLIDER_SENSOR","sensor":{"type":"range","range":[0,200],"unit":"%"}},{"type":"slider","name":"example-slider","label":"my slider","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-slider","slider":{"type":"range","sensor":"EXAMPLE-SLIDER_SENSOR","range":[0,200],"unit":"%"}},{"type":"sensor","name":"EXAMPLE-SWITCH_SENSOR","label":"my switch","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/EXAMPLE-SWITCH_SENSOR","sensor":{"type":"binary"}},{"type":"switch","name":"example-switch","label":"my switch","path":"/device/apt-2fd0eb0f922d2a7715eeda14615577c7f6eb53bd/example-switch","sensor":"EXAMPLE-SWITCH_SENSOR"}]},"score":0,"maxScore":4}]';
+
 	for (var z in devices) {
 		var score = 0;
 		var maxScore = 2;
@@ -721,7 +748,7 @@ function database_device_getbyid(dbid){
 	return founddevice;
 } // Request a device in the database by ID. (way of NEEO to get device configuratipon)
 
-function database_capabilitie_getbyadaptername(adapterName){
+function database_getdevice_byadaptername(adapterName){
 	var devices = Homey.manager('settings').get('myDevices');
 	var founddevice = {};
 
@@ -735,10 +762,11 @@ function database_capabilitie_getbyadaptername(adapterName){
 
 function database_capabilitie_setvalue(adapterName, capabilities_name, newvalue){
 	var devices = Homey.manager('settings').get('myDevices');
+	capabilities_name = capabilities_name.replace(/(_SENSOR)/gm,"");  
 	for (var z in devices) {
 		if (devices[z].adapterName == adapterName) {
 			for (var y in devices[z].capabilities) {
-				if (devices[z].capabilities[y].name == capabilities_name + "_SENSOR") {
+				if (devices[z].capabilities[y].type ==='sensor' && devices[z].capabilities[y].name === capabilities_name + "_SENSOR") {
 					Homey.log('  ~ Updating database from old Value: ' + devices[z].capabilities[y].sensor.value + ' to new value: ' + newvalue);
 					devices[z].capabilities[y].sensor.value = newvalue;
 				}
@@ -858,6 +886,7 @@ function init() {
 		callback( null, true ); 
     });
 
+	//Poweroff_all
 	Homey.manager('flow').on('action.poweroff_all_recipes', function (callback) {
 		Homey.log ('+ Powering off all recipes.'); 
 		var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
@@ -947,7 +976,9 @@ function init() {
 	});
 	Homey.manager('flow').on('action.inform_slider', function (callback, args, state) {
 		Homey.log ('Flow event: action.inform_slider');
-		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
+		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value);
+		database_capabilitie_setvalue(args.device.adapterName, args.capabilitie.realname, args.value);
+		homey_system_token_set(args.device.name, args.capabilitie.name, args.value);	
 		callback( null, true ); 
     });
 
@@ -962,7 +993,9 @@ function init() {
 	});
 	Homey.manager('flow').on('action.inform_slider_value', function (callback, args, state) {
 		Homey.log ('Flow event: action.inform_slider_value');
-		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
+		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value);
+		database_capabilitie_setvalue(args.device.adapterName, args.capabilitie.realname, args.value);
+		homey_system_token_set(args.device.name, args.capabilitie.name, args.value);	
 		callback( null, true ); 
     });
 
@@ -980,6 +1013,8 @@ function init() {
 		if (args.value === "true") {args.value = true};
 		if (args.value === "false") {args.value = false};
 		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
+		database_capabilitie_setvalue(args.device.adapterName, args.capabilitie.realname, args.value);
+		homey_system_token_set(args.device.name, args.capabilitie.name, args.value);	
 		callback( null, true ); 
     });
 
@@ -994,7 +1029,9 @@ function init() {
 	});
 	Homey.manager('flow').on('action.inform_textlabel', function (callback, args, state) {
 		Homey.log ('Flow event: action.inform_textlabel');
-		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value)
+		neeoBrain_sensor_notify(args.device.adapterName, args.capabilitie.realname, args.value);
+		database_capabilitie_setvalue(args.device.adapterName, args.capabilitie.realname, args.value);
+		homey_system_token_set(args.device.name, args.capabilitie.name, args.value);	
 		callback( null, true ); 
     });
 }

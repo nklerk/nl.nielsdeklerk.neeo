@@ -1,5 +1,4 @@
 module.exports = [
-
     {
         description:	'Discover NEEO Brains',
         method: 		'GET',

@@ -158,7 +158,8 @@
             "en": "{\"action\":\"brightness\",\"device\":\"Badkamer\",\"room\":\"Verlichting\",\"actionparameter\":48}"
           }
         }]
-		  }],
+		  }
+    ],
 		"actions": [{
 			"id": "activate_recipe",
 			"title": {

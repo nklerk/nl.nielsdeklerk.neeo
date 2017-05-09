@@ -1,7 +1,15 @@
 # NEEO
 
 This app brings the best of NEEO and Homey together.
-Build custom drivers and install them on your NEEO,
+
+Controll every device or flow in Homey with the NEEO remote. 
+Use sliders, buttons and switches to build your own virtual device and use the flow editor to hook it up to all kinds of Homey apps.
+The app supports feedback of information as well. Change the volume of your receiver and the slider on your remote will change in realtime.
+
+Want to visualise your sensors or "what did homey say?", with this app you can inform the remote about all kinds of state changes including textual.
+So what did homey say? you can see that on your remote.
+
+Build virtual devices and make them availeble to NEEO.
 Controll Flows with your NEEO remote and controll your NEEO connected devices with Homey.
 
 The NEEO Remote can be (Pre)ordered at: https://neeo.com/
@@ -56,16 +64,17 @@ Availeble actions:
 * Inform NEEO that a textlabel value of your virtual device has changed. (Provides visual feedback)
 
 
+# Changelog.
 ## Version 0.7.7
 - Added token support (Tags)
 
 ## Version 0.7.6
 - Fixed a critical bug that rendered all NEEO flows unusable.
 - Added textlabels as capabilitie, You can now display textual inforamation. like what did homey say :-)
-- Placed all settings java code in a seperate file.
-- ordered icons on app settings
-- added textlabel icon for app settings.
-- changed initial bonjour interval from unlimited every 10 seconds to 10 times 1 minute.
+- Cleaned settings code.
+- Changed icons on app settings
+- Added textlabel icon for app settings.
+- Changed initial bonjour interval from unlimited every 10 seconds to 10 times 1 minute.
 
 ## Version 0.7.5
 - Default Capabilities will now be added when adding a new virtual device.

@@ -4,7 +4,46 @@
 ////////////////////////////////////////
 'use strict'
 const http = require('http');
-const logging = false//true;
+const logging = true;
+
+
+////////////////////////////////////////
+// Converting myNEEOs to new format.
+// Can be removed on a later version.
+////////////////////////////////////////
+var oldNEEOs = Homey.manager('settings').get( 'myNEEOs');
+var newNEEOs = [];
+console.log ('===================================');
+for (var i in oldNEEOs) {
+	var exist = 0;
+	for (var i in newNEEOs){
+		if (oldNEEOs[i].host === newNEEOs[i].host) {
+			exist = exist + 1;
+		}
+	}
+	if (exist === 0) {
+		var newNEEO= {};
+		newNEEO.host = oldNEEOs[i].host
+		if (oldNEEOs[i].referer && oldNEEOs[i].referer.address) {
+			newNEEO.ip = []
+			newNEEO.ip.push(oldNEEOs[i].referer.address)
+		} else if (oldNEEOs[i].addresses) {
+			newNEEO.ip = oldNEEOs[i].addresses;
+		}
+		if (newNEEO.ip) {
+			newNEEOs.push(newNEEO);
+		}
+	}
+}
+
+console.log (newNEEOs.length)
+console.log ('===================================');
+if (newNEEOs.length > 0) {
+	Homey.manager('settings').set('myNEEOs', newNEEOs);
+}
+////////////////////////////////////////
+// End of conversion.
+////////////////////////////////////////
 
 const neeoBrain_sdk = http.createServer(function(req, res){
 	var response_data = {};
@@ -211,34 +250,39 @@ function neeoBrain_posts_event(body){
 function neeoBrain_discover() {
 	
 	tools_log (" Searching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
-	try{
-		var Bonjour = require('bonjour');
-		var bonjour = new Bonjour();
-		var browser = bonjour.find({type: 'neeo'}, function(service) {
-			tools_log (' Discovered NEEO brain ' + service.txt.hon + ' (' + service.referer.address + ')  Named: ' + service.name );
-			neeoBrain_Add_to_db(service);
-		})
-	} catch(err){
-		console.log ('ERROR! A Bonjour error happend.')
-	}
+	var mdns = require('mdns-js');
+	//if you have another mdns daemon running, like avahi or bonjour, uncomment following line
+	mdns.excludeInterface('0.0.0.0');
+	var browser = mdns.createBrowser('_neeo._tcp');
+	
+	browser.on('ready', function () {
+		browser.discover(); 
+	});
+
+	
+	browser.on('update', function (data) {
+		neeoBrain_Add_to_db(data);
+	});
 
 } // Discovery service
 
 function neeoBrain_Add_to_db(foundbrain) {
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
+
 	var exist = 0;
 	for (var i in NEEOs) {
-		if (NEEOs[i].txt.hon === foundbrain.txt.hon) {
-			console.log(' Updating settings of '+NEEOs[i].txt.hon);
-			NEEOs[i].referer.address = foundbrain.referer.address;
-			NEEOs[i].txt.rel = foundbrain.txt.rel;
-			NEEOs[i].txt.upd = foundbrain.txt.upd;
+		if (NEEOs[i].host === foundbrain.host) {
+			console.log(' Updating settings of '+foundbrain.host);
+			NEEOs[i].ip = foundbrain.addresses;
 			exist = exist + 1;
 		};
 	}
 	if (exist === 0) {
-		console.log(' New NEEO Brain found: ' + foundbrain.name);
-		NEEOs.push(foundbrain);
+		console.log(' New NEEO Brain found: ' + foundbrain.host);
+		var brain = {};
+		brain.host = foundbrain.host;
+		brain.ip = foundbrain.addresses;
+		NEEOs.push(brain);
 	}
 	Homey.manager('settings').set('myNEEOs', NEEOs);
 } // Adding the discovered brains to the DB (and update existing brains.)
@@ -253,7 +297,7 @@ function neeoBrain_connect(connectiontries){
 	} else {
 		for (var i in NEEOs) {
 			var NEEOBrain = NEEOs[i];
-			tools_log (' NEEO brain [' + i + ']: ' + NEEOBrain.name + '(' + NEEOBrain.referer.address + ')  ' + NEEOBrain.txt.reg + ' ' + NEEOBrain.txt.hon);
+			tools_log (' NEEO brain [' + i + ']: ' + NEEOBrain.host + '(' + NEEOBrain.ip + ')');
 			neeoBrain_register_devicedatabase(NEEOBrain);
 			neeoBrain_register_forwarderevents(NEEOBrain);
 			neeoBrain_configuration_download(NEEOBrain);
@@ -264,13 +308,13 @@ function neeoBrain_connect(connectiontries){
 } // Connection process to all neeo brains.
 
 function neeoBrain_register_devicedatabase(NEEOBrain) {
-	tools_log (' Registering Homey as a device server to NEEO @' + NEEOBrain.referer.address + '.');
+	tools_log (' Registering Homey as a device server to NEEO @' + NEEOBrain.host + '.');
 	var registration = {}
 	registration.name = 'Homey_Devicedatabase_' + tools_ip_getlocalip();
 	registration.baseUrl = 'http://' + tools_ip_getlocalip() + ':6336'
 	
 	var options = {
-		hostname: NEEOBrain.referer.address,
+		hostname: NEEOBrain.host,
 		port: 3000,
 		path: '/v1/api/registerSdkDeviceAdapter',
 		method: 'POST',
@@ -282,7 +326,7 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 		res.on('data', function (body) {
 			var reply = JSON.parse(body)
 			if (reply.success === true){
-				tools_log (' Homey database server is succesfully registerd @' + NEEOBrain.referer.address + '.');
+				tools_log (' Homey database server is succesfully registerd @' + NEEOBrain.host + '.');
 			}
 		});
 	});
@@ -293,7 +337,7 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 } // Register Homey as Device database in NEEO
 
 function neeoBrain_register_forwarderevents(NEEOBrain){
-	tools_log (' Registering Homey as event server @' + NEEOBrain.referer.address + '.');
+	tools_log (' Registering Homey as event server @' + NEEOBrain.host + '.');
 
 	var registration = {}
 	registration.host = tools_ip_getlocalip();
@@ -301,7 +345,7 @@ function neeoBrain_register_forwarderevents(NEEOBrain){
 	registration.path = "/Homey-By-Niels_de_Klerk"
 
 	var options = {
-		hostname: NEEOBrain.referer.address,
+		hostname: NEEOBrain.host,
 		port: 3000,
 		path: '/v1/forwardactions',
 		method: 'POST',
@@ -313,7 +357,7 @@ function neeoBrain_register_forwarderevents(NEEOBrain){
 		res.on('data', function (body) {
 			var reply = JSON.parse(body)
 			if (reply.success === true){
-				tools_log (' Homey event server is succesfully registerd @' + NEEOBrain.referer.address + '.');
+				tools_log (' Homey event server is succesfully registerd @' + NEEOBrain.host + '.');
 			}
 		});
 	});
@@ -328,16 +372,15 @@ function neeoBrain_configuration_download(NEEOBrain){
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
 	if (NEEOs === undefined || NEEOs.length === 0) {
 		// No NEEO Brains? Must eat brains. must eat brains.....
-		neeoBrain_discover();
+		//neeoBrain_discover();
 	} else {
 		for (var i in NEEOs) {
-			if (!NEEOBrain || NEEOBrain.referer.address == NEEOs[i].referer.address) {
-				var bid = i;
-				var receivedData = '';
-				tools_log (' Downloading Configuration @' + NEEOs[bid].referer.address + '.');
+			if (!NEEOBrain || NEEOBrain.host === NEEOs[i].host) {
+
+				tools_log (' Downloading Configuration @' + NEEOs[i].host + '.');
 
 				var options = {
-					hostname: NEEOs[bid].referer.address,
+					hostname: NEEOs[i].host,
 					port: 3000,
 					path: '/v1/projects/home',
 					method: 'GET',
@@ -347,13 +390,16 @@ function neeoBrain_configuration_download(NEEOBrain){
 				var req = http.request(options, function(res) {
 					
 					res.setEncoding('utf8');
+					
+					var receivedData = '';
 					res.on('data', function (body) {
 						receivedData = receivedData + body;
 					});
+					
 					res.on('end', function () {
-						tools_log (' Downloading Configuration @' + NEEOs[bid].referer.address + ' complete.');
+						tools_log (' Downloading Configuration @' + NEEOs[i].host + ' complete.');
 						var brainConfiguration = JSON.parse(receivedData);
-						NEEOs[bid].brainConfiguration = brainConfiguration;
+						NEEOs[i].brainConfiguration = brainConfiguration;
 					});
 				});
 				req.on('error', function(e) { tools_log ('problem with request: ' + e.message); });
@@ -483,7 +529,6 @@ function homey_system_token_set(adapterName, capabilities_name, token_value){
 	var token_name = capabilities_name + '('+adapterName+')';
 	token_name = tools_string_normalizename(token_name);
 	var token_type = typeof token_value;
-	console.log ('  [Homey] Adding token "', token_id, '"  With name "', token_name, '"  Of type ', token_type, '  And value ',  token_value);
 
 	Homey.manager('flow').unregisterToken(token_id);
 
@@ -558,7 +603,7 @@ function flow_brain_rooms_autocomplete_filter(args){
 				var item = {};
 				item.name = NEEOs[z].brainConfiguration.rooms[x].name;
 				item.key = NEEOs[z].brainConfiguration.rooms[x].key;
-				item.brainip = NEEOs[z].referer.address;
+				item.brainip = NEEOs[z].host;
 				foundrooms.push(item);
 			}
 		}
@@ -891,13 +936,13 @@ function init() {
 		tools_log ('+ Powering off all recipes.'); 
 		var NEEOs = Homey.manager('settings').get( 'myNEEOs' );
 		for (var i in NEEOs){
-			tools_http_json ('GET', NEEOs[i].referer.address, 3000, '/v1/api/Recipes', null, function(res, recipies){
+			tools_http_json ('GET', NEEOs[i].host, 3000, '/v1/api/Recipes', null, function(res, recipies){
 				if (typeof recipies !== 'undefined'){
 					recipies = JSON.parse(recipies);
 					var url=require('url');
 					for (var x in recipies) {
 						if (recipies[x].isPoweredOn === true){
-							console.log (' - Powering off '+recipies[x].detail.devicename)
+							tools_log (' - Powering off '+recipies[x].detail.devicename)
 							var a = url.parse(recipies[x].url.setPowerOff)
 							tools_http_get_forget('GET', a.hostname, a.port, a.pathname)
 						}

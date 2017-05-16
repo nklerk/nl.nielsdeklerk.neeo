@@ -456,7 +456,7 @@ function discover_brains_loop(count){
 function settings_refresh_display() {
     var dd = '';
     for (var i in Settings_brains) {
-        dd = dd + '<option value="'+ Settings_brains[i].txt.hon +'">'+Settings_brains[i].name+'</option>';
+        dd = dd + '<option value="'+ Settings_brains[i].host +'">'+Settings_brains[i].host+'</option>';
     }
     document.getElementById("brains").innerHTML = dd;
     document.getElementById("braininfo").innerHTML = '';
@@ -465,14 +465,14 @@ function settings_refresh_display() {
 function settings_brains_selection(){
     var selection = document.getElementById("brains").value
     for (var i in Settings_brains) {
-        if (Settings_brains[i].txt.hon === selection){
+        if (Settings_brains[i].host === selection){
             var dd='';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Name:      </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].name+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:  </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.hon+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Region:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.reg+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Version:   </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.rel+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Update:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.upd+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> IP:        </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].referer.address+'</div><br>';
+            //dd = dd + '<b style="position: absolute;left: 250px;"> Name:      </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].name+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:  </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].host+'</div><br>';
+            //dd = dd + '<b style="position: absolute;left: 250px;"> Region:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.reg+'</div><br>';
+            //dd = dd + '<b style="position: absolute;left: 250px;"> Version:   </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.rel+'</div><br>';
+            //dd = dd + '<b style="position: absolute;left: 250px;"> Update:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.upd+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> IP:        </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].ip+'</div><br>';
             dd = dd + '<button id="settings_btn_deletebrain" style="position: absolute;right: 18px;" onclick="settings_brain_delete()"><i class="fa fa-trash-o"></i> Delete.</button>'
             document.getElementById("braininfo").innerHTML = dd;
         }
@@ -483,7 +483,7 @@ function settings_brain_delete(){
     var selection = document.getElementById("brains").value
     var new_Settings_brains = [];
     for (var i in Settings_brains) {
-        if (Settings_brains[i].txt.hon === selection){
+        if (Settings_brains[i].host === selection){
             console.log('Deleting Brain '+selection+' from configuration');
         } else {
             new_Settings_brains.push(Settings_brains[i]);

@@ -65,6 +65,10 @@ Availeble actions:
 
 
 # Changelog.
+## Version 0.8.0
+- Rework of MDNS Discovery.
+
+
 ## Version 0.7.7
 - Added token support (Tags)
 

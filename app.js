@@ -13,7 +13,7 @@ const logging = true;
 ////////////////////////////////////////
 var oldNEEOs = Homey.manager('settings').get( 'myNEEOs');
 var newNEEOs = [];
-console.log ('===================================');
+
 for (var i in oldNEEOs) {
 	var exist = 0;
 	for (var i in newNEEOs){
@@ -36,8 +36,6 @@ for (var i in oldNEEOs) {
 	}
 }
 
-console.log (newNEEOs.length)
-console.log ('===================================');
 if (newNEEOs.length > 0) {
 	Homey.manager('settings').set('myNEEOs', newNEEOs);
 }
@@ -73,7 +71,7 @@ const neeoBrain_sdk = http.createServer(function(req, res){
 
 neeoBrain_sdk.listen(6336, function() {
 	tools_log (' NEEO SDK running on port: 6336' );										//Start the server and listen on the NEEO Default port 6336.
-	neeoBrain_connect();
+	neeoBrain_connect(0);
 });
 
 
@@ -237,11 +235,21 @@ function neeoBrain_posts_event(body){
 	tools_log ("  = Neeo Event received: " + body);
 	var action = "", device = "", room = "", actionparameter = "";
 				
-	if (typeof myjson.action !== 			'undefined' ) {action = myjson.action};
-	if (typeof myjson.actionparameter !== 	'undefined' ) {actionparameter = myjson.actionparameter.toString()};
-	if (typeof myjson.recipe !== 			'undefined' ) {device = myjson.recipe};
-	if (typeof myjson.device !== 			'undefined' ) {device = myjson.device};
-	if (typeof myjson.room !== 				'undefined' ) {room = myjson.room};
+	if (myjson.action){
+		action = myjson.action;
+	};
+	if (myjson.actionparameter){
+		actionparameter = myjson.actionparameter.toString();
+	};
+	if (myjson.recipe){
+		device = myjson.recipe;
+	};
+	if (myjson.device){
+		device = myjson.device;
+	};
+	if (myjson.room){
+		room = myjson.room;
+	};
 			
 	Homey.manager('flow').trigger('received_event', { Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body});
 	return (response_data)
@@ -324,10 +332,12 @@ function neeoBrain_register_devicedatabase(NEEOBrain) {
 	var req = http.request(options, function(res) {
 		res.setEncoding('utf8');
 		res.on('data', function (body) {
-			var reply = JSON.parse(body)
-			if (reply.success === true){
-				tools_log (' Homey database server is succesfully registerd @' + NEEOBrain.host + '.');
-			}
+			try {
+				var reply = JSON.parse(body)
+				if (reply.success === true){
+					tools_log (' Homey database server is succesfully registerd @' + NEEOBrain.host + '.');
+				}
+			} catch(e) {	}
 		});
 	});
 

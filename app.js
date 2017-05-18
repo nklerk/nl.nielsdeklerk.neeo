@@ -7,42 +7,6 @@ const http = require('http');
 const logging = true;
 
 
-////////////////////////////////////////
-// Converting myNEEOs to new format.
-// Can be removed on a later version.
-////////////////////////////////////////
-var oldNEEOs = Homey.manager('settings').get( 'myNEEOs');
-var newNEEOs = [];
-
-for (var i in oldNEEOs) {
-	var exist = 0;
-	for (var i in newNEEOs){
-		if (oldNEEOs[i].host === newNEEOs[i].host) {
-			exist = exist + 1;
-		}
-	}
-	if (exist === 0) {
-		var newNEEO= {};
-		newNEEO.host = oldNEEOs[i].host
-		if (oldNEEOs[i].referer && oldNEEOs[i].referer.address) {
-			newNEEO.ip = []
-			newNEEO.ip.push(oldNEEOs[i].referer.address)
-		} else if (oldNEEOs[i].addresses) {
-			newNEEO.ip = oldNEEOs[i].addresses;
-		}
-		if (newNEEO.ip) {
-			newNEEOs.push(newNEEO);
-		}
-	}
-}
-
-if (newNEEOs.length > 0) {
-	Homey.manager('settings').set('myNEEOs', newNEEOs);
-}
-////////////////////////////////////////
-// End of conversion.
-////////////////////////////////////////
-
 const neeoBrain_sdk = http.createServer(function(req, res){
 	var response_data = {};
 	var uriparts = decodeURI(req.url).split('/');
@@ -276,6 +240,9 @@ function neeoBrain_discover() {
 
 function neeoBrain_Add_to_db(foundbrain) {
 	var NEEOs = Homey.manager('settings').get( 'myNEEOs');
+	if (!NEEOs) {
+		NEEOs = [];
+	}
 
 	var exist = 0;
 	for (var i in NEEOs) {

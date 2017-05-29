@@ -7,11 +7,35 @@
 ////////////////////////////////////////
 // Vars.
 ////////////////////////////////////////
-var Settings_database;
-var Settings_brains;
-var Settings_id;
-var Settings_ready;
+let Settings_database = [];
+let Settings_brains = [];
+let Settings_id = 0;
+let Settings_ready; //Show loading screen until data is ready.....
 
+const showUnsupported = false;
+
+const sellectionoptions = [
+    { value: 'ACCESSOIRE', name: 'Accessoire', supported: true },
+    { value: 'LIGHT', name: 'Light', supported: true },
+    { value: 'TV', name: 'Television (Unsupported)', supported: false },
+    { value: 'DVD', name: 'DVD Player (Unsupported)', supported: false },
+    { value: 'VOD', name: 'Video on demand (Unsupported)', supported: false },
+    { value: 'PROJECTOR', name: 'Projector (Unsupported)', supported: false },
+    { value: 'DVB', name: 'DVB (Unsupported)', supported: false },
+    { value: 'AVRECEIVER', name: 'A/V Receiver (Unsupported)', supported: false },
+    { value: 'AUDIO', name: 'Audio (Unsupported)', supported: false },
+    { value: 'HDMISWITCH', name: 'HDMI Switch (Unsupported)', supported: false },
+    { value: 'GAMECONSOLE', name: 'Game Console (Unsupported)', supported: false },
+    { value: 'MEDIAPLAYER', name: 'Media Player (Unsupported)', supported: false },
+    { value: 'SOUNDBAR', name: 'Soundbar (Unsupported)', supported: false },
+    { value: 'TUNER', name: 'Tuner (Unsupported)', supported: false },
+    { value: 'THERMOSTAT', name: 'Thermostat (Unsupported)', supported: false },
+    { value: 'CLIMA', name: 'climate control (Unsupported)', supported: false }
+];
+                    
+                    
+
+                    
 
 ////////////////////////////////////////
 // Homey Functions
@@ -20,7 +44,18 @@ var Settings_ready;
 function onHomeyReady(){
     Homey.ready();
     readsettings();
+    addDeviceTypeOptions();
 }// HOMEY ready
+
+function addDeviceTypeOptions () {
+    var optStr = '';
+    for (const i in sellectionoptions) {
+        if (showUnsupported === true || sellectionoptions[i].supported === true) {
+            optStr = optStr + '<option value="'+sellectionoptions[i].value+'">'+sellectionoptions[i].name+'</option>';
+        }
+    }
+    document.getElementById('AddDevice_Type').innerHTML = optStr;
+}
 
 function readsettings(){
     readMyDevices();
@@ -34,7 +69,6 @@ function readMyDevices() {
             Settings_database = Devices
             devices_refresh_display();                 
         } else { 
-            Settings_database = [];
             setTimeout(readMyDevices, 300);
         }
     });
@@ -44,15 +78,15 @@ function readMyId() {
     Homey.get('myId', function(err, id){
         if (typeof id !== 'undefined') {
             Settings_id = id;
+            document.getElementById('settings_id').value = Settings_id;
         } else {
-            Settings_id = 0;
             setTimeout(readMyId, 300);
         }
     });
 } // Get ID Variable from homey.
 
 function readMyBrains() {
-    Homey.get('myNEEOs', function(err, NEEObrains){
+    Homey.get('neeoBrains', function(err, NEEObrains){
         if (typeof NEEObrains !== 'undefined') {
             Settings_brains = NEEObrains   
             settings_refresh_display();             
@@ -65,10 +99,16 @@ function readMyBrains() {
 
 function useMyId() {
     Settings_id = Settings_id + 1;
+    document.getElementById('settings_id').value = Settings_id;
     Homey.set('myId', Settings_id);
     return (Settings_id);
 } // Get new ID and save Variable in homey.
 
+function settings_btn_saveid() {
+    Settings_id = parseInt(document.getElementById('settings_id').value, 10);
+    Homey.set('myId', Settings_id);
+    console.log('myId is set to '+Settings_id);
+} 
 
 ////////////////////////////////////////
 // General GUI
@@ -109,7 +149,7 @@ function gui_view_selection(displayWindow){
 ////////////////////////////////////////
 
 function AddDecice_save(){
-    var mydevice = newDevice(document.getElementById('AddDevice_Manufactorer').value, document.getElementById('AddDevice_Name').value, document.getElementById('AddDevice_Type').value);
+    let mydevice = newDevice(document.getElementById('AddDevice_Manufactorer').value, document.getElementById('AddDevice_Name').value, document.getElementById('AddDevice_Type').value);
     Settings_database.push(mydevice);
     device_capgrp_from_devicetype(mydevice.adapterName,mydevice.type);
     Homey.set('myDevices', Settings_database);
@@ -175,18 +215,18 @@ function device_cap_view_type_change(adapterName){
 } // GUI change type in the capabilitie view
 
 function device_cap_save(adapterName){
-    var cname = document.getElementById('capname_' + adapterName).value
-    var ctype = document.getElementById('captype_' + adapterName).value
-    var slmax = document.getElementById('capslider_max_' + adapterName).value
-    var slunit = document.getElementById('capslider_unit_' + adapterName).value
+    let cname = document.getElementById('capname_' + adapterName).value
+    let ctype = document.getElementById('captype_' + adapterName).value
+    let slmax = document.getElementById('capslider_max_' + adapterName).value
+    let slunit = document.getElementById('capslider_unit_' + adapterName).value
     device_add_cap(adapterName, cname, ctype, slmax, slunit, true);
 } // Add, Save Capabilities
 
 function device_add_cap(adapterName, cname, ctype, slmax, slunit, alert){
-    for (var i in Settings_database) {
+    for (let i in Settings_database) {
         if (Settings_database[i].adapterName === adapterName) {
-            var found = 0
-            for (var z in Settings_database[i].capabilities) {
+            let found = 0
+            for (let z in Settings_database[i].capabilities) {
                 if (Settings_database[i].capabilities[z].label == cname){ found = found + 1}
             }
             if (found > 0) { // Check if capabilitie name allready exist.
@@ -364,10 +404,10 @@ function device_capgrp_from_devicetype(adapterName, type){
 } // Add, Save Capabilities
 
 function capabilitie_remove(adapterName, Capname){
-    for (var i in Settings_database) {
+    for (let i in Settings_database) {
         if (Settings_database[i].adapterName === adapterName) {
-            var capabilities = []
-            for (var z in Settings_database[i].capabilities) {
+            let capabilities = []
+            for (let z in Settings_database[i].capabilities) {
                 if (Settings_database[i].capabilities[z].name != Capname && Settings_database[i].capabilities[z].name != Capname + '_SENSOR'){
                     capabilities.push(Settings_database[i].capabilities[z])
                 }
@@ -381,14 +421,14 @@ function capabilitie_remove(adapterName, Capname){
 } // remove, Capabilities
 
 function devices_refresh_display() {
-    var dd = "";
-    for (var i in Settings_database) {
+    let dd = "";
+    for (let i in Settings_database) {
         dd = dd + '<h1>'+ Settings_database[i].manufacturer + ', ' + Settings_database[i].name + ' <i style="font-size: 11px;">' + Settings_database[i].type + '</i> <b class="deletedevice" onclick="device_remove(\'' + Settings_database[i].adapterName + '\')">Delete</b></h1>';
         
         if (Settings_database[i].capabilities.length > 0) { dd = dd + '<div style="width: 100%; margin: 0 auto; overflow: auto;"><ul style="list-style-type: none;">';};
         
-        for (var ic in Settings_database[i].capabilities) {
-            var ctype = Settings_database[i].capabilities[ic].type;
+        for (let ic in Settings_database[i].capabilities) {
+            let ctype = Settings_database[i].capabilities[ic].type;
             if (ctype === 'slider' || ctype === 'button' || ctype === 'switch' || ctype === 'textlabel') {
                 dd = dd + '<li><img src="ico/ico_' + Settings_database[i].capabilities[ic].type + '.png"/>' + Settings_database[i].capabilities[ic].label;
                 if (ctype === 'slider') { dd = dd + ' (' + Settings_database[i].capabilities[ic].slider.range[0] + '/' + Settings_database[i].capabilities[ic].slider.range[1] + ' ' + Settings_database[i].capabilities[ic].slider.unit + ')';};
@@ -399,7 +439,7 @@ function devices_refresh_display() {
         if (Settings_database[i].capabilities.length > 0) { dd = dd + '</ul></div>'; };
         
         
-        var adn = Settings_database[i].adapterName;
+        let adn = Settings_database[i].adapterName;
         dd = dd + '<div id="cap_view_' + adn + '" style="display: none; margin-bottom: 100px;">';
         dd = dd + ' <div class="field row">';
         dd = dd + ' <label for="captype_' + adn + '">Capabilitie type:</label>';
@@ -454,8 +494,8 @@ function discover_brains_loop(count){
 }
 
 function settings_refresh_display() {
-    var dd = '';
-    for (var i in Settings_brains) {
+    let dd = '';
+    for (let i in Settings_brains) {
         dd = dd + '<option value="'+ Settings_brains[i].host +'">'+Settings_brains[i].host+'</option>';
     }
     document.getElementById("brains").innerHTML = dd;
@@ -463,16 +503,17 @@ function settings_refresh_display() {
 } // Display NEEO's in setting screen.
 
 function settings_brains_selection(){
-    var selection = document.getElementById("brains").value
-    for (var i in Settings_brains) {
+    let selection = document.getElementById("brains").value
+    for (let i in Settings_brains) {
         if (Settings_brains[i].host === selection){
-            var dd='';
-            //dd = dd + '<b style="position: absolute;left: 250px;"> Name:      </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].name+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:  </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].host+'</div><br>';
-            //dd = dd + '<b style="position: absolute;left: 250px;"> Region:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.reg+'</div><br>';
-            //dd = dd + '<b style="position: absolute;left: 250px;"> Version:   </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.rel+'</div><br>';
-            //dd = dd + '<b style="position: absolute;left: 250px;"> Update:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].txt.upd+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> IP:        </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].ip+'</div><br>';
+            let dd='';
+            dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].host+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> IP:          </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].ip+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;">              </b><div style="position: absolute;left: 400px;"></div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> Name:        </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.name+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> Label:       </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.label+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> Last change: </b><div style="position: absolute;left: 400px;"> '+new Date(Settings_brains[i].brainConfiguration.lastchange)+'</div><br>';
+            dd = dd + '<b style="position: absolute;left: 250px;"> key:         </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.key+'</div><br>';
             dd = dd + '<button id="settings_btn_deletebrain" style="position: absolute;right: 18px;" onclick="settings_brain_delete()"><i class="fa fa-trash-o"></i> Delete.</button>'
             document.getElementById("braininfo").innerHTML = dd;
         }
@@ -480,16 +521,16 @@ function settings_brains_selection(){
 } // 
 
 function settings_brain_delete(){
-    var selection = document.getElementById("brains").value
-    var new_Settings_brains = [];
-    for (var i in Settings_brains) {
+    let selection = document.getElementById("brains").value
+    let new_Settings_brains = [];
+    for (let i in Settings_brains) {
         if (Settings_brains[i].host === selection){
             console.log('Deleting Brain '+selection+' from configuration');
         } else {
             new_Settings_brains.push(Settings_brains[i]);
         }
     }
-    Homey.set('myNEEOs', new_Settings_brains);
+    Homey.set('neeoBrains', new_Settings_brains);
     Settings_brains = new_Settings_brains;
     settings_refresh_display();
 } // 
@@ -506,12 +547,12 @@ function settings_btn_download(){
 } //
 
 function download(filename, text) {
-    var pom = document.createElement('a');
+    let pom = document.createElement('a');
     pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     pom.setAttribute('download', filename);
 
     if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
+        let event = document.createEvent('MouseEvents');
         event.initEvent('click', true, true);
         pom.dispatchEvent(event);
     }
@@ -521,8 +562,8 @@ function download(filename, text) {
 } //
 
 function device_remove(adapterName){
-    var newSettings_database = []
-    for (var i in Settings_database) {
+    let newSettings_database = []
+    for (let i in Settings_database) {
         if (Settings_database[i].adapterName != adapterName) {newSettings_database.push(Settings_database[i])}
     }
     Settings_database = newSettings_database
@@ -541,7 +582,7 @@ function clear_button(){
 } // Clear device database
 
 function clear_brain_button(){
-    Homey.set('myNEEOs', []);
+    Homey.set('neeoBrains', []);
     Settings_brains = [];
     settings_refresh_display()
 } // Clear device database
@@ -554,7 +595,7 @@ function clear_brain_button(){
 
 
 function newDevice(manufacturer, name, type) {
-    var _newdevice = {};
+    let _newdevice = {};
     _newdevice.id = useMyId();
     _newdevice.adapterName = 'homey_' + name.replace(/ /gm,"-") + '_' + _newdevice.id;
     _newdevice.type = type.toUpperCase();  
@@ -568,7 +609,7 @@ function newDevice(manufacturer, name, type) {
 } // Returns device OBJECT
 
 function newCapabilitie_button(device, name) {
-    var _newCapabilitie_button = {};
+    let _newCapabilitie_button = {};
     _newCapabilitie_button.type = 'button';
     _newCapabilitie_button.name = name.toUpperCase();
     _newCapabilitie_button.label = name; //my button
@@ -577,7 +618,7 @@ function newCapabilitie_button(device, name) {
 } // Returns device with added button OBJECT
 
 function newCapabilitie_slider(device, name, range, unit ) {
-    var _newCapabilitie_sensor = {};
+    let _newCapabilitie_sensor = {};
     _newCapabilitie_sensor.type = 'sensor';
     
     _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
@@ -588,7 +629,7 @@ function newCapabilitie_slider(device, name, range, unit ) {
     _newCapabilitie_sensor.sensor.unit = unit;      //"unit":"%"
     _newCapabilitie_sensor.sensor.value = 0;
 
-    var _newCapabilitie_slider = {};
+    let _newCapabilitie_slider = {};
     _newCapabilitie_slider.type = 'slider';
     //_newCapabilitie_slider.name = name.replace(/ /gm,"-").toUpperCase();
     _newCapabilitie_slider.name = name.toUpperCase();
@@ -602,7 +643,7 @@ function newCapabilitie_slider(device, name, range, unit ) {
 } // Returns device with added slider OBJECTs            
     
 function newCapabilitie_switch(device, name ) {
-    var _newCapabilitie_sensor = {};
+    let _newCapabilitie_sensor = {};
     _newCapabilitie_sensor.type = 'sensor'; 
     _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
     _newCapabilitie_sensor.label = name;
@@ -610,7 +651,7 @@ function newCapabilitie_switch(device, name ) {
     _newCapabilitie_sensor.sensor = {type:"binary"}
     _newCapabilitie_sensor.sensor.value = false;
     
-    var _newCapabilitie_switch = {};
+    let _newCapabilitie_switch = {};
     _newCapabilitie_switch.type = 'switch';
     _newCapabilitie_switch.name = name.toUpperCase();
     _newCapabilitie_switch.label = name;
@@ -621,7 +662,7 @@ function newCapabilitie_switch(device, name ) {
 } // Returns device with added switch OBJECT
 
 function newCapabilitie_textlabel(device, name ) {
-    var _newCapabilitie_sensor = {};
+    let _newCapabilitie_sensor = {};
     _newCapabilitie_sensor.type = 'sensor';
     _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
     _newCapabilitie_sensor.label = name;
@@ -629,7 +670,7 @@ function newCapabilitie_textlabel(device, name ) {
     _newCapabilitie_sensor.sensor = {type:"custom"}
     _newCapabilitie_sensor.sensor.value = "My Text Here";
     
-    var _newCapabilitie_textlabel = {};
+    let _newCapabilitie_textlabel = {};
     _newCapabilitie_textlabel.type = 'textlabel';
     _newCapabilitie_textlabel.name = name.toUpperCase();
     _newCapabilitie_textlabel.label = name;

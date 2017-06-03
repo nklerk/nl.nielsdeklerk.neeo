@@ -12,7 +12,7 @@ let Settings_brains = [];
 let Settings_id = 0;
 let Settings_ready; //Show loading screen until data is ready.....
 
-const showUnsupported = false;
+const showUnsupported = true;
 
 const sellectionoptions = [
     { value: 'ACCESSOIRE', name: 'Accessoire', supported: true },
@@ -77,7 +77,8 @@ function readMyDevices() {
 function readMyId() {
     Homey.get('myId', function(err, id){
         if (typeof id !== 'undefined') {
-            Settings_id = id;
+           
+            Settings_id = parseInt(id, 10);
             document.getElementById('settings_id').value = Settings_id;
         } else {
             setTimeout(readMyId, 300);
@@ -98,7 +99,7 @@ function readMyBrains() {
 } //
 
 function useMyId() {
-    Settings_id = Settings_id + 1;
+    Settings_id++;
     document.getElementById('settings_id').value = Settings_id;
     Homey.set('myId', Settings_id);
     return (Settings_id);

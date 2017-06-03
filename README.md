@@ -71,6 +71,9 @@ Availeble actions:
 ## To Do
 - Creating individual node modules.
 
+## Version 0.9.2
+- Rewritten event notifications.
+
 ## Version 0.9.1
 - Cleaned up a lot of code.
 

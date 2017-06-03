@@ -13,7 +13,7 @@ const NEEO_RECONNECT_INTERVAL = 900000;	//15 Min
 let neeoConnectionTries = 0;
 
 const neeoBrain_sdk = http.createServer((req, res) => {
-	let response_data = {};
+	let response_data = {code: 200, type: { 'Content-Type': 'application/json' }};
 	const uriparts = decodeURI(req.url).split('/');
 
 	if (req.method == 'GET') {
@@ -115,11 +115,11 @@ function neeoBrain_request_device(deviceName, deviceFunction, deviceParameter){
 		tools_log ('[EVENTS]\tSlider state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);
 		deviceParameter = parseInt(deviceParameter, 10); // Make sure its an integer
 		const decimalvalue = tools_math_round(deviceParameter / capabilitie.slider.range[1],2);
+		neeoBrain_sensor_notify(deviceName, deviceFunction + '_SENSOR', deviceParameter, () => { });
+		homey_system_token_set(deviceName, deviceFunction, deviceParameter, () => { });
 		Homey.manager('flow').trigger( 'slider_changed', {'value': deviceParameter, 'decimalvalue': decimalvalue}, {'adapterName': deviceName, 'capabilitie': deviceFunction}, function(err, result){
 			if( err ) return tools_log (err); 
 		});
-		homey_system_token_set(deviceName, deviceFunction, deviceParameter);
-		neeoBrain_sensor_notify(deviceName, deviceFunction + '_SENSOR', deviceParameter)
 		responseData.content = database_capabilitie_setvalue(deviceName, deviceFunction, deviceParameter)
 	}
 	else if (capabilitie.type === 'switch') {
@@ -147,10 +147,10 @@ function neeoBrain_request_device(deviceName, deviceFunction, deviceParameter){
 function neeoBrain_request_subscribe(uriparts, brainIP){
 	brainIP = brainIP.replace(/^.*:/, '')
 	tools_log ("[NOTIFICATIONS]\tRequest for subscription from: " +  brainIP);
+	/*
 	const devicename = uriparts[1];
 	const eventregister = uriparts[3];
-	const eventregisterB = uriparts[4];
-	console.log ("HUNT ME DOWN IN CODE..." + eventregisterB)
+	const deviceid = uriparts[4];
 
 	const options = {
 		hostname: brainIP,
@@ -174,8 +174,9 @@ function neeoBrain_request_subscribe(uriparts, brainIP){
 
 	const response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': '{"success":true}'};
 	return (response_data);
+	*/
 } // NEEO brain subscription.
-
+/*
 function neeoBrain_request_subscribe_registereventserver(eventregisters, devicename, brainIP) {
 	const devices = database_devices();
 
@@ -193,7 +194,7 @@ function neeoBrain_request_subscribe_registereventserver(eventregisters, devicen
 			if (devices[x].capabilities[y].eventservers) {
 				z = devices[x].capabilities[y].eventservers.findIndex((find => find.eventKey === eventregister.eventKey));
 				if (z === -1){
-					devices[x].capabilities[y].eventservers.push(eventserver);
+					devices[x].capabilities[y].eventservers.push(newEventServer);
 					tools_log ("[NOTIFICATIONS]\tRegistered and added eventserver: " + newEventServer);
 				} else {
 					tools_log ("[NOTIFICATIONS]\tEventserver allready existed " + newEventServer);
@@ -208,6 +209,7 @@ function neeoBrain_request_subscribe_registereventserver(eventregisters, devicen
 		Homey.manager('settings').set('myDevices', devices);
 	}
 } // Register events the neeo brain requested to be updated on.
+*/
 
 function neeoBrain_request_capabilities(uriparts){
 	let response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
@@ -414,6 +416,8 @@ function neeoBrain_configuration_download(neeoBrainQ){
 						let brainConfiguration = JSON.parse(receivedData);
 						neeoBrain.brainConfiguration = brainConfiguration;
 						Homey.manager('settings').set('neeoBrains', neeoBrains);
+						database_updateEventRegisters();
+						//Update Event registers.
 					});
 				});
 				req.on('error', function(e) { tools_log ('[DATABASE] ' + neeoBrain.host + ', Download error: ' + e.message); });
@@ -426,10 +430,56 @@ function neeoBrain_configuration_download(neeoBrainQ){
 	Homey.manager('settings').set('downloading', false);
 } // Download configuration (JSON) from neeo brain
 
+function database_updateEventRegisters (){
+	let devices = Homey.manager('settings').get('myDevices');
+
+	for (const a in devices) {
+		const device = devices[a];
+		for (const b in device.capabilities){
+			const capabilitie = device.capabilities[b];
+			if (capabilitie.type === 'sensor'){
+				tools_log('[DATABASE]\tUpdating Event registers of '+device.name+' sensor: '+capabilitie.label);
+				devices[a].capabilities[b].eventservers = neeoBrain_findEventservers(device.adapterName, capabilitie.name);
+			}
+		}
+	}
+	Homey.manager('settings').set('myDevices', devices);
+}
+
+function neeoBrain_findEventservers(adapterName, capabilities_name){
+	const neeoBrains = Homey.manager('settings').get( 'neeoBrains' );
+	let foundEventregisters = [];
+	
+	for (const neeoBrain of neeoBrains) {
+		if (neeoBrain.brainConfiguration && neeoBrain.brainConfiguration.rooms) {
+			for (const a in neeoBrain.brainConfiguration.rooms) {
+				const room = neeoBrain.brainConfiguration.rooms[a];
+				for (const b in room.devices) {
+					const device = room.devices[b];
+					if (device.details.adapterName === adapterName){
+						for (const c in device.sensors){
+							const sensor = device.sensors[c];
+							if (sensor.name === capabilities_name) {
+								const foundEventregister = {
+									host: neeoBrain.host,
+									eventKey: sensor.eventKey
+								}
+								foundEventregisters.push(foundEventregister);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	//rooms."room".devices."Device".details.adaptername === homey_Homey_10 
+	return foundEventregisters;
+}
+
 function neeoBrain_sensor_notify(adapterName, capabilities_name, value){
 	const capabilitie = database_capabilitie_get(adapterName, capabilities_name)
-//	console.log(capabilitie.eventservers);
-	if (capabilitie.eventservers) {
+
+	if (capabilitie && capabilitie.eventservers) {
 		for (let eventserver of capabilitie.eventservers) {
 			
 			const content = {
@@ -438,31 +488,38 @@ function neeoBrain_sensor_notify(adapterName, capabilities_name, value){
 			};
 
 			const options = {
-				hostname: eventserver.ip,
+				hostname: eventserver.host,
 				port: 3000,
 				path: '/v1/notifications', 
 				method: 'POST', 
 				headers: {'Content-Type': 'application/json'}
 			};
 
-			const req = http.request(options, (res) => {
-				res.setEncoding('utf8');
-				res.on('data', function (body) {
-					let reply = JSON.parse(body)
-					if (reply.success === true){
-						tools_log ('[NOTIFICATIONS]\tSuccesfully sent notification with value ' + value + ' to eventkey ' + eventserver.eventKey + ' @' + eventserver.ip);
-					}
-				});
-			});
-
-			req.on('error', function(e) { tools_log ('[NOTIFICATIONS]\tProblem with request: ' + e.message); });
-			req.write(JSON.stringify(content));
-			req.end();
-			req.on('end', () => { req = undefined;});
+			neeoBrain_sensor_notify_send(options, content, function(){	});
+			
 		}
+	} else {
+		tools_log('[ERROR]\t\tneeoBrain_sensor_notify('+adapterName+', '+capabilities_name+', '+value+')');
 	}
 } // update sensor
+function neeoBrain_sensor_notify_send(options, content, callback){
+	const req = http.request(options, (res) => {
+		res.setEncoding('utf8');
+		res.on('data', function (body) {
+			let reply = JSON.parse(body)
+			if (reply.success === true){
+				tools_log ('[NOTIFICATIONS]\tSuccesfully sent notification with value ' + content.data + ' to eventkey ' + content.type + ' @' + options.hostname);
+			}
+		});
+	});
 
+	req.on('error', function(e) { tools_log ('[NOTIFICATIONS]\tProblem with request: ' + e.message); });
+	req.write(JSON.stringify(content));
+	req.end();
+	req.on('end', () => { 
+		callback();
+	});
+}
 
 ////////////////////////////////////////
 // Functions Tools
@@ -597,7 +654,7 @@ function flow_capabilitie_autocomplete_filter(args, type){
 			for (const capabilitie of device.capabilities) {
 				const capabilitieQ = tools_string_cleanformatch(capabilitie.label)
 				if (capabilitieQ.indexOf(query) !== -1 ) {
-					if (capabilitie.eventservers && capabilitie.sensor && capabilitie.sensor.type === type || capabilitie.type == type){
+					if (capabilitie.sensor && capabilitie.sensor.type === type || capabilitie.type == type){ //capabilitie.eventservers && 
 						foundcapa.push({name: capabilitie.label, realname: capabilitie.name})
 					}
 				}
@@ -824,7 +881,7 @@ function database_device_search(queery){
 		}
 		
 		if (maxScore > 4) {
-			tools_log ('[DATABASE]\tReturned driver: "' + devices[z].manufacturer + " " + devices[z].name + '"  With score: ' + maxScore);
+			tools_log ('[DATABASE]\tReturned driver: "' + device.manufacturer + " " + device.name + '"  With score: ' + maxScore);
 			
 			let fdevice = {
 				item: device,
@@ -832,7 +889,6 @@ function database_device_search(queery){
 				maxScore
 			};
 
-			console.log (fdevice)
 			founddevices.push(fdevice)
 		}
 	}

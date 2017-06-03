@@ -3,16 +3,19 @@
 This app brings the best of NEEO and Homey together.
 
 Controll every device or flow in Homey with the NEEO remote. 
-Use sliders, buttons and switches to build your own virtual device and use the flow editor to hook it up to all kinds of Homey apps.
+Use sliders, buttons and switches to build your own virtual device and use the Homey flow editor to hook it up to all kinds of Homey apps.
 The app supports feedback of information as well. Change the volume of your receiver and the slider on your remote will change in realtime.
 
 Want to visualise your sensors or "what did homey say?", with this app you can inform the remote about all kinds of state changes including textual.
 So what did homey say? you can see that on your remote.
 
 Build virtual devices and make them availeble to NEEO.
-Controll Flows with your NEEO remote and controll your NEEO connected devices with Homey.
+Controll Homey Flows with your NEEO remote and controll your NEEO connected devices with Homey.
 
 The NEEO Remote can be (Pre)ordered at: https://neeo.com/
+
+
+Please note that this is not an official NEEO app made by NEEO and there will be no support from NEEO concerning this App.
 
 
 You may leave me a donation if you love my work.
@@ -65,6 +68,19 @@ Availeble actions:
 
 
 # Changelog.
+## To Do
+- Creating individual node modules.
+
+## Version 0.9.2
+- Rewritten event notifications.
+
+## Version 0.9.1
+- Cleaned up a lot of code.
+
+## Version 0.8.0
+- Rework of MDNS Discovery.
+- Bug Fixes
+
 ## Version 0.7.7
 - Added token support (Tags)
 

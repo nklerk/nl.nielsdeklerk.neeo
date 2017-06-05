@@ -171,10 +171,10 @@ function neeoBrain_request_subscribe(uriparts, brainIP){
 	});
 
 	req.end();
-
+	*/
 	const response_data = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': '{"success":true}'};
 	return (response_data);
-	*/
+
 } // NEEO brain subscription.
 /*
 function neeoBrain_request_subscribe_registereventserver(eventregisters, devicename, brainIP) {

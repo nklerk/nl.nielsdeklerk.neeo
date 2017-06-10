@@ -71,6 +71,9 @@ Availeble actions:
 ## To Do
 - Creating individual node modules.
 
+## Version 0.9.3
+- Fixed an issue when NEEO requests a unknown capabilitie.
+
 ## Version 0.9.2
 - Rewritten event notifications.
 

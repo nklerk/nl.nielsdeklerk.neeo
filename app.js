@@ -100,6 +100,9 @@ function neeoBrain_request_device(deviceName, deviceFunction, deviceParameter){
 	};
 
 	const capabilitie = database_capabilitie_get(deviceName, deviceFunction);
+	if (!capabilitie.type){
+		capabilitie.type = 'error';
+	}
 
 	if (capabilitie.type === 'sensor') { 
 		responseData.content = JSON.stringify({value: capabilitie.sensor.value});
@@ -942,7 +945,7 @@ function database_capabilitie_get(adapterName, capabilitieName){
 			}
 		}
 	}
-	return;
+	return {};
 } // return a specific capabilitie of a deviceadapter.
 
 

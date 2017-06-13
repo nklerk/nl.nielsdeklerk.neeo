@@ -278,7 +278,6 @@ function neeoBrain_Add_to_db(foundbrain) {
 	if (!neeoBrains) {
 		neeoBrains = [];
 	}
-
 	let exist = 0;
 	for (const i in neeoBrains) {
 		if (neeoBrains[i].host === foundbrain.host) {
@@ -300,12 +299,13 @@ function neeoBrain_Add_to_db(foundbrain) {
 } // Adding the discovered brains to the DB (and update existing brains.)
 
 function neeoBrain_connect(){
-	const neeoBrains = Homey.manager('settings').get( 'neeoBrains');
-	if (!neeoBrains && neeoConnectionTries < 10) {
+	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	if ((!neeoBrains || neeoBrains.length === 0 )&& neeoConnectionTries < 10) {
 		neeoBrain_discover();
 		setTimeout(neeoBrain_connect, NEEO_CONNECT_INTERVAL);
         neeoConnectionTries++;
 	} else {
+		console.log ('Debugg')
 		for (let neeoBrain of neeoBrains) {
 			tools_log('[SERVER]\tConnecting: '+neeoBrain.host+' ('+neeoBrain.ip+')');
 			neeoBrain_register_devicedatabase(neeoBrain);
@@ -955,7 +955,10 @@ function database_capabilitie_get(adapterName, capabilitieName){
 ////////////////////////////////////////
 
 function init() { 
-	
+
+//Start with empty configuration after installation as this should be automaticaly rediscovered. This way the starting point of the app is allways the same.
+Homey.manager('settings').set('neeoBrains', []);
+
 //Triggers
 	//button_pressed
 	Homey.manager('flow').on('trigger.button_pressed.device.autocomplete', function( callback, args ){

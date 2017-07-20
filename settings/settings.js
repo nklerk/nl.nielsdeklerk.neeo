@@ -12,25 +12,25 @@ let Settings_brains = [];
 let Settings_id = 0;
 let Settings_ready; //Show loading screen until data is ready.....
 
-const showUnsupported = true;
+const showUnsupported = false;
 
 const sellectionoptions = [
     { value: 'ACCESSOIRE', name: 'Accessoire', supported: true },
     { value: 'LIGHT', name: 'Light', supported: true },
-    { value: 'TV', name: 'Television (Unsupported)', supported: false },
-    { value: 'DVD', name: 'DVD Player (Unsupported)', supported: false },
-    { value: 'VOD', name: 'Video on demand (Unsupported)', supported: false },
-    { value: 'PROJECTOR', name: 'Projector (Unsupported)', supported: false },
-    { value: 'DVB', name: 'DVB (Unsupported)', supported: false },
-    { value: 'AVRECEIVER', name: 'A/V Receiver (Unsupported)', supported: false },
-    { value: 'AUDIO', name: 'Audio (Unsupported)', supported: false },
-    { value: 'HDMISWITCH', name: 'HDMI Switch (Unsupported)', supported: false },
-    { value: 'GAMECONSOLE', name: 'Game Console (Unsupported)', supported: false },
-    { value: 'MEDIAPLAYER', name: 'Media Player (Unsupported)', supported: false },
-    { value: 'SOUNDBAR', name: 'Soundbar (Unsupported)', supported: false },
-    { value: 'TUNER', name: 'Tuner (Unsupported)', supported: false },
-    { value: 'THERMOSTAT', name: 'Thermostat (Unsupported)', supported: false },
-    { value: 'CLIMA', name: 'climate control (Unsupported)', supported: false }
+    { value: 'TV', name: 'Television', supported: true },
+    { value: 'DVD', name: 'DVD Player', supported: true },
+    { value: 'VOD', name: 'Video on demand', supported: true },
+    { value: 'PROJECTOR', name: 'Projector', supported: true },
+    { value: 'DVB', name: 'DVB', supported: true },
+    { value: 'AVRECEIVER', name: 'A/V Receiver', supported: true },
+    { value: 'AUDIO', name: 'Audio', supported: true },
+    { value: 'HDMISWITCH', name: 'HDMI Switch', supported: false },
+    { value: 'GAMECONSOLE', name: 'Game Console', supported: true },
+    { value: 'MEDIAPLAYER', name: 'Media Player', supported: true },
+    { value: 'SOUNDBAR', name: 'Soundbar', supported: false },
+    { value: 'TUNER', name: 'Tuner', supported: false },
+    { value: 'THERMOSTAT', name: 'Thermostat', supported: false },
+    { value: 'CLIMA', name: 'climate control', supported: false }
 ];
                     
                     
@@ -213,6 +213,16 @@ function device_cap_view_type_change(adapterName){
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Text label:'
     }
+    if (document.getElementById('captype_' + adapterName).value == 'image') {
+        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('capname_' + adapterName).value = 'Small image'
+    }
+    if (document.getElementById('captype_' + adapterName).value == 'large image') {
+        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('capname_' + adapterName).value = 'Large Image'
+    }
 } // GUI change type in the capabilitie view
 
 function device_cap_save(adapterName){
@@ -233,10 +243,12 @@ function device_add_cap(adapterName, cname, ctype, slmax, slunit, alert){
             if (found > 0) { // Check if capabilitie name allready exist.
                 if (alert == true) {alert("There is allready a capabilitie named: " + cname);}
             }else {
-                if (ctype == 'slider')    { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_slider(Settings_database[i], cname, [0,Number(slmax)], slunit)) }
-                if (ctype == 'button')    { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_button(Settings_database[i], cname)) }
-                if (ctype == 'switch')    { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_switch(Settings_database[i], cname)) }
-                if (ctype == 'textlabel') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_textlabel(Settings_database[i], cname)) }
+                if (ctype == 'slider')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_slider(Settings_database[i], cname, [0,Number(slmax)], slunit)) }
+                if (ctype == 'button')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_button(Settings_database[i], cname)) }
+                if (ctype == 'switch')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_switch(Settings_database[i], cname)) }
+                if (ctype == 'textlabel')   { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_textlabel(Settings_database[i], cname)) }
+                if (ctype == 'image')       { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_image(Settings_database[i], cname, 'small')) }
+                if (ctype == 'large image') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapabilitie_image(Settings_database[i], cname, 'large')) }
                 Homey.set('myDevices', Settings_database);
                 devices_refresh_display()
                 gui_view_selection('devices')
@@ -259,6 +271,9 @@ function device_capgrp_save(adapterName, capability){
             device_add_cap(adapterName, 'REVERSE', 'button', 0, 0, false);
             device_add_cap(adapterName, 'PLAY PAUSE TOGGLE', 'button', 0, 0, false);
             device_add_cap(adapterName, 'INFO', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'MY RECORDINGS', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'RECORD', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'LIVE', 'button', 0, 0, false);
             break; // zonder break zou de vergelijking door alle cases gaan vergelijken.
         case "digits":
             device_add_cap(adapterName, 'DIGIT 0', 'button', 0, 0, false);
@@ -280,7 +295,7 @@ function device_capgrp_save(adapterName, capability){
             device_add_cap(adapterName, 'CURSOR LEFT', 'button', 0, 0, false);
             device_add_cap(adapterName, 'CURSOR RIGHT', 'button', 0, 0, false);
             device_add_cap(adapterName, 'CURSOR UP', 'button', 0, 0, false);
-            device_add_cap(adapterName, 'ENTER', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'CURSOR ENTER', 'button', 0, 0, false);
             device_add_cap(adapterName, 'EXIT', 'button', 0, 0, false);
             device_add_cap(adapterName, 'HOME', 'button', 0, 0, false);
             device_add_cap(adapterName, 'MENU', 'button', 0, 0, false);
@@ -295,6 +310,11 @@ function device_capgrp_save(adapterName, capability){
             device_add_cap(adapterName, 'CHANNEL DOWN', 'button', 0, 0, false);
             device_add_cap(adapterName, 'CHANNEL SEARCH', 'button', 0, 0, false);
             device_add_cap(adapterName, 'FAVORITE', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'GUIDE', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'FUNCTION RED', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'FUNCTION GREEN', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'FUNCTION YELLOW', 'button', 0, 0, false);
+            device_add_cap(adapterName, 'FUNCTION BLUE', 'button', 0, 0, false);
             break;
         case "video":
             device_add_cap(adapterName, 'FORMAT 16:9', 'button', 0, 0, false);
@@ -430,7 +450,7 @@ function devices_refresh_display() {
         
         for (let ic in Settings_database[i].capabilities) {
             let ctype = Settings_database[i].capabilities[ic].type;
-            if (ctype === 'slider' || ctype === 'button' || ctype === 'switch' || ctype === 'textlabel') {
+            if (ctype === 'slider' || ctype === 'button' || ctype === 'switch' || ctype === 'textlabel' || ctype === 'imageurl') {
                 dd = dd + '<li><img src="ico/ico_' + Settings_database[i].capabilities[ic].type + '.png"/>' + Settings_database[i].capabilities[ic].label;
                 if (ctype === 'slider') { dd = dd + ' (' + Settings_database[i].capabilities[ic].slider.range[0] + '/' + Settings_database[i].capabilities[ic].slider.range[1] + ' ' + Settings_database[i].capabilities[ic].slider.unit + ')';};
                 dd = dd + '<b class="deletecapabilitie" onclick="capabilitie_remove(\'' + Settings_database[i].adapterName + '\', \'' + Settings_database[i].capabilities[ic].name + '\')">X</b>';
@@ -445,7 +465,7 @@ function devices_refresh_display() {
         dd = dd + ' <div class="field row">';
         dd = dd + ' <label for="captype_' + adn + '">Capabilitie type:</label>';
         dd = dd + ' <select id="captype_' + adn + '" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 260px;" onchange="device_cap_view_type_change(\'' + adn + '\')">';
-        dd = dd + ' <option value="button">Button</option><option value="switch">Switch</option><option value="slider">Slider</option><option value="textlabel">textlabel</option></select></div>';
+        dd = dd + ' <option value="button">Button</option><option value="switch">Switch</option><option value="slider">Slider</option><option value="textlabel">textlabel</option><option value="image">image</option><option value="large image">large image</option></select></div>';
         dd = dd + ' <div class="field row">';
         dd = dd + ' <label for="capname_' + adn + '">Capabilitie name:</label>';
         dd = dd + ' <input  id="capname_' + adn + '" type="text" value="Power On" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
@@ -679,4 +699,25 @@ function newCapabilitie_textlabel(device, name ) {
     _newCapabilitie_textlabel.sensor = _newCapabilitie_sensor.name
     
     return ([_newCapabilitie_sensor, _newCapabilitie_textlabel]);
+} // Returns device with added textlabel OBJECT
+
+function newCapabilitie_image(device, name, size) {
+    let _newCapabilitie_sensor = {};
+    _newCapabilitie_sensor.type = 'sensor';
+    _newCapabilitie_sensor.name = name.toUpperCase() + "_SENSOR"; 
+    _newCapabilitie_sensor.label = name;
+    _newCapabilitie_sensor.path = "/device/" + device.adapterName + "/" + _newCapabilitie_sensor.name;
+    _newCapabilitie_sensor.sensor = {type:"custom"}
+    _newCapabilitie_sensor.sensor.value = "My Text Here";
+    
+    let _newCapabilitie_image = {};
+    _newCapabilitie_image.type = 'imageurl';
+    _newCapabilitie_image.name = name.toUpperCase();
+    _newCapabilitie_image.label = name;
+    _newCapabilitie_image.imageUri = null;
+    _newCapabilitie_image.size = size;
+    _newCapabilitie_image.path = "/device/" + device.adapterName + "/" + _newCapabilitie_image.name;
+    _newCapabilitie_image.sensor = _newCapabilitie_sensor.name
+    
+    return ([_newCapabilitie_sensor, _newCapabilitie_image]);
 } // Returns device with added textlabel OBJECT

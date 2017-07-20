@@ -258,7 +258,6 @@ function neeoBrain_discover() {
 	
 	tools_log ("[SERVER]\tSearching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
 	const mdns = require('mdns-js');
-	//if you have another mdns daemon running, like avahi or bonjour, uncomment following line
 	mdns.excludeInterface('0.0.0.0');
 	let browser = mdns.createBrowser('_neeo._tcp');
 	
@@ -1178,7 +1177,7 @@ Homey.manager('settings').set('neeoBrains', []);
 		callback( null, true ); 
     });
 
-	//inform_switch
+	//inform_textlabel
 	Homey.manager('flow').on('action.inform_textlabel.device.autocomplete', function( callback, args ){
 		let devices = flow_devices_autocomplete_filter(args.query)
 		callback(null, devices);

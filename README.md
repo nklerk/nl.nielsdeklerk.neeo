@@ -12,7 +12,8 @@ So what did homey say? you can see that on your remote.
 Build virtual devices and make them availeble to NEEO.
 Controll Homey Flows with your NEEO remote and controll your NEEO connected devices with Homey.
 
-The NEEO Remote can be (Pre)ordered at: https://neeo.com/
+This code is developed with an actual neeo combo.
+The NEEO Remote can be (Pre)ordered at https://neeo.com/pre-order/
 
 
 Please note that this is not an official NEEO app made by NEEO and there will be no support from NEEO concerning this App.
@@ -40,6 +41,7 @@ virtual devices:
 * Add sliders to your virtual devices.
 * Add switches to your virtual devices.
 * Add textlabels to your virtual devices.
+* Add images to your virtual devices.
 * Add predefined media buttons to your virtual devices.
 * Add predefined digit buttons to your virtual devices.
 * Add predefined power buttons to your virtual devices.
@@ -59,37 +61,40 @@ Availeble actions:
 
 * Activate a NEEO Recipe.
 * Shutdown a NEEO Recipe (Power off).
+* Shutdown all active NEEO Recipes (Power off).
 * Press a button.
 * Change the state of a switch.
 * Change the state of a slider.
-* Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
-* Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
-* Inform NEEO that a textlabel value of your virtual device has changed. (Provides visual feedback)
+* State change, Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
+* State change, Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
+* State change, Inform NEEO that a textlabel or image URL value of your virtual device has changed. (Provides visual feedback)
 
+
+## To Do
+- Support base64encoded images to NEEO.
+- Check is recipe is active or deactive.
+- redesign of settings UI.
+- adding tools like favorite editing.
+- changing to homey-sdkv2
 
 # Changelog.
-## To Do
-- Creating individual node modules.
-
+## Version 0.9.47
+- Created individual node modules.
+- General code cleaning
+- Neeo now support images! and so does this app.
 ## Version 0.9.4
 - Fixed an issue with a corupted neeobrains save.
-
 ## Version 0.9.3
 - Fixed an issue when NEEO requests a unknown capabilitie.
-
 ## Version 0.9.2
 - Rewritten event notifications.
-
 ## Version 0.9.1
 - Cleaned up a lot of code.
-
 ## Version 0.8.0
 - Rework of MDNS Discovery.
 - Bug Fixes
-
 ## Version 0.7.7
 - Added token support (Tags)
-
 ## Version 0.7.6
 - Fixed a critical bug that rendered all NEEO flows unusable.
 - Added textlabels as capabilitie, You can now display textual inforamation. like what did homey say :-)
@@ -97,7 +102,6 @@ Availeble actions:
 - Changed icons on app settings
 - Added textlabel icon for app settings.
 - Changed initial bonjour interval from unlimited every 10 seconds to 10 times 1 minute.
-
 ## Version 0.7.5
 - Default Capabilities will now be added when adding a new virtual device.
 - Settings page look and feel changed.
@@ -105,19 +109,15 @@ Availeble actions:
 - Added setting to view connected NEEO brains.
 - Added discovery button to manually discover NEEO brains.
 - Added a delete NEEO brain function to settings.
-
 ## Version 0.7.4
 - Fixed a bug where switches didn't work.
 - changed name of "drivers" to "Virtual Devices"
 - Fixed a bug that causes bonjour error's.
 - Added a way to turn off all active recipies.
-
 ## Version 0.7.3
 - minor debug log changes.
 - Changed re registering to rediscovery/reconnect syclus of 10 Minutes.
-
 ## Version 0.7.2
 - fixed a bug that caused an issue when using a multi brain setup
-
 ## Version 0.7.1
 - First public beta release.

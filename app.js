@@ -29,6 +29,8 @@ module.exports = {
 				callback(null, false);
 			}
 		});
+		
+		
 		//switch_changed
 		Homey.manager('flow').on('trigger.switch_changed.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));
@@ -44,6 +46,8 @@ module.exports = {
 				callback(null, false);
 			}
 		});
+		
+		
 		//slider_changed
 		Homey.manager('flow').on('trigger.slider_changed.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));
@@ -59,6 +63,8 @@ module.exports = {
 				callback(null, false);
 			}
 		});
+		
+		
 		//activate_recipe
 		Homey.manager('flow').on('action.activate_recipe.room.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.rooms(args));
@@ -68,9 +74,11 @@ module.exports = {
 		});
 		Homey.manager('flow').on('action.activate_recipe', function (callback, args, state) {
 			Homey.log  ('[HOMEY] \tActivating recipe ' + args.recipe.name + '.'); 
-			tools.httpGetAndForget('GET', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/recipes/' + args.recipe.key + '/execute');  // move to neeo-brain
+			neeoBrain.executeRecipe(args.room.brainip, args.room.key, args.recipe.key);
 			callback( null, true ); 
 		});
+		
+		
 		//poweroff_recipe
 		Homey.manager('flow').on('action.poweroff_recipe.room.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.rooms(args));
@@ -80,31 +88,19 @@ module.exports = {
 		});
 		Homey.manager('flow').on('action.poweroff_recipe', function (callback, args, state) {
 			Homey.log  ('[HOMEY] \tPowering off recipe ' + args.recipe.name + '.'); 
-			tools.httpGetAndForget('GET', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/recipes/' + args.recipe.key + '/execute') // move to neeo-brain
+			neeoBrain.executeRecipe(args.room.brainip, args.room.key, args.recipe.key);
 			callback( null, true ); 
 		});
+		
+		
 		//Poweroff_all
 		Homey.manager('flow').on('action.poweroff_all_recipes', function (callback) {
-			 // move to neeo-brain
 			Homey.log  ('[HOMEY] \tPowering off all recipes.'); 
-			const neeoBrains = Homey.manager('settings').get( 'neeoBrains' );
-			for (const neeoBrain of neeoBrains){
-				tools.httpRequestJson ('GET', neeoBrain.host, 3000, '/v1/api/Recipes', null, function(res, recipies){
-					if (typeof recipies !== 'undefined'){
-						recipies = JSON.parse(recipies);
-						const url=require('url');
-						for (const recipie of recipies) {
-							if (recipie.isPoweredOn === true){
-								Homey.log  (' - Powering off '+recipie.detail.devicename)
-								const a = url.parse(recipie.url.setPowerOff)
-								tools.httpGetAndForget('GET', a.hostname, a.port, a.pathname)
-							}
-						}
-					}
-					callback( null, true );
-				});
-			} 
+			neeoBrain.shutdownAllRecipes();
+			callback( null, true );
 		});
+		
+		
 		//command_button
 		Homey.manager('flow').on('action.command_button.room.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.rooms(args));
@@ -117,9 +113,11 @@ module.exports = {
 		});
 		Homey.manager('flow').on('action.command_button', function (callback, args, state) {
 			Homey.log  ('[HOMEY] \tPressing the "' + args.capabilitie.name + '" button of ' + args.device.name); 
-			tools.httpGetAndForget('GET', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/devices/' + args.device.key + '/macros/' + args.capabilitie.key + '/trigger');
+			neeoBrain.commandButton(args.room.brainip, args.room.key, args.device.key, args.capabilitie.key);
 			callback( null, true ); 
 		});
+		
+		
 		//command_switch
 		Homey.manager('flow').on('action.command_switch.room.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.rooms(args));
@@ -131,10 +129,12 @@ module.exports = {
 			callback(null, homeyAutocomplete.switches(args));
 		});
 		Homey.manager('flow').on('action.command_switch', function (callback, args, state) {
-			Homey.log  ('[HOMEY] \tFlip switch "' + args.capabilitie.name + '" of ' + args.device.name); 
-			tools.httpGetAndForget('PUT', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/devices/' + args.device.key + '/switches/' + args.capabilitie.key + '/' + args.value);
+			Homey.log  ('[HOMEY] \tFlip switch "' + args.capabilitie.name + '" of ' + args.device.name);
+			neeoBrain.commandSwitch(args.room.brainip, args.room.key, args.device.key, args.capabilitie.key, args.value);
 			callback( null, true ); 
 		});
+		
+		
 		//command_slider
 		Homey.manager('flow').on('action.command_slider.room.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.rooms(args));
@@ -147,9 +147,11 @@ module.exports = {
 		});
 		Homey.manager('flow').on('action.command_slider', function (callback, args, state) {
 			Homey.log  ('[HOMEY] \tDragging slider "' + args.capabilitie.name + '" of ' + args.device.name + ' to ' + args.value); 
-			tools.httpGetAndForget('PUT', args.room.brainip, 3000, '/v1/projects/home/rooms/' + args.room.key + '/devices/' + args.device.key + '/sliders/' + args.capabilitie.key, {value: args.value});
+			neeoBrain.commandSlider(args.room.brainip, args.room.key, args.device.key, args.capabilitie.key, args.value);
 			callback( null, true ); 
 		});
+		
+		
 		//inform_slider
 		Homey.manager('flow').on('action.inform_slider.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));
@@ -164,6 +166,8 @@ module.exports = {
 			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
 			callback( null, true ); 
 		});
+		
+		
 		//inform_slider_value
 		Homey.manager('flow').on('action.inform_slider_value.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));
@@ -178,6 +182,8 @@ module.exports = {
 			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
 			callback( null, true ); 
 		});
+		
+		
 		//inform_switch
 		Homey.manager('flow').on('action.inform_switch.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));
@@ -187,13 +193,14 @@ module.exports = {
 		});
 		Homey.manager('flow').on('action.inform_switch', function (callback, args, state) {
 			Homey.log  ('[HOMEY FLOW]\taction.inform_switch');
-			if (args.value === "true") {args.value = true};
-			if (args.value === "false") {args.value = false};
-			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value)
+			args.value = tools.stringToBoolean(args.value);
+			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
 			neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
 			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
 			callback( null, true ); 
 		});
+		
+		
 		//inform_textlabel
 		Homey.manager('flow').on('action.inform_textlabel.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));

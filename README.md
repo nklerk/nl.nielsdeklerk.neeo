@@ -78,7 +78,7 @@ Availeble actions:
 - changing to homey-sdkv2
 
 # Changelog.
-## Version 0.9.47
+## Version 0.47.x
 - Created individual node modules.
 - General code cleaning
 - Neeo now support images! and so does this app.

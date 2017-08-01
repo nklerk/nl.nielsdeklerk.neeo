@@ -4,7 +4,7 @@ module.exports.handle = function (body){
 	let responseData = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
 	const myjson = JSON.parse(body);
 	Homey.log ("[EVENTS]\tNeeo Event received: " + body);
-	let action = "", device = "", room = "", actionparameter = "";		
+	let action = "", device = "", room = "", actionparameter = "";
 	if (myjson.action){
 		action = myjson.action;
 	};
@@ -19,7 +19,7 @@ module.exports.handle = function (body){
 	};
 	if (myjson.room){
 		room = myjson.room;
-	};		
+	};
 	Homey.manager('flow').trigger('received_event', { Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body});
 	return (responseData)
 }

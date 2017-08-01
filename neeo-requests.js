@@ -79,7 +79,7 @@ module.exports.device = function device(deviceName, deviceFunction, deviceParame
 
 
 module.exports.subscribe = function subscribe(uriparts, brainIP){
-	brainIP = brainIP.replace(/^.*:/, '')
+	brainIP = brainIP.replace(/^.*:/, '');
 	console.log ("[NOTIFICATIONS]\tRequest for subscription from: " +  brainIP);
 	const responseData = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': '{"success":true}'};
 	return (responseData);
@@ -87,7 +87,7 @@ module.exports.subscribe = function subscribe(uriparts, brainIP){
 
 
 module.exports.unsubscribe = function unsubscribe(uriparts, brainIP){
-	brainIP = brainIP.replace(/^.*:/, '')
+	brainIP = brainIP.replace(/^.*:/, '');
 	console.log ("[NOTIFICATIONS]\tRequest for unsubscription from: " +  brainIP);
 	const responseData = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': '{"success":true}'};
 	return (responseData);

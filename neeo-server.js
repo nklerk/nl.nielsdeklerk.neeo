@@ -11,7 +11,7 @@ const neeoServer = http.createServer((req, res) => {
 	let responseData = {code: 200, type: { 'Content-Type': 'application/json' }};
 	const uriparts = decodeURI(req.url).split('/');
 	if (req.method == 'GET') {
-		if (uriparts[1] === 'db') {	
+		if (uriparts[1] === 'db') {
 			responseData = neeoRequests.db(uriparts[2]);
 		} else if (uriparts[1] === 'device') { 
 			responseData = neeoRequests.device(uriparts[2],uriparts[3],uriparts[5]);

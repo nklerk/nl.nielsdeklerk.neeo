@@ -181,14 +181,13 @@
 
         <fieldset id="Settings_view" style="display: none;">
             <legend>Settings</legend>
-            <h2>Discover NEEO Brains <button onclick="settings_btn_discoverbrains()" class="right" > <i class="fa fa-refresh"></i> Discover</button></h2>
-            Use this button to discover NEEO brain(s).
-
-
-            <div><br></div><div><br></div><div><br></div><div><br></div>
-            <h2>NEEO Brains</h2>
-            This are the discovered NEEO brain(s).<br>
             <table>
+            <tr>
+                <td>
+                    <h2>NEEO Brains</h2>
+                    This are the discovered NEEO brain(s).<br>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <select id="brains" name="sometext" onclick="settings_brains_selection()" size="5" style="height: 120px; width: 200px; background: white;">
@@ -203,11 +202,15 @@
                     <div id="braininfo"> </div>
                 </td>
             </tr>
+            <tr>
+                <td><button onclick="settings_btn_discoverbrains()" class="left" > <i class="fa fa-refresh"></i> Discover</button></td>
+            </tr>
             </table>
-            <div><br></div><div><br></div><div><br></div><div><br></div>
+            <div style="display: none;"><br><div><br></div><div><br></div><div><br></div>
             <h2>DB ID#</h2>
             <input id="settings_id" type="number" value="39"></input>
             <button id="settings_btn_saveid" class="mi" onclick="settings_btn_saveid()" > <i class="fa fa-save"></i> Save</button>
+            </div>
             <div><br></div><div><br></div><div><br></div><div><br></div>
             <h2>JSON formated configuration</h2>
             Use this text area to change, download or backup your virtual device database configurations.

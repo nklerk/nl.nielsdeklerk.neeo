@@ -37,7 +37,7 @@ function httpRequest(options, content, callback){
 		});
 	});
 	req.on('error', (e) => { 
-		tools_log ('problem with request: ' + e.message); 
+		Homey.log ('problem with request: ' + e.message); 
 	});
 	if (content) {
 		req.write(JSON.stringify(content));

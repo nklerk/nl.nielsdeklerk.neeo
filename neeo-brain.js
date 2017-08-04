@@ -10,7 +10,7 @@ const NEEO_RECONNECT_INTERVAL = 900000;	//15 Min
 let neeoConnectionTries = 0;
 
 
-module.exports.discover = function discover() {
+function discover() {
 	Homey.log ("[SERVER]\tSearching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
 	const mdns = require('mdns-js');
 	mdns.excludeInterface('0.0.0.0');
@@ -22,6 +22,7 @@ module.exports.discover = function discover() {
 		addNeeoBrainToDatabase(data);
 	});
 }
+module.exports.discover = discover;
 
 
 function addNeeoBrainToDatabase(foundbrain) {
@@ -49,7 +50,7 @@ function addNeeoBrainToDatabase(foundbrain) {
 }
 
 
-module.exports.connect = function connect() {
+function connect() {
 	const neeoBrains = Homey.manager('settings').get('neeoBrains');
 	if ((!neeoBrains || neeoBrains.length === 0 )&& neeoConnectionTries < 10) {
 		discover();
@@ -67,6 +68,7 @@ module.exports.connect = function connect() {
 	}
 	setTimeout(connect, NEEO_RECONNECT_INTERVAL);
 }
+module.exports.connect = connect;
 
 
 function registerAsDeviceDatabase(neeoBrain) {

@@ -107,11 +107,13 @@ module.exports.capabilitieSetValue = function (adapterName, capabilities_name, n
 module.exports.capabilitie = function (adapterName, capabilitieName) {
 	const devices = allDevices();
 	let response = {};
-	for (const device of devices) {
-		if (device.adapterName == adapterName) {
-			for (const capabilitie of device.capabilities) {
-				if (capabilitie.name == capabilitieName) {
-					return capabilitie;
+	if (devices) {
+		for (const device of devices) {
+			if (device.adapterName == adapterName) {
+				for (const capabilitie of device.capabilities) {
+					if (capabilitie.name == capabilitieName) {
+						return capabilitie;
+					}
 				}
 			}
 		}

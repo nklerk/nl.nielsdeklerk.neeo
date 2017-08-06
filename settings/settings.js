@@ -54,10 +54,11 @@ function readsettings(){
 
 function readMyDevices() {
     Homey.get('myDevices', function(err, Devices){
-        if (typeof Devices !== 'undefined') {
+        if (typeof Devices !== 'undefined' && Devices !== null) {
             Settings_database = Devices
             devices_refresh_display();                 
         } else { 
+            Settings_database = [];
             setTimeout(readMyDevices, 300);
         }
     });

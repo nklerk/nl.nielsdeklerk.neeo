@@ -54,11 +54,14 @@ function readsettings(){
 
 function readMyDevices() {
     Homey.get('myDevices', function(err, Devices){
-        if (typeof Devices !== 'undefined' && Devices !== null) {
-            Settings_database = Devices
+        if (typeof Devices !== 'undefined') {
+            if (Devices !== null){
+                Settings_database = [];
+            } else {
+                Settings_database = Devices
+            }
             devices_refresh_display();                 
         } else { 
-            Settings_database = [];
             setTimeout(readMyDevices, 300);
         }
     });
@@ -68,6 +71,9 @@ function readMyDevices() {
 function readMyId() {
     Homey.get('myId', function(err, id){
         if (typeof id !== 'undefined') {
+            if (id === null) {
+                id = 1;
+            }
             Settings_id = parseInt(id, 10);
             document.getElementById('settings_id').value = Settings_id;
         } else {
@@ -84,7 +90,7 @@ function readMyBrains() {
             settings_refresh_display();             
         } else { 
             Settings_brains = [];
-            setTimeout(readMyBrains, 100);
+            setTimeout(readMyBrains, 300);
         }
     });
 } 

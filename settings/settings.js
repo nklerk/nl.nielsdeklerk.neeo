@@ -55,7 +55,7 @@ function readsettings(){
 function readMyDevices() {
     Homey.get('myDevices', function(err, Devices){
         if (typeof Devices !== 'undefined') {
-            if (Devices !== null){
+            if (Devices === null){
                 Settings_database = [];
             } else {
                 Settings_database = Devices
@@ -72,7 +72,7 @@ function readMyId() {
     Homey.get('myId', function(err, id){
         if (typeof id !== 'undefined') {
             if (id === null) {
-                id = 1;
+                id = 0;
             }
             Settings_id = parseInt(id, 10);
             document.getElementById('settings_id').value = Settings_id;

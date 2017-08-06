@@ -79,6 +79,7 @@ Availeble actions:
 
 # Changelog.
 ## Version 0.47.x
+- New helpfull information added.
 - Created individual node modules.
 - General code cleaning
 - Neeo now support images! and so does this app.

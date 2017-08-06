@@ -22,7 +22,7 @@ module.exports.set = set;
 
 module.exports.setAll = function () {
 	const devices = Homey.manager('settings').get('myDevices');
-	if (typeof devices === object) {
+	if (typeof devices === 'object') {
 		for (const device of devices) {
 			for (const capabilitie of device.capabilities) {
 				if (capabilitie.type === 'sensor' && capabilitie.sensor.value){

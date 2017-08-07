@@ -72,10 +72,13 @@ Availeble actions:
 
 ## To Do
 - Support base64encoded images to NEEO.
-- Check is recipe is active or deactive.
+- Check if recipe is active or deactive.
 - redesign of settings UI.
+- Adding more system info to settings UI.
 - adding tools like favorite editing.
 - changing to homey-sdkv2
+- Adding feature to blink NEEO Brain LED.
+- Adding feature to check specific sensor values in NEEO.
 
 # Changelog.
 ## Version 0.47.x
@@ -83,6 +86,7 @@ Availeble actions:
 - Created individual node modules.
 - General code cleaning
 - Neeo now support images! and so does this app.
+- Fixed first time use issues.
 ## Version 0.9.4
 - Fixed an issue with a corupted neeobrains save.
 ## Version 0.9.3

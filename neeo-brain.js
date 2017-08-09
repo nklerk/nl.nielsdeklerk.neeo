@@ -196,7 +196,7 @@ module.exports.commandButton = function (brainIp, roomKey, deviceKey, capabiliti
 }
 
 module.exports.commandSwitch = function (brainIp, roomKey, deviceKey, capabilitieKey, value){
-	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+args.device.key+'/switches/'+capabilitieKey+'/'+value);
+	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/switches/'+capabilitieKey+'/'+value);
 }
 
 module.exports.commandSlider = function (brainIp, roomKey, deviceKey, capabilitieKey, value){

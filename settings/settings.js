@@ -490,8 +490,8 @@ function devices_refresh_display() {
         dd = dd + '  <div class="addcapabilitie"><br></div>';
         dd = dd + '  <div class="addcapabilitie" onclick="device_capgrp_view_hide(\'' + adn + '\')">Cancel</div>';
         dd = dd + '</div>';
-        dd = dd + '<div class="addcapabilitie" onclick="device_cap_view_show(\'' + adn + '\')" id="cap_addbtn_' + adn + '">Add a capebilitie...</div>';
-        dd = dd + '<div class="addcapabilitiegroup" onclick="device_capgrp_view_show(\'' + adn + '\')" id="capgrp_addbtn_' + adn + '">Add a capebilitie group...</div>';
+        dd = dd + '<div class="addcapabilitie" onclick="device_cap_view_show(\'' + adn + '\')" id="cap_addbtn_' + adn + '">Add a capabilitie...</div>';
+        dd = dd + '<div class="addcapabilitiegroup" onclick="device_capgrp_view_show(\'' + adn + '\')" id="capgrp_addbtn_' + adn + '">Add a capabilitie group...</div>';
     }
     document.getElementById("jsonconfig").value = JSON.stringify(Settings_database)
     document.getElementById("Devices").innerHTML = dd;

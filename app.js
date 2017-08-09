@@ -64,6 +64,21 @@ module.exports = {
 			}
 		});
 		
+
+		//recipe_active
+    Homey.manager('flow').on('condition.recipe_active.room.autocomplete', function (callback, args) {
+        callback(null, homeyAutocomplete.rooms(args));
+    });
+    Homey.manager('flow').on('condition.recipe_active.recipe.autocomplete', function (callback, args) {
+        callback(null, homeyAutocomplete.recepies(args, 'launch'));
+    });
+		Homey.manager('flow').on('condition.recipe_active', function (callback, args) {
+			neeoBrain.isRecipeActive(args.room.brainip, args.room.key, args.recipe.key, (answer)=>{
+				callback (null, answer);
+			});
+		});
+
+
 		
 		//activate_recipe
 		Homey.manager('flow').on('action.activate_recipe.room.autocomplete', function( callback, args ){
@@ -213,6 +228,16 @@ module.exports = {
 			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
 			neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
 			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
+			callback( null, true ); 
+		});
+
+		//neeobrain_blinkLED
+		Homey.manager('flow').on('action.neeobrain_blinkLED.brain.autocomplete', function( callback, args ){
+			callback(null, homeyAutocomplete.neeoBrains(args));
+		});
+		Homey.manager('flow').on('action.neeobrain_blinkLED', function (callback, args, state) {
+			Homey.log  ('[HOMEY FLOW]\taction.neeobrain_blinkLED');
+			neeoBrain.blinkLed(args.brain.ip, args.times);
 			callback( null, true ); 
 		});
 	}

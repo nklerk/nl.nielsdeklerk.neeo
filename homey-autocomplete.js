@@ -49,6 +49,26 @@ module.exports.rooms = function(args){
 }
 
 
+module.exports.neeoBrains = function(args){
+	if (Homey.manager('settings').get('downloading') != true) {
+  	neeoBrain.downloadConfiguration();
+  }
+	const query = tools.stringCleanForMatch(args.query);
+  const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	let foundBrains = [];
+	for (const neeoBrain of neeoBrains) {
+		if (neeoBrain.host.indexOf(query) !== -1) {
+			const item = {
+				name: neeoBrain.host,
+				ip: neeoBrain.ip[0]
+			};
+			foundBrains.push(item);
+		}
+	}
+	return foundBrains;
+}
+
+
 module.exports.roomDevices = function(args){
 	if (Homey.manager('settings').get('downloading') != true) {
   	neeoBrain.downloadConfiguration();

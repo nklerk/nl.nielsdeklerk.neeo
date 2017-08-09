@@ -72,16 +72,17 @@ Availeble actions:
 
 ## To Do
 - Support base64encoded images to NEEO.
-- Check if recipe is active or deactive.
 - redesign of settings UI.
 - Adding actual system info to settings UI.
 - adding tools like favorite editing.
 - changing to homey-sdkv2
-- Adding feature to blink NEEO Brain LED.
+
 - Adding feature to check specific sensor values in NEEO.
 
 # Changelog.
 ## Version 0.47.x
+- Check if recipe is active or deactive.
+- Adding feature to blink NEEO Brain LED.
 - New helpfull information added.
 - Created individual node modules.
 - General code cleaning

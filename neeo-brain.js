@@ -187,6 +187,18 @@ module.exports.shutdownAllRecipes = function (){
 	} 
 }
 
+module.exports.isRecipeActive = function (brainIp, roomKey, recipeKey, callback) {
+	tools.httpRequest({hostname: brainIp, port: 3000, path: '/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/isactive', method: 'GET', headers: {'Content-Type': 'application/json'}},false, (response, answer) =>{
+		if (answer === '{"active":true}'){
+			callback(true);
+		} else if (answer === '{"active":false}'){
+			callback(false);
+		} else {
+			callback('ERROR');
+		}
+	});
+}
+
 module.exports.executeRecipe = function (brainIp, roomKey, recipeKey) {
 	tools.httpGetAndForget('GET', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/execute');
 }
@@ -202,3 +214,12 @@ module.exports.commandSwitch = function (brainIp, roomKey, deviceKey, capabiliti
 module.exports.commandSlider = function (brainIp, roomKey, deviceKey, capabilitieKey, value){
 	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/sliders/' + capabilitieKey, {value: value});
 }
+
+function blinkLed(brainIp, times){
+	tools.httpGetAndForget('GET', brainIp, 3000, '/v1/systeminfo/identbrain');
+	times--;
+	if (times > 0){
+		setTimeout(blinkLed, 2000, brainIp, times);
+	}
+}
+module.exports.blinkLed = blinkLed;

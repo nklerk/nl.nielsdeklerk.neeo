@@ -3,390 +3,488 @@
 	"name": {
 		"en": "NEEO"
 	},
-  "tags": {
-        "en": [ "NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote" ]
-    },
-	"version": "0.9.4",
+	"tags": {
+		"en": ["NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote"]
+	},
+	"version": "0.47.13",
 	"compatibility": "0.x || 1.x",
 	"author": {
 		"name": "Niels de Klerk",
 		"email": "mail@nielsdeklerk.nl"
 	},
-  "description": {
-        "en": "Combine the power of NEEO and Homey."
-  },
-  "category": "appliances",
-   "images": {
-        "large": "assets/images/large.png",
-        "small": "assets/images/small.png"
-   },
+	"description": {
+		"en": "Combine the power of NEEO and Homey."
+	},
+	"category": "appliances",
+	"images": {
+		"large": "assets/images/large.png",
+		"small": "assets/images/small.png"
+	},
 	"flow": {
-		"triggers": [
-      {
-        "id": "button_pressed",
-        "title": {
-          "en": "A button is pressed."
-        },
-        "hint": {
-          "en": "This card is triggered when a button is pressed."
-        },
-        "args": [{
-          "name": "device",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Device"}
-        },
-        {
-          "name": "capabilitie",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Button"}
-        }]
-      },
-      {
-        "id": "switch_changed",
-        "title": {
-          "en": "A switch changed state."
-        },
-        "hint": {
-          "en": "This card is triggered when a switch changed state."
-        },
-        "tokens": [{
-          "name": "value",
-          "title": {
-            "en": "Value"
-          },
-          "type": "boolean"
-        }],
-        "args": [{
-          "name": "device",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Device"}
-        },
-        {
-          "name": "capabilitie",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Switch"}
-        }]
-      },
-      {
-        "id": "slider_changed",
-        "title": {
-          "en": "A slider is changed."
-        },
-        "hint": {
-          "en": "This card is triggered when a slider is changed."
-        },
-        "tokens": [{
-          "name": "value",
-          "title": {
-            "en": "Value"
-          },
-          "type": "number"
-        },
-        {
-          "name": "decimalvalue",
-          "title": {
-            "en": "Decimal Value"
-          },
-          "type": "number"
-        }],
-        "args": [{
-          "name": "device",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Device"}
-        },
-        {
-          "name": "capabilitie",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Slider"}
-        }]
-      },
-      {
-        "id": "received_event",
-        "title": {
-          "en": "Event triggered"
-        },
-        "hint": {
-          "en": "This card is triggered when Homey received a NEEO forward action event."
-        },
-        "tokens": [{
-          "name": "Action",
-          "title": {
-            "en": "Action"
-          },
-          "type": "string",
-          "example": {
-            "en": "VOLUME UP"
-          }
-        },
-        {
-          "name": "Device",
-          "title": {
-            "en": "Device"
-          },
-          "type": "string",
-          "example": {
-            "en": "Receiver"
-          }
-        },
-        {
-          "name": "Room",
-          "title": {
-            "en": "Room"
-          },
-          "type": "string",
-          "example": {
-            "en": "Living room"
-          }
-        },
-        {
-          "name": "Parameter",
-          "title": {
-            "en": "Parameter"
-          },
-          "type": "string",
-          "example": {
-            "en": "Parameter"
-          }
-        },
-        {
-          "name": "Json",
-          "title": {
-            "en": "JSON"
-          },
-          "type": "string",
-          "example": {
-            "en": "{\"action\":\"brightness\",\"device\":\"Badkamer\",\"room\":\"Verlichting\",\"actionparameter\":48}"
-          }
-        }]
-		  }
-    ],
-		"actions": [{
-			"id": "activate_recipe",
-			"title": {
-				"en": "Activate a recipe."
-			},
-      "hint": {
-				"en": "This card will activate the selected NEEO recipe."
-			},
-			"args": [
-      {
-        "name": "room",
-        "type": "autocomplete",
-        "placeholder":{ "en": "Room"}
-      },
-      {
-				"name": "recipe",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Recipe"}
-			}]
-		},
-		{
-			"id": "poweroff_recipe",
-			"title": {
-				"en": "Shutdown a recipe."
-			},
-      "hint": {
-				"en": "This card will shutdown the selected NEEO recipe. (Power off)"
-			},
-			"args": [
-        {
-          "name": "room",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Room"}
-        },{
-          "name": "recipe",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Recipe"}
-			}]
-		},
-    {
-			"id": "poweroff_all_recipes",
-			"title": {
-				"en": "Shutdown all active recipes."
-			},
-      "hint": {
-				"en": "This card will shutdown all active NEEO recipe. (Power off)"
+		"triggers": [{
+				"id": "button_pressed",
+				"title": {
+					"en": "A button is pressed."
+				},
+				"hint": {
+					"en": "This card is triggered when a button is pressed."
+				},
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Button"
+						}
+					}
+				]
+			}, {
+				"id": "switch_changed",
+				"title": {
+					"en": "A switch changed state."
+				},
+				"hint": {
+					"en": "This card is triggered when a switch changed state."
+				},
+				"tokens": [{
+						"name": "value",
+						"title": {
+							"en": "Value"
+						},
+						"type": "boolean"
+					}
+				],
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Switch"
+						}
+					}
+				]
+			}, {
+				"id": "slider_changed",
+				"title": {
+					"en": "A slider is changed."
+				},
+				"hint": {
+					"en": "This card is triggered when a slider is changed."
+				},
+				"tokens": [{
+						"name": "value",
+						"title": {
+							"en": "Value"
+						},
+						"type": "number"
+					}, {
+						"name": "decimalvalue",
+						"title": {
+							"en": "Decimal Value"
+						},
+						"type": "number"
+					}
+				],
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Slider"
+						}
+					}
+				]
+			}, {
+				"id": "received_event",
+				"title": {
+					"en": "Event triggered"
+				},
+				"hint": {
+					"en": "This card is triggered when Homey received a NEEO forward action event."
+				},
+				"tokens": [{
+						"name": "Action",
+						"title": {
+							"en": "Action"
+						},
+						"type": "string",
+						"example": {
+							"en": "VOLUME UP"
+						}
+					}, {
+						"name": "Device",
+						"title": {
+							"en": "Device"
+						},
+						"type": "string",
+						"example": {
+							"en": "Receiver"
+						}
+					}, {
+						"name": "Room",
+						"title": {
+							"en": "Room"
+						},
+						"type": "string",
+						"example": {
+							"en": "Living room"
+						}
+					}, {
+						"name": "Parameter",
+						"title": {
+							"en": "Parameter"
+						},
+						"type": "string",
+						"example": {
+							"en": "Parameter"
+						}
+					}, {
+						"name": "Json",
+						"title": {
+							"en": "JSON"
+						},
+						"type": "string",
+						"example": {
+							"en": "{\"action\":\"brightness\",\"device\":\"Badkamer\",\"room\":\"Verlichting\",\"actionparameter\":48}"
+						}
+					}
+				]
 			}
-		},
-		{
-			"id": "command_button",
-			"title": {
-				"en": "Press a button."
+		],
+		"conditions": [{
+				"id": "recipe_active",
+				"title": {
+					"en": "Recipe !{{is|isn't}} active"
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "recipe",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Recipe"
+						}
+					}
+				]
+			}
+		],
+		"actions": [{
+				"id": "activate_recipe",
+				"title": {
+					"en": "Activate a recipe."
+				},
+				"hint": {
+					"en": "This card will activate the selected NEEO recipe."
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "recipe",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Recipe"
+						}
+					}
+				]
+			}, {
+				"id": "poweroff_recipe",
+				"title": {
+					"en": "Shutdown a recipe."
+				},
+				"hint": {
+					"en": "This card will shutdown the selected NEEO recipe. (Power off)"
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "recipe",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Recipe"
+						}
+					}
+				]
+			}, {
+				"id": "poweroff_all_recipes",
+				"title": {
+					"en": "Shutdown all active recipes."
+				},
+				"hint": {
+					"en": "This card will shutdown all active NEEO recipe. (Power off)"
+				}
+			}, {
+				"id": "command_button",
+				"title": {
+					"en": "Press a button."
+				},
+				"hint": {
+					"en": "This card will press the selected button."
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Button"
+						}
+					}
+				]
+			}, {
+				"id": "command_switch",
+				"title": {
+					"en": "Change a Switch"
+				},
+				"hint": {
+					"en": "This card will change the selected switch."
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Switch"
+						}
+					}, {
+						"name": "value",
+						"type": "dropdown",
+						"values": [{
+								"id": "off",
+								"label": {
+									"en": "Off"
+								}
+							}, {
+								"id": "on",
+								"label": {
+									"en": "On"
+								}
+							}
+						]
+					}
+				]
+			}, {
+				"id": "command_slider",
+				"title": {
+					"en": "Change a Slider"
+				},
+				"hint": {
+					"en": "This card will change the selected slider."
+				},
+				"args": [{
+						"name": "room",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Room"
+						}
+					}, {
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Slider"
+						}
+					}, {
+						"name": "value",
+						"type": "range",
+						"min": 0,
+						"max": 100
+					}
+				]
+			}, {
+				"id": "inform_slider",
+				"title": {
+					"en": "Update slider state. (Percentage)"
+				},
+				"hint": {
+					"en": "This card will inform the NEEO brain that the selected slider has a new value."
+				},
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Slider"
+						}
+					}, {
+						"name": "value",
+						"type": "range",
+						"min": 0,
+						"max": 1,
+						"step": 0.01,
+						"label": "%",
+						"labelMultiplier":100,
+						"labelDecimals":0
+					}
+				]
+			}, {
+				"id": "inform_slider_value",
+				"title": {
+					"en": "Update slider state. (Value)"
+				},
+				"hint": {
+					"en": "This card will inform the NEEO brain that the selected slider has a new value."
+				},
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Slider"
+						}
+					}, {
+						"name": "value",
+						"type": "number"
+					}
+				]
+			}, {
+				"id": "inform_switch",
+				"title": {
+					"en": "Update switch state."
+				},
+				"hint": {
+					"en": "This card will inform the NEEO brain that the selected swich has a new value."
+				},
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Switch"
+						}
+					}, {
+						"name": "value",
+						"type": "dropdown",
+						"values": [{
+								"id": false,
+								"label": {
+									"en": "False"
+								}
+							}, {
+								"id": true,
+								"label": {
+									"en": "True"
+								}
+							}
+						]
+					}
+				]
+			}, {
+				"id": "inform_textlabel",
+				"title": {
+					"en": "Update textlabel or image state."
+				},
+				"hint": {
+					"en": "This card will inform the NEEO brain that the selected textlabel has a new value."
+				},
+				"args": [{
+						"name": "device",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Device"
+						}
+					}, {
+						"name": "capabilitie",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "textlabel"
+						}
+					}, {
+						"name": "value",
+						"type": "text"
+					}
+				]
 			},
-      "hint": {
-				"en": "This card will press the selected button."
-			},
-			"args": [
-        {
-          "name": "room",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Room"}
-        },
-        {
-          "name": "device",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Device"}
-        },
-        {
-          "name": "capabilitie",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Button"}
-        }
-      ]
-		},
-		{
-			"id": "command_switch",
-			"title": {
-				"en": "Change a Switch"
-			},
-      "hint": {
-				"en": "This card will change the selected switch."
-			},
-			"args": [
-          {
-            "name": "room",
-            "type": "autocomplete",
-            "placeholder":{ "en": "Room"}
-          },
-          {
-            "name": "device",
-            "type": "autocomplete",
-            "placeholder":{ "en": "Device"}
-          },
-          {
-            "name": "capabilitie",
-            "type": "autocomplete",
-            "placeholder":{ "en": "Switch"}
-          },
-          {
-            "name": "value",
-            "type": "dropdown",
-            "values": [ { "id": "off", "label": { "en": "Off" } },{ "id": "on", "label": { "en": "On" } } ]
-          }  
-      ]
-		},
-		{
-			"id": "command_slider",
-			"title": {
-				"en": "Change a Slider"
-			},
-      "hint": {
-				"en": "This card will change the selected slider."
-			},
-			"args": [
-        {
-          "name": "room",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Room"}
-        },
-        {
-          "name": "device",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Device"}
-        },
-        {
-          "name": "capabilitie",
-          "type": "autocomplete",
-          "placeholder":{ "en": "Slider"}
-        },
-        {
-          "name": "value",
-          "type": "range",
-          "min": 0,
-          "max": 100
-        }
-      ]
-		},
-		{
-			"id": "inform_slider",
-			"title": {
-				"en": "Inform about a slider change."
-			},
-      "hint": {
-				"en": "This card will inform the NEEO brain that the selected slider has a new value."
-			},
-			"args": [{
-				"name": "device",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Device"}
-			},{
-				"name": "capabilitie",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Slider"}
-			},
-			{
-				"name": "value",
-				"type": "range",
-				"min": 0,
-				"max": 100
-			}]
-		},
-		{
-			"id": "inform_slider_value",
-			"title": {
-				"en": "Inform about a slider change."
-			},
-      "hint": {
-				"en": "This card will inform the NEEO brain that the selected slider has a new value."
-			},
-			"args": [{
-				"name": "device",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Device"}
-			},{
-				"name": "capabilitie",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Slider"}
-			},
-			{
-				"name": "value",
-				"type": "number"
-			}]
-		},
-    {
-			"id": "inform_switch",
-			"title": {
-				"en": "Inform about switch change"
-			},
-      "hint": {
-				"en": "This card will inform the NEEO brain that the selected swich has a new value."
-			},
-			"args": [{
-				"name": "device",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Device"}
-			},{
-				"name": "capabilitie",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Switch"}
-			},
-			{
-				"name": "value",
-				"type": "dropdown",
-        "values": [ { "id": false, "label": { "en": "False" } },{ "id": true, "label": { "en": "True" } } ]
-			}]
-		},
-    {
-			"id": "inform_textlabel",
-			"title": {
-				"en": "Inform about textlabel change"
-			},
-      "hint": {
-				"en": "This card will inform the NEEO brain that the selected textlabel has a new value."
-			},
-			"args": [{
-				"name": "device",
-				"type": "autocomplete",
-        "placeholder":{ "en": "Device"}
-			},{
-				"name": "capabilitie",
-				"type": "autocomplete",
-        "placeholder":{ "en": "textlabel"}
-			},
-			{
-				"name": "value",
-				"type": "text"
-			}]
-		}]
+      {
+				"id": "neeobrain_blinkLED",
+				"title": {
+					"en": "blink the brain LED."
+				},
+				"hint": {
+					"en": "This card will blink the neeo LED the amout of times set.."
+				},
+				"args": [{
+						"name": "brain",
+						"type": "autocomplete",
+						"placeholder": {
+							"en": "Brain"
+						}
+					}, {
+						"name": "times",
+						"type": "number",
+            "placeholder": {
+							"en": "x times."
+						}
+					}
+				]
+			}
+		]
 	}
 }

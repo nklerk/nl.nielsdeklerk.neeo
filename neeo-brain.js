@@ -176,7 +176,7 @@ module.exports.shutdownAllRecipes = function (){
 				recipies = JSON.parse(recipies);
 				for (const recipie of recipies) {
 					if (recipie.isPoweredOn === true){
-						Homey.log  (' - Powering off '+recipie.detail.devicename);
+						Homey.log  ('[RECIPE]\tPowering off '+recipie.detail.devicename);
 						const url=require('url');
 						const a = url.parse(recipie.url.setPowerOff);
 						tools.httpGetAndForget('GET', a.hostname, a.port, a.pathname);

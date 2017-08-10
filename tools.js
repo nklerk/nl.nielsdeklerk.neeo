@@ -68,3 +68,12 @@ module.exports.stringToBoolean = function (textstring){
 	if (textstring === "false") {textstring = false};
 	return textstring;
 }
+
+module.exports.percentage = function (value, range) {
+	if (value >= 0 && value <=1) {
+		return ((range[1]-range[0]) * value) + range[0];
+	} else {
+		Homey.log  ('[TOOLS]\tERROR CONVERTING % to Value expected number 0 to 1 but got: '+value);
+		return 0;
+	}
+}

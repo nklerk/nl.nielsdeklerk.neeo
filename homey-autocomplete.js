@@ -14,7 +14,11 @@ module.exports.capabilities = function(args, type){
 				const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
 				if (capabilitieQ.indexOf(query) !== -1 ) {
 					if (capabilitie.sensor && capabilitie.sensor.type === type || capabilitie.type == type){
-						foundcapa.push({name: capabilitie.label, realname: capabilitie.name});
+						if (capabilitie.sensor.type === 'range'){
+							foundcapa.push({name: capabilitie.label, realname: capabilitie.name, range: capabilitie.sensor.range});
+						} else {
+							foundcapa.push({name: capabilitie.label, realname: capabilitie.name});
+						}
 					}
 				}
 			}

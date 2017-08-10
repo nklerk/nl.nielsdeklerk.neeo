@@ -175,11 +175,16 @@ module.exports = {
 			callback(null, homeyAutocomplete.capabilities(args, "range"));
 		});
 		Homey.manager('flow').on('action.inform_slider', function (callback, args, state) {
-			Homey.log  ('[HOMEY FLOW]\taction.inform_slider');
-			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
-			neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
-			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
-			callback( null, true ); 
+			Homey.log ('[HOMEY FLOW]\taction.inform_slider');
+			if (args.value >= 0 && args.value <= 1){
+				const value = tools.percentage(args.value, args.capabilitie.range);
+				neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, value);
+				neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, value);
+				homeyTokens.set(args.device.name, args.capabilitie.name, value);
+				callback( null, true );
+			} else {
+				callback( null, false );
+			}
 		});
 		
 		

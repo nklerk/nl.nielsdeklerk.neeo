@@ -6,7 +6,7 @@
 	"tags": {
 		"en": ["NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote"]
 	},
-	"version": "0.47.13",
+	"version": "0.47.14",
 	"compatibility": "0.x || 1.x",
 	"author": {
 		"name": "Niels de Klerk",
@@ -79,7 +79,7 @@
 					"en": "A slider is changed."
 				},
 				"hint": {
-					"en": "This card is triggered when a slider is changed."
+					"en": "This card is triggered when a slider of a virtual device is changed."
 				},
 				"tokens": [{
 						"name": "value",
@@ -115,7 +115,7 @@
 					"en": "Event triggered"
 				},
 				"hint": {
-					"en": "This card is triggered when Homey received a NEEO forward action event."
+					"en": "This card is triggered when a NEEO event is triggered. (recipe activated, button pressed, slider changed, etc...)"
 				},
 				"tokens": [{
 						"name": "Action",
@@ -193,7 +193,7 @@
 					"en": "Activate a recipe."
 				},
 				"hint": {
-					"en": "This card will activate the selected NEEO recipe."
+					"en": "This card will start (Activate) the selected recipe."
 				},
 				"args": [{
 						"name": "room",
@@ -215,7 +215,7 @@
 					"en": "Shutdown a recipe."
 				},
 				"hint": {
-					"en": "This card will shutdown the selected NEEO recipe. (Power off)"
+					"en": "This card will shutdown (deactivate) the selected recipe."
 				},
 				"args": [{
 						"name": "room",
@@ -234,10 +234,10 @@
 			}, {
 				"id": "poweroff_all_recipes",
 				"title": {
-					"en": "Shutdown all active recipes."
+					"en": "Shutdown all recipes."
 				},
 				"hint": {
-					"en": "This card will shutdown all active NEEO recipe. (Power off)"
+					"en": "This card will shutdown all recipes."
 				}
 			}, {
 				"id": "command_button",
@@ -245,7 +245,7 @@
 					"en": "Press a button."
 				},
 				"hint": {
-					"en": "This card will press the selected button."
+					"en": "This card will press the selected button on the NEEO remote."
 				},
 				"args": [{
 						"name": "room",
@@ -270,10 +270,10 @@
 			}, {
 				"id": "command_switch",
 				"title": {
-					"en": "Change a Switch"
+					"en": "Change a Switch."
 				},
 				"hint": {
-					"en": "This card will change the selected switch."
+					"en": "This card will set the selected switch on the NEEO remote to On/Off."
 				},
 				"args": [{
 						"name": "room",
@@ -313,10 +313,10 @@
 			}, {
 				"id": "command_slider",
 				"title": {
-					"en": "Change a Slider"
+					"en": "Change a Slider."
 				},
 				"hint": {
-					"en": "This card will change the selected slider."
+					"en": "This card will set the selected slider on the NEEO remote to a specific value."
 				},
 				"args": [{
 						"name": "room",
@@ -346,10 +346,10 @@
 			}, {
 				"id": "inform_slider",
 				"title": {
-					"en": "Update slider state. (Percentage)"
+					"en": "Inform slider state. (Percentage)"
 				},
 				"hint": {
-					"en": "This card will inform the NEEO brain that the selected slider has a new value."
+					"en": "This card will inform the NEEO remote user interface of the given value in percentage for the selected slider."
 				},
 				"args": [{
 						"name": "device",
@@ -377,10 +377,10 @@
 			}, {
 				"id": "inform_slider_value",
 				"title": {
-					"en": "Update slider state. (Value)"
+					"en": "Inform slider state. (Value)"
 				},
 				"hint": {
-					"en": "This card will inform the NEEO brain that the selected slider has a new value."
+					"en": "This card will inform the NEEO remote user interface of the new value for the selected slider"
 				},
 				"args": [{
 						"name": "device",
@@ -405,7 +405,7 @@
 					"en": "Update switch state."
 				},
 				"hint": {
-					"en": "This card will inform the NEEO brain that the selected swich has a new value."
+					"en": "This card will inform the NEEO remote user interface of the new value for the selected switch."
 				},
 				"args": [{
 						"name": "device",
@@ -465,10 +465,10 @@
       {
 				"id": "neeobrain_blinkLED",
 				"title": {
-					"en": "blink the brain LED."
+					"en": "Blink the brain LED."
 				},
 				"hint": {
-					"en": "This card will blink the neeo LED the amout of times set.."
+					"en": "This card will blink the LED of the selected NEEO brain (every x time blinks for 2 seconds.)"
 				},
 				"args": [{
 						"name": "brain",
@@ -480,7 +480,7 @@
 						"name": "times",
 						"type": "number",
             "placeholder": {
-							"en": "x times."
+							"en": "x time(s)."
 						}
 					}
 				]

@@ -49,45 +49,54 @@ virtual devices:
 * Added virtual devices contain a default set of buttons.
 
 
-Availeble triggers:
+When... flow cards:
 
-* When a button is pressed of any of the virtual devices.
-* When a switch changed state of any of the virtual devices.
-* When a slider changed value of any of the virtual devices.
-* When a general NEEO event is triggered. (recipe activated, button pressed, slider changed, etc...)
+* "A button is pressed."      This card is triggered when a button of a virtual device is pressed.
+* "A switch changed state."   This card is triggered when a switch of a virtual device has changed state.
+* "A slider is changed."      This card is triggered when a slider of a virtual device is changed.
+* "Event triggered."          This card is triggered when a NEEO event is triggered. (recipe activated, button pressed, slider changed, etc...)
 
 
-Availeble actions:
+...And... flow cards:
 
-* Activate a NEEO Recipe.
-* Shutdown a NEEO Recipe (Power off).
-* Shutdown all active NEEO Recipes (Power off).
-* Press a button.
-* Change the state of a switch.
-* Change the state of a slider.
-* State change, Inform NEEO that a slider value of your virtual device has changed. (Provides visual feedback)
-* State change, Inform NEEO that a switch state of your virtual device has changed. (Provides visual feedback)
-* State change, Inform NEEO that a textlabel or image URL value of your virtual device has changed. (Provides visual feedback)
+* "Recipe is|isn't active."    This card will condition a recipe being active or deactive.
+
+
+...Then flow cards:
+
+* "Activate a recipe."        This card will start (Activate) the selected recipe.
+* "Shutdown a recipe."        This card will shutdown (deactivate) the selected recipe.
+* "Shutdown all recipes."     This card will shutdown all recipes.
+* "Press a button."           This card will press the selected button on the NEEO remote.
+* "Change a Switch."          This card will set the selected switch on the NEEO remote to On/Off.  
+* "Change a Slider."          This card will set the selected slider on the NEEO remote to a specific value.  
+* "Inform slider state. (Percentage)"    This card will inform the NEEO remote user interface of the given value in percentage for the selected virtual device slider.
+* "Inform slider state. (Value)"         This card will inform the NEEO remote user interface of the new value for the selected virtual device slider.
+* "Inform switch state."                 This card will inform the NEEO remote user interface of the new value for the selected virtual device switch.
+* "Inform label or image state."         This card will inform the NEEO remote user interface of the new value for the selected virtual device label or set the image based on a URL.
+* "Blink the brain LED."                 This card will blink the LED of the selected NEEO brain (every x time blinks for 2 seconds.)
 
 
 ## To Do
+- Migrating to homey-sdkv2
 - Support base64encoded images to NEEO.
 - redesign of settings UI.
 - Adding actual system info to settings UI.
-- adding tools like favorite editing.
-- changing to homey-sdkv2
-
+- Adding tools like favorite editing.
 - Adding feature to check specific sensor values in NEEO.
 
 # Changelog.
-## Version 0.47.x
-- Check if recipe is active or deactive.
-- Adding feature to blink NEEO Brain LED.
+## Version 0.47.14
+- Changed Version Numbering
+- Added ...And... card recipe is active/deactive.
+- Added ...then card blink NEEO Brain LED.
 - New helpfull information added.
-- Created individual node modules.
+- Created individual node modules. (was one file)
 - General code cleaning
 - Neeo now support images! and so does this app.
 - Fixed first time use issues.
+- Fixed the use of percentage values. (0 to 1).
+- A lot of smaller bug fixes.
 ## Version 0.9.4
 - Fixed an issue with a corupted neeobrains save.
 ## Version 0.9.3

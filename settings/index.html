@@ -202,25 +202,25 @@
             To update the image use the "Update textlabel or image state." flow card. and set the URL to the image that needs to be represented.<br>
             <img alt="" border="0" src="./img/11.png"><br><br><br><br>
 
-            <H2><b>-- IF Flow Cards --</b></H2><br>
+            <H2><b>-- When... Flow Cards --</b></H2><br>
             <b>A button is pressed.</b><br>
             <img alt="" border="0" src="./img/5.png"><br>
-            Use this card to act on a button press.<br><br>
+            This card is triggered when a button of a virtual device is pressed.<br><br>
             
             <b>A switch changed state.</b><br>
             <img alt="" border="0" src="./img/6.png"><br>
-            Use this card to act on a switch state change.<br>
-            The "value" tag will contain the boolean state<br><br>
+            This card is triggered when a switch of a virtual device has changed state.<br>
+            * The "value" tag will contain the boolean state<br><br>
 
             <b>A slider is changed.</b><br>
             <img alt="" border="0" src="./img/8.png"><br>
-            Use this card to act on a slider state change.<br>
-            The "Decimal" tag will hold the the slider percentage value in the form of a decimal between 0 and 1.<br>
-            The "Value" tag will hold the actual value that has been set.<br>
+            This card is triggered when a slider of a virtual device is changed.<br>
+            * The "Decimal" tag will hold the the slider percentage value in the form of a decimal between 0 and 1.<br>
+            * The "Value" tag will hold the actual value that has been set.<br>
 
             <b>Event triggered.</b><br>
             <img alt="" border="0" src="./img/12.png"><br>
-            Use this card to act on any NEEO event.<br>
+            This card is triggered when a NEEO event is triggered.<br>
             This inludes button presses, activation of activities and changing states of various components.<br>
             the events are not limited to the devices build with this app, every device event either a NEEO driver, SDK driver or made by this app will be caught.<br><br>
 
@@ -230,54 +230,60 @@
             
             Example of posible events:<br>
             {"action":"launch","recipe":"Motion Detected"}<br>
-            {"action":"VOLUME UP","device":"TV","room":"Huiskamer"}<br>
+            {"action":"VOLUME UP","device":"TV","room":"Livingroom"}<br>
             {"action":"CHANNEL_301"}<br>
             {"action":"launch","recipe":"Wii U"}<br>
             
             The folowing flow will log all events as they happen.<br>
             <img alt="" border="0" src="./img/13.jpg"><br><br><br>
+            
+            <H2><b>-- ...And... Flow Cards --</b></H2><br>
+            <b>Recipe is|isn't active.</b><br>
+            <img alt="" border="0" src="./img/20.png"><br>
+            This card will condition a recipe being active or deactive.<br><br><br>
 
-            <H2><b>-- THEN Flow Cards --</b></H2><br>
+            <H2><b>-- ...Then Flow Cards --</b></H2><br>
             <b>Activate a recipe.</b><br>
             <img alt="" border="0" src="./img/14.png"><br>
-            Use this card to activate the selected recipe<br><br>
+            This card will start (Activate) the selected recipe.<br><br>
             
             <b>Shutdown a recipe.</b><br>
             <img alt="" border="0" src="./img/15.png"><br>
-            Use this card to de-activate the selected recipe<br><br>
+            This card will shutdown (deactivate) the selected recipe.<br><br>
 
-            <b>Shutdown all active recipies.</b><br>
+            <b>Shutdown all recipes.</b><br>
             <img alt="" border="0" src="./img/16.png"><br>
-            Use this card to de-activate all active recipies<br><br>
+            his card will shutdown all recipes.<br><br>
 
             <b>Press a button.</b><br>
             <img alt="" border="0" src="./img/17.png"><br>
-            Use this card to virtually press a selected button<br><br>
+            This card will press the selected button on the NEEO remote.<br><br>
 
             <b>Change a switch.</b><br>
             <img alt="" border="0" src="./img/18.png"><br>
-            Use this card to change the state of the selected switch<br><br>
+            This card will set the selected switch on the NEEO remote to On/Off.<br><br>
 
             <b>Change a slider.</b><br>
             <img alt="" border="0" src="./img/19.png"><br>
-            Use this card to change the state of the selected slider<br><br>
+            This card will set the selected slider on the NEEO remote to a specific value.r<br><br>
 
-            <b>Update slider state. (Percentage)</b><br>
+            <b>Inform slider state. (Percentage)</b><br>
             <img alt="" border="0" src="./img/9.png"><br>
-            Use this card to update the state of the selected slider<br><br>
+            This card will inform the NEEO remote user interface of the given value in percentage for the selected virtual device slider.<br><br>
 
-            <b>Update slider state. (Value)</b><br>
+            <b>Inform slider state. (Value)</b><br>
             <img alt="" border="0" src="./img/10.png"><br>
-            Use this card to update the state of the selected slider<br><br>
+            This card will inform the NEEO remote user interface of the new value for the selected virtual device slider.<br><br>
 
-            <b>Update switch state.</b><br>
+            <b>Inform switch state</b><br>
             <img alt="" border="0" src="./img/7.png"><br>
-            Use this card to update the state of the selected switch<br><br>
+            This card will inform the NEEO remote user interface of the new value for the selected virtual device switch.<br><br>
 
-            <b>Update textlabel or Image state.</b><br>
+            <b>Inform label or image state.</b><br>
             <img alt="" border="0" src="./img/11.png"><br>
-            Use this card to update the text of the selected textlabel.<br>
-            Or use this card to update the URL of the selected image<br><br>
+            This card will inform the NEEO remote user interface of the new value for the selected virtual device label or set the image based on a URL.<br>
+            Use this card to update the text of the selected textlabel<br>
+            or use this card to update the URL of the selected image.<br><br>
 
         </fieldset>
         

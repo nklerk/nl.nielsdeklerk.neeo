@@ -86,6 +86,8 @@ When... flow cards:
 - Adding feature to check specific sensor values in NEEO.
 
 # Changelog.
+## Version 0.47.16
+- Fixed an issue where selecting a button would crash the app.
 ## Version 0.47.15
 - Fixed an issue where the app would crash when no NEEO brains where found.
 ## Version 0.47.14

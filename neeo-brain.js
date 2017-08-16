@@ -52,10 +52,14 @@ function addNeeoBrainToDatabase(foundbrain) {
 
 function connect() {
 	const neeoBrains = Homey.manager('settings').get('neeoBrains');
-	if ((!neeoBrains || neeoBrains.length === 0 )&& neeoConnectionTries < 10) {
+	if (!neeoBrains || neeoBrains.length === 0 ) {
 		discover();
-		setTimeout(connect, NEEO_CONNECT_INTERVAL);
-        neeoConnectionTries++;
+		neeoConnectionTries++;
+		if (neeoConnectionTries <= 10) {
+			setTimeout(connect, NEEO_CONNECT_INTERVAL);
+		} else {
+			setTimeout(connect, NEEO_RECONNECT_INTERVAL);
+		}
 	} else {
 		console.log ('Debugg')
 		for (let neeoBrain of neeoBrains) {

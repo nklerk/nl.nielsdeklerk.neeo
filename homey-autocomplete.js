@@ -13,8 +13,8 @@ module.exports.capabilities = function(args, type){
 			for (const capabilitie of device.capabilities) {
 				const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
 				if (capabilitieQ.indexOf(query) !== -1 ) {
-					if (capabilitie.sensor && capabilitie.sensor.type === type || capabilitie.type == type){
-						if (capabilitie.sensor.type === 'range'){
+					if ((capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === type) || capabilitie.type == type){
+						if (capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === 'range'){
 							foundcapa.push({name: capabilitie.label, realname: capabilitie.name, range: capabilitie.sensor.range});
 						} else {
 							foundcapa.push({name: capabilitie.label, realname: capabilitie.name});

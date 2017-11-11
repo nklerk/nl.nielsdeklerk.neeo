@@ -1,5 +1,7 @@
 'use strict'
 
+const tools = require('./tools');
+
 module.exports.refreshEventRegisters = function (){
 	let devices = Homey.manager('settings').get('myDevices');
 	for (const a in devices) {
@@ -44,7 +46,13 @@ module.exports.findEventServers = findEventServers;
 
 
 function allDevices () {
-    return Homey.manager('settings').get('myDevices');
+	const devices = Homey.manager('settings').get('myDevices');
+	if (tools.isArray(devices)){
+		return devices;
+	} else{
+		return [];
+	}
+	
 }
 module.exports.devices = allDevices;
 
@@ -54,21 +62,23 @@ module.exports.deviceSearch = function (queery){
 	const devices = allDevices();
 	let founddevices = [];
 	Homey.log('[DATABASE]\tGot queery for: ' +queery);
-	for (const device of devices) {
-		let score = 0;
-		let maxScore = 2;
-		for (const queery of queeries) {
-			if (device.name.toLowerCase().indexOf(queery.toLowerCase()) !== -1 ) {
-				maxScore = maxScore + queery.length;
+	if (devices.length > 0) {
+		for (const device of devices) {
+			let score = 0;
+			let maxScore = 2;
+			for (const queery of queeries) {
+				if (device.name.toLowerCase().indexOf(queery.toLowerCase()) !== -1 ) {
+					maxScore = maxScore + queery.length;
+				}
+				if (device.manufacturer.toLowerCase().indexOf(queery.toLowerCase()) !== -1 ) {
+					maxScore = maxScore + queery.length;
+				}
 			}
-			if (device.manufacturer.toLowerCase().indexOf(queery.toLowerCase()) !== -1 ) {
-				maxScore = maxScore + queery.length;
+			if (maxScore > 4) {
+				Homey.log ('[DATABASE]\tReturned driver: "'+device.manufacturer+' '+device.name+'"  With score: '+maxScore);
+				let fdevice = { item: device, score, maxScore};
+				founddevices.push(fdevice);
 			}
-		}
-		if (maxScore > 4) {
-			Homey.log ('[DATABASE]\tReturned driver: "'+device.manufacturer+' '+device.name+'"  With score: '+maxScore);
-			let fdevice = { item: device, score, maxScore};
-			founddevices.push(fdevice);
 		}
 	}
 	return founddevices;

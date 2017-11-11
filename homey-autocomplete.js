@@ -2,22 +2,25 @@
 
 const tools = require('./tools');
 const neeoBrain = require('./neeo-brain');
+const neeoDatabase = require('./neeo-database');
 
 
 module.exports.capabilities = function(args, type){
 	const query = tools.stringCleanForMatch(args.query); 
-	const devices = Homey.manager('settings').get('myDevices');
+	const devices = neeoDatabase.devices();
 	let foundcapa = [];
-	for (const device of devices) {
-		if (device.adapterName == args.args.device.adapterName){
-			for (const capabilitie of device.capabilities) {
-				const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
-				if (capabilitieQ.indexOf(query) !== -1 ) {
-					if ((capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === type) || capabilitie.type == type){
-						if (capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === 'range'){
-							foundcapa.push({name: capabilitie.label, realname: capabilitie.name, range: capabilitie.sensor.range});
-						} else {
-							foundcapa.push({name: capabilitie.label, realname: capabilitie.name});
+	if (devices.length>0){
+		for (const device of devices) {
+			if (device.adapterName == args.args.device.adapterName){
+				for (const capabilitie of device.capabilities) {
+					const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
+					if (capabilitieQ.indexOf(query) !== -1 ) {
+						if ((capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === type) || capabilitie.type == type){
+							if (capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === 'range'){
+								foundcapa.push({name: capabilitie.label, realname: capabilitie.name, range: capabilitie.sensor.range});
+							} else {
+								foundcapa.push({name: capabilitie.label, realname: capabilitie.name});
+							}
 						}
 					}
 				}
@@ -104,16 +107,18 @@ module.exports.roomDevices = function(args){
 
 module.exports.devices = function(args){
 	const query = tools.stringCleanForMatch(args.query);
-	const devices = Homey.manager('settings').get('myDevices');
+	const devices = neeoDatabase.devices();
 	let founddevices = [];
-	for (const device of devices) {
-		const deviceQ = tools.stringCleanForMatch(device.manufacturer + device.name);
-		if (deviceQ.indexOf(query) !== -1 ) {
-			const item = {
-				name: device.manufacturer+", "+device.name,
-				adapterName: device.adapterName
-			};
-			founddevices.push(item);
+	if (devices.length>0){
+		for (const device of devices) {
+			const deviceQ = tools.stringCleanForMatch(device.manufacturer + device.name);
+			if (deviceQ.indexOf(query) !== -1 ) {
+				const item = {
+					name: device.manufacturer+", "+device.name,
+					adapterName: device.adapterName
+				};
+				founddevices.push(item);
+			}
 		}
 	}
 	return founddevices;

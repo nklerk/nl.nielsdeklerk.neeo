@@ -134,10 +134,15 @@ function downloadConfiguration(neeoBrainQ){
 				};
 				tools.httpRequest(options, null, (response, responseData)=>{
 					Homey.log ('[DATABASE]\t'+neeoBrain.host+', Download complete.');
-						let brainConfiguration = JSON.parse(responseData);
-						neeoBrain.brainConfiguration = brainConfiguration;
-						Homey.manager('settings').set('neeoBrains', neeoBrains);
-						neeoDatabase.refreshEventRegisters();
+					let brainConfiguration = {};
+					try {
+						brainConfiguration = JSON.parse(responseData);
+					} catch (e) {
+						Homey.log ('[EVENTS]\tERROR: '+e);
+					}
+					neeoBrain.brainConfiguration = brainConfiguration;
+					Homey.manager('settings').set('neeoBrains', neeoBrains);
+					neeoDatabase.refreshEventRegisters();
 				});
 			}
 		}

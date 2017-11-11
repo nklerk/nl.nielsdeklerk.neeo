@@ -1,5 +1,12 @@
 'use strict'
 
+module.exports.isArray = function(a) {
+	return (!!a) && (a.constructor === Array);
+};
+
+module.exports.isObject = function(a) {
+	return (!!a) && (a.constructor === Object);
+};
 
 module.exports.mathRound = function (value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);

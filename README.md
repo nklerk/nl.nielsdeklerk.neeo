@@ -86,6 +86,11 @@ When... flow cards:
 - Adding feature to check specific sensor values in NEEO.
 
 # Changelog.
+## Version 0.47.17
+- Fixed an issue that would happen when searching a device in NEEO when no virtual devices where pressent on Homey.
+- Fixed an issue that would happen when searching capabilities in Homey when no virtual devices where pressent.
+- Fixed an issue that would happen when getting all devices in Homey when no virtual devices where pressent.
+- Fixed an issue that could happen while retreving brain configuration.
 ## Version 0.47.16
 - Fixed an issue where selecting a button would crash the app.
 ## Version 0.47.15

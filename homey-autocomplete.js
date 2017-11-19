@@ -1,17 +1,18 @@
 'use strict'
 
+const Homey = require('homey');
 const tools = require('./tools');
 const neeoBrain = require('./neeo-brain');
 const neeoDatabase = require('./neeo-database');
 
 
-module.exports.capabilities = function(args, type){
-	const query = tools.stringCleanForMatch(args.query); 
+module.exports.capabilities = function(query, args, type){
+	query = tools.stringCleanForMatch(query); 
 	const devices = neeoDatabase.devices();
 	let foundcapa = [];
-	if (devices.length>0){
+	if(devices.length>0){
 		for (const device of devices) {
-			if (device.adapterName == args.args.device.adapterName){
+			if (device.adapterName == args.device.adapterName){
 				for (const capabilitie of device.capabilities) {
 					const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
 					if (capabilitieQ.indexOf(query) !== -1 ) {
@@ -31,12 +32,12 @@ module.exports.capabilities = function(args, type){
 }
 
 
-module.exports.rooms = function(args){
-	if (Homey.manager('settings').get('downloading') != true) {
+module.exports.rooms = function(query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
         neeoBrain.downloadConfiguration();
     }
-	const query = tools.stringCleanForMatch(args.query)
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	query = tools.stringCleanForMatch(query)
+	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundrooms = [];
 	for (const neeoBrain of neeoBrains) {
 		for (const i in neeoBrain.brainConfiguration.rooms) {
@@ -56,12 +57,12 @@ module.exports.rooms = function(args){
 }
 
 
-module.exports.neeoBrains = function(args){
-	if (Homey.manager('settings').get('downloading') != true) {
-  	neeoBrain.downloadConfiguration();
-  }
-	const query = tools.stringCleanForMatch(args.query);
-  const neeoBrains = Homey.manager('settings').get('neeoBrains');
+module.exports.neeoBrains = function(query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
+  		neeoBrain.downloadConfiguration();
+  	}
+	query = tools.stringCleanForMatch(query);
+  	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundBrains = [];
 	for (const neeoBrain of neeoBrains) {
 		if (neeoBrain.host.indexOf(query) !== -1) {
@@ -76,17 +77,17 @@ module.exports.neeoBrains = function(args){
 }
 
 
-module.exports.roomDevices = function(args){
-	if (Homey.manager('settings').get('downloading') != true) {
-  	neeoBrain.downloadConfiguration();
-  }
-	const query = tools.stringCleanForMatch(args.query);
-  const neeoBrains = Homey.manager('settings').get('neeoBrains');
+module.exports.roomDevices = function(query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
+  		neeoBrain.downloadConfiguration();
+  	}
+	query = tools.stringCleanForMatch(query);
+  	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let founddevices = [];
     for (const neeoBrain of neeoBrains) {
 		for (const i in neeoBrain.brainConfiguration.rooms) {
 			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.args.room.key) {
+			if (room.key === args.room.key) {
 				for (const i in room.devices) {
 					const device = room.devices[i];
 					const deviceQ = tools.stringCleanForMatch(device.name);
@@ -105,11 +106,11 @@ module.exports.roomDevices = function(args){
 }
 
 
-module.exports.devices = function(args){
-	const query = tools.stringCleanForMatch(args.query);
-	const devices = neeoDatabase.devices();
+module.exports.devices = function(query, args){
+	query = tools.stringCleanForMatch(query);
 	let founddevices = [];
-	if (devices.length>0){
+	let devices = neeoDatabase.devices();
+	if (devices.length>0) {
 		for (const device of devices) {
 			const deviceQ = tools.stringCleanForMatch(device.manufacturer + device.name);
 			if (deviceQ.indexOf(query) !== -1 ) {
@@ -125,20 +126,20 @@ module.exports.devices = function(args){
 }
 
 
-module.exports.macros = function (args){
-	if (Homey.manager('settings').get('downloading') != true) {
+module.exports.macros = function (query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
         neeoBrain.downloadConfiguration();
     }
-	const query = tools.stringCleanForMatch(args.query);
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	query = tools.stringCleanForMatch(query);
+	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundmacros= [];
 	for (const neeoBrain of neeoBrains) {
 		for (const i in neeoBrain.brainConfiguration.rooms) {
 			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.args.room.key) {
+			if (room.key === args.room.key) {
 				for (const i in room.devices) {
 					const device = room.devices[i];
-					if (device.key === args.args.device.key) {
+					if (device.key === args.device.key) {
 						for (const i in device.macros) {
 							const macro = device.macros[i];
 							const macroQ = tools.stringCleanForMatch(macro.name);
@@ -159,20 +160,20 @@ module.exports.macros = function (args){
 }
 
 
-module.exports.sliders = function(args){
-	if (Homey.manager('settings').get('downloading') != true) {
+module.exports.sliders = function(query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
         neeoBrain.downloadConfiguration();
     }
-	const query = tools.stringCleanForMatch(args.query);
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	query = tools.stringCleanForMatch(query);
+	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundsliders= [];
 	for (const neeoBrain of neeoBrains) {
 	for (const i in neeoBrain.brainConfiguration.rooms) {
 		const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.args.room.key) {
+			if (room.key === args.room.key) {
 				for (const i in room.devices) {
 					const device = room.devices[i];
-					if (device.key === args.args.device.key) {
+					if (device.key === args.device.key) {
 						for (const i in device.sliders) {
 							const slider = device.sliders[i];
 							const sliderQ = tools.stringCleanForMatch(slider.name);
@@ -193,20 +194,19 @@ module.exports.sliders = function(args){
 }; 
 
 
-module.exports.switches = function(args){
-	if (Homey.manager('settings').get('downloading') != true) {
+module.exports.switches = function(query, args){
+	if (Homey.ManagerSettings.get('downloading') != true) {
         neeoBrain.downloadConfiguration();
     }
-	const query = (args.query);
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundswitches= [];
 	for (const neeoBrain of neeoBrains) {
 		for (const i in neeoBrain.brainConfiguration.rooms) {
 			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.args.room.key) {
+			if (room.key === args.room.key) {
 				for (const i in room.devices) {
 					const device = room.devices[i];
-					if (device.key === args.args.device.key) {
+					if (device.key === args.device.key) {
 						for (const i in device.switches) {
 							const switche = device.switches[i];
 							const switchQ = tools.stringCleanForMatch(switche.name);
@@ -227,17 +227,17 @@ module.exports.switches = function(args){
 }
 
 
-module.exports.recepies = function(args, stype){
-	if (Homey.manager('settings').get('downloading') != true) {
+module.exports.recepies = function(query, args, stype){
+	if (Homey.ManagerSettings.get('downloading') != true) {
         neeoBrain.downloadConfiguration();
     }
-	const query = tools.stringCleanForMatch(args.query);
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	query = tools.stringCleanForMatch(query);
+	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundrecipes = [];
 	for (const neeoBrain of neeoBrains) {
 		for (const i in neeoBrain.brainConfiguration.rooms) {
 			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.args.room.key) {
+			if (room.key === args.room.key) {
 				for (const i in room.recipes) {
 					const recipe = room.recipes[i];
 					const recipeQ = tools.stringCleanForMatch(recipe.name);

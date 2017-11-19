@@ -1,5 +1,5 @@
 'use strict'
-
+const Homey = require('homey');
 const homeyTokens = require('./homey-tokens');
 const tools = require('./tools');
 const neeoDatabase = require('./neeo-database');
@@ -8,10 +8,11 @@ const TCP_PORT = 6336;
 const NEEO_CONNECT_INTERVAL= 60000;	//1 Min
 const NEEO_RECONNECT_INTERVAL = 900000;	//15 Min
 let neeoConnectionTries = 0;
+let neeoBrains;
 
 
 function discover() {
-	Homey.log ("[SERVER]\tSearching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
+	console.log ("[SERVER]\tSearching for NEEO brains... MUST.... EAT..... BRAINS .....!!!");
 	const mdns = require('mdns-js');
 	mdns.excludeInterface('0.0.0.0');
 	let browser = mdns.createBrowser('_neeo._tcp');
@@ -26,32 +27,36 @@ module.exports.discover = discover;
 
 
 function addNeeoBrainToDatabase(foundbrain) {
-	let neeoBrains = Homey.manager('settings').get( 'neeoBrains');
+	neeoBrains = Homey.ManagerSettings.get( 'neeoBrains');
 	if (!neeoBrains) {
 		neeoBrains = [];
 	}
 	let exist = 0;
 	for (const i in neeoBrains) {
 		if (neeoBrains[i].host === foundbrain.host) {
-			Homey.log('[SERVER]\tUpdating settings: '+foundbrain.host);
+			console.log('[SERVER]\tUpdating settings: '+foundbrain.host);
 			neeoBrains[i].ip = foundbrain.addresses;
 			exist = exist + 1;
 		};
 	}
 	if (exist === 0) {
-		Homey.log('[SERVER]\tNew NEEO Brain found: '+foundbrain.host);
+		console.log('[SERVER]\tNew NEEO Brain found: '+foundbrain.host);
+		console.log ("_____________________________________________");
+		console.log (foundbrain);
+		console.log ("_____________________________________________");
 		const neeoBrain = {host: foundbrain.host, ip: foundbrain.addresses};
 		neeoBrains.push(neeoBrain);
 		registerAsDeviceDatabase(neeoBrain);
 		registerForwarderEvents(neeoBrain);
 		downloadConfiguration(neeoBrain);
+		downloadSystemInfo(neeoBrain);
 	}
-	Homey.manager('settings').set('neeoBrains', neeoBrains);
+	Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 }
 
 
 function connect() {
-	const neeoBrains = Homey.manager('settings').get('neeoBrains');
+	neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	if (!neeoBrains || neeoBrains.length === 0 ) {
 		discover();
 		neeoConnectionTries++;
@@ -61,14 +66,15 @@ function connect() {
 			setTimeout(connect, NEEO_RECONNECT_INTERVAL);
 		}
 	} else {
-		console.log ('Debugg')
 		for (let neeoBrain of neeoBrains) {
-			Homey.log('[SERVER]\tConnecting: '+neeoBrain.host+' ('+neeoBrain.ip+')');
+			console.log('[SERVER]\tConnecting: '+neeoBrain.host+' ('+neeoBrain.ip+')');
 			registerAsDeviceDatabase(neeoBrain);
 			registerForwarderEvents(neeoBrain);
 			downloadConfiguration(neeoBrain);
-			homeyTokens.setAll();
+			downloadSystemInfo(neeoBrain);
+			//homeyTokens.setAll();
 		}
+		homeyTokens.setAll();
 	}
 	setTimeout(connect, NEEO_RECONNECT_INTERVAL);
 }
@@ -76,7 +82,7 @@ module.exports.connect = connect;
 
 
 function registerAsDeviceDatabase(neeoBrain) {
-	Homey.log ('[DRIVER]\t'+neeoBrain.host+', Registering Homey as NEEO device server...');
+	console.log ('[DRIVER]\t'+neeoBrain.host+', Registering Homey as NEEO device server...');
 	const content = {
 		name: 'Homey_Devicedatabase_'+tools.getLocalIp(), 
 		baseUrl: 'http://'+tools.getLocalIp()+':'+TCP_PORT
@@ -90,13 +96,15 @@ function registerAsDeviceDatabase(neeoBrain) {
 	};
 	tools.httpRequest(options, content, (response, responseData)=>{
 		if (responseData === '{"success":true}'){
-			Homey.log ('[DRIVER]\t'+neeoBrain.host+', Registration succesfull.');
+			console.log ('[DRIVER]\t'+neeoBrain.host+', device registration succesfull.');
+		} else {
+			console.log ('[EVENTS]\tERROR: '+neeoBrain.host+', device registration unsuccesfull!');
 		}
 	});
 }
 
 function registerForwarderEvents(neeoBrain){
-	Homey.log ('[EVENTS]\t'+neeoBrain.host+', Registering Homey as NEEO events receiver...');
+	console.log ('[EVENTS]\t'+neeoBrain.host+', Registering Homey as NEEO events receiver...');
 	const content = {
 		host: tools.getLocalIp(),
 		port: TCP_PORT,
@@ -111,20 +119,20 @@ function registerForwarderEvents(neeoBrain){
 	};
 	tools.httpRequest(options, content, (response, responseData)=>{
 		if (responseData === '{"success":true}'){
-			Homey.log ('[EVENTS]\t'+neeoBrain.host+', Registration succesfull.');
+			console.log ('[EVENTS]\t'+neeoBrain.host+', events registration succesfull.');
 		} else {
-			Homey.log ('[EVENTS]\tERROR: '+neeoBrain.host+', Registration unsuccesfull!');
+			console.log ('[EVENTS]\tERROR: '+neeoBrain.host+', events registration unsuccesfull!');
 		}
 	});
 }
 
 function downloadConfiguration(neeoBrainQ){
-	Homey.manager('settings').set('downloading', true);
-	let neeoBrains = Homey.manager('settings').get( 'neeoBrains' );
-	if (neeoBrains !== undefined && neeoBrains.length !== 0) {
+	Homey.ManagerSettings.set('downloading', true);
+	//let neeoBrains = Homey.ManagerSettings.get( 'neeoBrains' );
+	if (tools.isArray(neeoBrains) && neeoBrains.length !== 0) {
 		for (let neeoBrain of neeoBrains) {
 			if (!neeoBrainQ || neeoBrain.host === neeoBrainQ.host) {
-				Homey.log ('[DATABASE]\t'+neeoBrain.host+', Downloading configuration...');
+				console.log ('[DATABASE]\t'+neeoBrain.host+', Downloading configuration...');
 				const options = {
 					hostname: neeoBrain.host,
 					port: 3000,
@@ -133,26 +141,57 @@ function downloadConfiguration(neeoBrainQ){
 					headers: {'Content-Type': 'application/json'}
 				};
 				tools.httpRequest(options, null, (response, responseData)=>{
-					Homey.log ('[DATABASE]\t'+neeoBrain.host+', Download complete.');
+					console.log ('[DATABASE]\t'+neeoBrain.host+', Download complete.');
 					let brainConfiguration = {};
 					try {
 						brainConfiguration = JSON.parse(responseData);
+						neeoBrain.brainConfiguration = brainConfiguration;
+						Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 					} catch (e) {
 						Homey.log ('[EVENTS]\tERROR: '+e);
 					}
-					neeoBrain.brainConfiguration = brainConfiguration;
-					Homey.manager('settings').set('neeoBrains', neeoBrains);
-					neeoDatabase.refreshEventRegisters();
 				});
 			}
 		}
 	}
-	Homey.manager('settings').set('downloading', false);
+	Homey.ManagerSettings.set('downloading', false);
 }
 module.exports.downloadConfiguration = downloadConfiguration;
 
-module.exports.notifyStateChange = function (adapterName, capabilities_name, value){
-	const capabilitie = neeoDatabase.capabilitie(adapterName, capabilities_name)
+
+function downloadSystemInfo(neeoBrainQ){
+	//let neeoBrains = Homey.ManagerSettings.get( 'neeoBrains' );
+	if (tools.isArray(neeoBrains) && neeoBrains.length !== 0) {
+		for (let neeoBrain of neeoBrains) {
+			if (!neeoBrainQ || neeoBrain.host === neeoBrainQ.host) {
+				console.log ('[SYSTEM INFO]\t'+neeoBrain.host+', Getting System Information...');
+				
+				const options = {
+					hostname: neeoBrain.host,
+					port: 3000,
+					path: '/v1/systeminfo',
+					method: 'GET',
+					headers: {'Content-Type': 'application/json'}
+				};
+
+				tools.httpRequest(options, null, (response, responseData)=>{
+					console.log ('[SYSTEM INFO]\t'+neeoBrain.host+', Complete.');
+					let systemInfo = {};
+					try {
+						systemInfo = JSON.parse(responseData);
+						neeoBrain.systemInfo = systemInfo;
+						Homey.ManagerSettings.set('neeoBrains', neeoBrains);
+					} catch (e) {
+						Homey.log ('[EVENTS]\tERROR: '+e);
+					}
+				});
+			}
+		}
+	}
+}
+
+module.exports.notifyStateChange = function (adapterName, capabilitieName, value){
+	const capabilitie = neeoDatabase.capabilitie(adapterName, capabilitieName)
 	if (capabilitie && capabilitie.eventservers) {
 		for (let eventserver of capabilitie.eventservers) {
 			const content = {
@@ -168,24 +207,26 @@ module.exports.notifyStateChange = function (adapterName, capabilities_name, val
 			};
 			tools.httpRequest(options, content, (response, responseData)=>{
 				if (responseData === '{"success":true}'){
-					Homey.log ('[NOTIFICATIONS]\tSuccesfully sent notification with value '+content.data+' to eventkey '+content.type+' @'+options.hostname);
+					console.log ('[NOTIFICATIONS]\tSuccesfully sent notification with value '+content.data+' to eventkey '+content.type+' @'+options.hostname);
+				} else {
+					console.log ('[ERROR]\t\tError sending notification with value '+content.data+' to eventkey '+content.type+' @'+options.hostname+'. Got response: '+responseData);
 				}
 			});
 		}
 	} else {
-		Homey.log('[ERROR]\t\tneeoBrain_sensor_notify('+adapterName+', '+capabilities_name+', '+value+')');
+		console.log('[ERROR]\t\tneeoBrain_sensor_notify('+adapterName+', '+capabilitieName+', '+value+')');
 	}
 }
 
 module.exports.shutdownAllRecipes = function (){
-	const neeoBrains = Homey.manager('settings').get( 'neeoBrains' );
+	//const neeoBrains = Homey.ManagerSettings.get( 'neeoBrains' );
 	for (const neeoBrain of neeoBrains){
 		tools.httpRequest({ hostname: neeoBrain.host,	port: 3000,	path: '/v1/api/Recipes', method: 'GET', headers: {'Content-Type': 'application/json'}},	null,	(res, recipies)=>{
 			if (typeof recipies !== 'undefined'){
 				recipies = JSON.parse(recipies);
 				for (const recipie of recipies) {
 					if (recipie.isPoweredOn === true){
-						Homey.log  ('[RECIPE]\tPowering off '+recipie.detail.devicename);
+						console.log  ('[RECIPE]\tPowering off '+recipie.detail.devicename);
 						const url=require('url');
 						const a = url.parse(recipie.url.setPowerOff);
 						tools.httpGetAndForget('GET', a.hostname, a.port, a.pathname);

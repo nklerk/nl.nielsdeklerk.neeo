@@ -78,19 +78,19 @@ When... flow cards:
 
 
 ## To Do
-- Migrating to homey-sdkv2
 - Support base64encoded images to NEEO.
-- redesign of settings UI.
-- Adding actual system info to settings UI.
 - Adding tools like favorite editing.
 - Adding feature to check specific sensor values in NEEO.
+- Making brain's seperate devices in Homey.
+- Removing the download NEEO config, instead use live data.
+- Add new firmware availeble card.
+
 
 # Changelog.
-## Version 0.47.17
-- Fixed an issue that would happen when searching a device in NEEO when no virtual devices where pressent on Homey.
-- Fixed an issue that would happen when searching capabilities in Homey when no virtual devices where pressent.
-- Fixed an issue that would happen when getting all devices in Homey when no virtual devices where pressent.
-- Fixed an issue that could happen while retreving brain configuration.
+## Version 0.48.00
+- Changed from Homey SDKv1 to SDKv2
+- Settings page now show more system information details.
+
 ## Version 0.47.16
 - Fixed an issue where selecting a button would crash the app.
 ## Version 0.47.15

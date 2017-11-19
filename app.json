@@ -1,13 +1,14 @@
 {
 	"id": "nl.nielsdeklerk.neeo",
+	"sdk": 2,
 	"name": {
 		"en": "NEEO"
 	},
 	"tags": {
 		"en": ["NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote"]
 	},
-	"version": "0.47.17",
-	"compatibility": "0.x || 1.x",
+	"version": "0.47.701",
+	"compatibility": "1.x >=1.5.0",
 	"author": {
 		"name": "Niels de Klerk",
 		"email": "mail@nielsdeklerk.nl"

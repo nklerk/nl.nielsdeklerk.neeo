@@ -1,5 +1,6 @@
 'use strict'
 
+const Homey = require('homey');
 const neeoRequests = require('./neeo-requests');
 const neeoEvents = require('./neeo-events');
 const neeoBrain = require('./neeo-brain');
@@ -27,11 +28,11 @@ const neeoServer = http.createServer((req, res) => {
 		res.writeHead(responseData.code, responseData.type);
     	res.end(responseData.content);
 	} else if (req.method == 'POST') {
-        let body = '';
+		let body = '';
         req.on('data', function (data) { body += data; });
         req.on('end', function () {
 			 if (uriparts[1] === 'Homey-By-Niels_de_Klerk') {	
-				responseData = neeoEvents.handle(body);
+				responseData = neeoEvents.handle(body, req.connection.remoteAddress);
 				res.writeHead(responseData.code, responseData.type);
     			res.end(responseData.content);
 			};
@@ -41,7 +42,7 @@ const neeoServer = http.createServer((req, res) => {
 
 
 neeoServer.listen(TCP_PORT, function() {
-	Homey.log (' NEEO Service running on port: ' + TCP_PORT );
-	Homey.log ('-------------------------------------------------');
+	console.log (' NEEO Service running on port: ' + TCP_PORT );
+	console.log ('-------------------------------------------------');
 	neeoBrain.connect();
 });

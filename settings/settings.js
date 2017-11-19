@@ -27,8 +27,12 @@ const sellectionoptions = [
 // Homey Functions
 ////////////////////////////////////////
 
-function onHomeyReady(){
+function onHomeyReady( HomeyReady){
+    Homey = HomeyReady;
     Homey.ready();
+    Homey.get('myDevices', function( err, Devices ) {
+        if( err ) return Homey.alert( err );
+     });
     readsettings();
     addDeviceTypeOptions();
 }
@@ -510,13 +514,13 @@ function settings_btn_discoverbrains(){
 
 
 function discover_brains_loop(count){
-    readMyBrains();
     if (count < 10){
         document.getElementById('brains').style.display = 'none';
+        document.getElementById("braininfo").innerHTML = '<b style="position: absolute;left: 250px;"> Discovering:      </b><div style="position: absolute;left: 400px;"> <progress value="'+count+'" max="10"></progress></div><br>';
         count = count + 1;
         setTimeout(discover_brains_loop, 200, count);
     } else {
-        document.getElementById('brains').style.display = 'block';
+        readMyBrains();
     }
 }
 
@@ -528,6 +532,7 @@ function settings_refresh_display() {
     }
     document.getElementById("brains").innerHTML = dd;
     document.getElementById("braininfo").innerHTML = '';
+    document.getElementById('brains').style.display = 'block';
 } // Display NEEO's in setting screen.
 
 
@@ -535,16 +540,28 @@ function settings_brains_selection(){
     let selection = document.getElementById("brains").value
     for (let i in Settings_brains) {
         if (Settings_brains[i].host === selection){
-            let dd='';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].host+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> IP:          </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].ip+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;">              </b><div style="position: absolute;left: 400px;"></div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Name:        </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.name+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Label:       </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.label+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> Last change: </b><div style="position: absolute;left: 400px;"> '+new Date(Settings_brains[i].brainConfiguration.lastchange)+'</div><br>';
-            dd = dd + '<b style="position: absolute;left: 250px;"> key:         </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.key+'</div><br>';
-            dd = dd + '<button id="settings_btn_deletebrain" style="position: absolute;right: 18px;" onclick="settings_brain_delete()"><i class="fa fa-trash-o"></i> Delete.</button>'
-            document.getElementById("braininfo").innerHTML = dd;
+            var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour:'numeric', minute:'numeric', second:'numeric'};
+            var changedate = new Date(Settings_brains[i].brainConfiguration.lastchange);
+            
+            let systemInfoUrl = 'http://'+Settings_brains[i].ip+':3000/v1/systeminfo';
+            fetch(systemInfoUrl)
+            .then(res => res.json())
+            .then((systemInfo) => {
+                let dd='';
+                dd = dd + '<b style="position: absolute;left: 250px;"> Hostname:    </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].host+'</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> IP:          </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].ip+'</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> Version:     </b><div style="position: absolute;left: 400px;"> '+systemInfo.version+'</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> Memory:      </b><div style="position: absolute;left: 400px;"> <progress value="'+ (systemInfo.totalmem - systemInfo.freemem)+'" max="'+ systemInfo.totalmem+'"></progress> '+Math.round(systemInfo.freemem/1000000)+' MB Free</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> Label:       </b><div style="position: absolute;left: 400px;"> '+Settings_brains[i].brainConfiguration.label+'</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> Last change: </b><div style="position: absolute;left: 400px;"> '+changedate.toLocaleDateString("en-GB",options)+'</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> CPU (1 Min. Avg.):</b><div style="position: absolute;left: 400px;"><progress value="'+systemInfo.loadavgShort+'" max="1"></progress> '+Math.round(systemInfo.loadavgShort*100)+'%</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> CPU (5 Min. Avg.):</b><div style="position: absolute;left: 400px;"><progress value="'+systemInfo.loadavgMid+'" max="1"></progress> '+Math.round(systemInfo.loadavgMid*100)+'%</div><br>';
+                dd = dd + '<b style="position: absolute;left: 250px;"> CPU (15 Min. Avg.):</b><div style="position: absolute;left: 400px;"><progress value="'+systemInfo.loadavgLong+'" max="1"></progress> '+Math.round(systemInfo.loadavgLong*100)+'%</div><br>';
+                dd = dd + '<button id="settings_btn_deletebrain" style="position: absolute;right: 18px;" onclick="settings_brain_delete()"><i class="fa fa-trash-o"></i> Delete.</button>'
+                document.getElementById("braininfo").innerHTML = dd;
+                setTimeout(settings_brains_selection, 5000);
+            })
+            .catch(err => { throw err });
         }
     }
 } // 

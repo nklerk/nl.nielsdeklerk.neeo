@@ -1,5 +1,13 @@
 'use strict'
+const Homey = require('homey');
 
+module.exports.isArray = function(a) {
+	return (!!a) && (a.constructor === Array);
+};
+
+module.exports.isObject = function(a) {
+	return (!!a) && (a.constructor === Object);
+};
 
 module.exports.mathRound = function (value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
@@ -37,7 +45,7 @@ function httpRequest(options, content, callback){
 		});
 	});
 	req.on('error', (e) => { 
-		Homey.log ('problem with request: ' + e.message); 
+		console.log ('problem with request: ' + e.message); 
 	});
 	if (content) {
 		req.write(JSON.stringify(content));
@@ -48,6 +56,27 @@ function httpRequest(options, content, callback){
 	});
 }
 module.exports.httpRequest = httpRequest;
+
+
+/* function httpPromReq(options, content){
+	return new Promise((resolve, reject) => {
+		let responseData = '';
+		const http = require('http');
+		const req = http.request(options, function(response) {
+			response.setEncoding('utf8');
+			response.on('data', (body) => {
+				responseData = responseData + body;
+			});
+			response.on('end', () => {
+				resolve(responseData);
+			});
+		});
+		req.on('error', (err) => reject(err))
+		if (content) { req.write(JSON.stringify(content));}
+		req.end();
+	})
+}
+module.exports.httpPromReq = httpPromReq; */
 
 
 module.exports.stringCleanForMatch = function (textstring){
@@ -73,7 +102,7 @@ module.exports.percentage = function (value, range) {
 	if (value >= 0 && value <=1) {
 		return ((range[1]-range[0]) * value) + range[0];
 	} else {
-		Homey.log  ('[TOOLS]\tERROR CONVERTING % to Value expected number 0 to 1 but got: '+value);
+		console.log  ('[TOOLS]\tERROR CONVERTING % to Value expected number 0 to 1 but got: '+value);
 		return 0;
 	}
 }

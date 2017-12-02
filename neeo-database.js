@@ -127,4 +127,4 @@ module.exports.capabilitie = function (adapterName, capabilitieName) {
 		}
 	}
 	return {};
-}
+} 

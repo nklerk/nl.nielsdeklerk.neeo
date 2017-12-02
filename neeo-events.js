@@ -24,4 +24,4 @@ module.exports.handle = function (body, clientIP){
 	let neeoReceivedEvent = new Homey.FlowCardTrigger('received_event');
 	neeoReceivedEvent.register().trigger('received_event', { Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body}).then(() => {}).catch( err => {});
 	return (responseData)
-}
+} 

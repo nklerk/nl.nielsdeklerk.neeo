@@ -73,23 +73,30 @@ When... flow cards:
 * "Inform slider state. (Percentage)"    This card will inform the NEEO remote user interface of the given value in percentage for the selected virtual device slider.
 * "Inform slider state. (Value)"         This card will inform the NEEO remote user interface of the new value for the selected virtual device slider.
 * "Inform switch state."                 This card will inform the NEEO remote user interface of the new value for the selected virtual device switch.
-* "Inform label or image state."         This card will inform the NEEO remote user interface of the new value for the selected virtual device label or set the image based on a URL.
+* "Inform label or image state."         This card will inform the NEEO remote user interface of the new value for the selected virtual device label or set the image based on a URL or image tag.
 * "Blink the brain LED."                 This card will blink the LED of the selected NEEO brain (every x time blinks for 2 seconds.)
 
 
-## To Do
-- Support base64encoded images to NEEO.
-- Adding tools like favorite editing.
+# To Do
+## My next focus will be on
 - Adding feature to check specific sensor values in NEEO.
-- Making brain's seperate devices in Homey.
+- setting brain's as seperate devices to Homey.
+
+## Lower priority.
+- Adding favorite editing tool.
+- Adding a tool to debug ir commands.
 - Removing the download NEEO config, instead use live data.
 - Add new firmware availeble card.
+- Update firmware card.
 
 
 # Changelog.
 ## Version 0.48.00
+
+This has been a huge change and issues are to be expected.
 - Changed from Homey SDKv1 to SDKv2
 - Settings page now show more system information details.
+- Support base64 images (image Tag) to NEEO. just drag a image tag in the "Update textlabel or image state." card.
 
 ## Version 0.47.16
 - Fixed an issue where selecting a button would crash the app.

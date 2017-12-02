@@ -21,7 +21,7 @@ let neeoInformSwitchDevice = neeoInformSwitch.getArgument('device');
 neeoInformSwitchDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.devices(query, args); });
 
 let neeoInformSwitchCapabilitie = neeoInformSwitch.getArgument('capabilitie');
-neeoInformSwitchCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });
+neeoInformSwitchCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "binary"); });
 /* 		//inform_switch
 		Homey.manager('flow').on('action.inform_switch.device.autocomplete', function( callback, args ){
 			callback(null, homeyAutocomplete.devices(args));

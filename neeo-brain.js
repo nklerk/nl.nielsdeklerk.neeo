@@ -179,7 +179,8 @@ function downloadSystemInfo(neeoBrainQ){
 					let systemInfo = {};
 					try {
 						systemInfo = JSON.parse(responseData);
-						neeoBrain.systemInfo = systemInfo;
+						//neeoBrain.systemInfo = systemInfo;
+						neeoBrain.ip = systemInfo.ip
 						Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 					} catch (e) {
 						Homey.log ('[EVENTS]\tERROR: '+e);

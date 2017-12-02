@@ -38,9 +38,15 @@ module.exports.device = function device(deviceName, deviceFunction, deviceParame
 	if (!capabilitie.type){
 		capabilitie.type = 'error';
 	}
-	if (capabilitie.type === 'sensor') { 
-		responseData.content = JSON.stringify({value: capabilitie.sensor.value});
-		console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capabilitie.sensor.value);
+	if (capabilitie.type === 'sensor') {
+		if (deviceParameter === 'base64') {
+			let buf = Buffer.from(capabilitie.sensor.base64, 'base64');
+			responseData = {'code': 200,'Type': {'Content-Type': 'image'}, 'content': buf};
+			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded with image buffer.');
+		} else {
+			responseData.content = JSON.stringify({value: capabilitie.sensor.value});
+			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capabilitie.sensor.value);
+		}
 	}
 	else if (capabilitie.type === 'button') {
 		console.log ('[EVENTS]\tButton pressed: ' + deviceName + ', ' + deviceFunction + '.');
@@ -103,6 +109,6 @@ module.exports.capabilities = function capabilities(uriparts){
 module.exports.unknown = function unknown(uriparts){
 	console.log ('[ERROR]\tRECEIVED UNKNOWN REQUEST.');
 	console.log (uriparts);
-	const responseData = {'code': 500,'Type': {'Content-Type': 'application/json'}, 'content': {'error': 'Unknown request.'}};
+	const responseData = {'code': 500,'Type': {'Content-Type': 'application/json'}, 'content': '{"error": "Unknown request."}'};
 	return (responseData);
 }

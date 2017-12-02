@@ -92,7 +92,7 @@ module.exports.deviceByAdaptername = function (adapterName){
 }
 
 
-module.exports.capabilitieSetValue = function (adapterName, capabilities_name, newvalue) {
+module.exports.capabilitieSetValue = function (adapterName, capabilities_name, newvalue, base64) {
 	const devices = allDevices();
 	capabilities_name = capabilities_name.replace(/(_SENSOR)/gm,"");  
 	for (let z in devices) {
@@ -101,6 +101,9 @@ module.exports.capabilitieSetValue = function (adapterName, capabilities_name, n
 				if (devices[z].capabilities[y].type ==='sensor' && devices[z].capabilities[y].name === capabilities_name + '_SENSOR') {
 					console.log ('[DATABASE]\tUpdating database from old Value: ' + devices[z].capabilities[y].sensor.value + ' to new value: ' + newvalue);
 					devices[z].capabilities[y].sensor.value = newvalue;
+					if (base64) {
+						devices[z].capabilities[y].sensor.base64 = base64;
+					}
 				}
 			}
 		}

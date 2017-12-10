@@ -6,7 +6,7 @@ const homeyAutocomplete = require('./homey-autocomplete');
 let neeoBrainBlinkLED= new Homey.FlowCardAction('neeobrain_blinkLED');
 neeoBrainBlinkLED.register().registerRunListener((args, state)=>{	
 	console.log  ('[HOMEY FLOW]\taction.neeobrain_blinkLED');
-	neeoBrain.blinkLed(args.brain.ip, args.times);
+	neeoBrain.blinkLed(args.brain.name, args.times);
 	return true;
 });
 

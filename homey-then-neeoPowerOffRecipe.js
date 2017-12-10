@@ -14,5 +14,4 @@ let neeoPoweroffRecipeRoom = neeoPoweroffRecipe.getArgument('room');
 neeoPoweroffRecipeRoom.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.rooms(query, args); });
 
 let neeoPoweroffRecipeRecipe= neeoPoweroffRecipe.getArgument('recipe');
-neeoPoweroffRecipeRecipe.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.recipe(query, args, "poweroff"); });
-
+neeoPoweroffRecipeRecipe.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.recepies(query, args, "poweroff"); });

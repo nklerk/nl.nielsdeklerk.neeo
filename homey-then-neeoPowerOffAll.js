@@ -9,10 +9,4 @@ neeoPoweroffAll.register().registerRunListener((args, state)=>{
     return true;
 });
 
-/* 		//Poweroff_all
-		Homey.manager('flow').on('action.poweroff_all_recipes', function (callback) {
-			Homey.log  ('[HOMEY] \tPowering off all recipes.'); 
-			neeoBrain.shutdownAllRecipes();
-			callback( null, true );
-		}); */
 		

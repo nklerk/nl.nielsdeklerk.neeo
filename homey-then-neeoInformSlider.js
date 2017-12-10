@@ -25,23 +25,3 @@ neeoInformSliderDevice.registerAutocompleteListener(( query, args ) => { return 
 
 let neeoInformSliderCapabilitie = neeoInformSlider.getArgument('capabilitie');
 neeoInformSliderCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });
-
-/* 		//inform_slider
-		Homey.manager('flow').on('action.inform_slider.device.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.devices(args));
-		});
-		Homey.manager('flow').on('action.inform_slider.capabilitie.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.capabilities(args, "range"));
-		});
-		Homey.manager('flow').on('action.inform_slider', function (callback, args, state) {
-			Homey.log ('[HOMEY FLOW]\taction.inform_slider');
-			if (args.value >= 0 && args.value <= 1){
-				const value = tools.percentage(args.value, args.capabilitie.range);
-				neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, value);
-				neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, value);
-				homeyTokens.set(args.device.name, args.capabilitie.name, value);
-				callback( null, true );
-			} else {
-				callback( null, false );
-			}
-		}); */

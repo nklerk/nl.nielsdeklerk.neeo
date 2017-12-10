@@ -16,16 +16,3 @@ neeoPoweroffRecipeRoom.registerAutocompleteListener(( query, args ) => { return 
 let neeoPoweroffRecipeRecipe= neeoPoweroffRecipe.getArgument('recipe');
 neeoPoweroffRecipeRecipe.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.recipe(query, args, "poweroff"); });
 
-
-/* 	//poweroff_recipe
-    Homey.manager('flow').on('action.poweroff_recipe.room.autocomplete', function( callback, args ){
-        callback(null, homeyAutocomplete.rooms(args));
-    });
-    Homey.manager('flow').on('action.poweroff_recipe.recipe.autocomplete', function( callback, args ){
-        callback(null, homeyAutocomplete.recepies(args, 'poweroff'));
-    });
-    Homey.manager('flow').on('action.poweroff_recipe', function (callback, args, state) {
-        Homey.log  ('[HOMEY] \tPowering off recipe ' + args.recipe.name + '.'); 
-        neeoBrain.executeRecipe(args.room.brainip, args.room.key, args.recipe.key);
-        callback( null, true ); 
-    }); */

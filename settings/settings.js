@@ -1,6 +1,5 @@
 let Settings_database = [];
 let Settings_brains = [];
-let Settings_id = 0;
 let Settings_ready; //Show loading screen until data is ready.....
 const showUnsupported = false;
 const sellectionoptions = [
@@ -51,7 +50,6 @@ function addDeviceTypeOptions () {
 
 function readsettings(){
     readMyDevices();
-    readMyId();
     readMyBrains();
 }
 
@@ -72,19 +70,6 @@ function readMyDevices() {
 }
 
 
-function readMyId() {
-    Homey.get('myId', function(err, id){
-        if (typeof id !== 'undefined') {
-            if (id === null) {
-                id = 0;
-            }
-            Settings_id = parseInt(id, 10);
-            document.getElementById('settings_id').value = Settings_id;
-        } else {
-            setTimeout(readMyId, 300);
-        }
-    });
-}
 
 
 function readMyBrains() {
@@ -99,18 +84,6 @@ function readMyBrains() {
     });
 } 
 
-function useMyId() {
-    Settings_id++;
-    document.getElementById('settings_id').value = Settings_id;
-    Homey.set('myId', Settings_id);
-    return (Settings_id);
-}
-
-function settings_btn_saveid() {
-    Settings_id = parseInt(document.getElementById('settings_id').value, 10);
-    Homey.set('myId', Settings_id);
-    console.log('myId is set to '+Settings_id);
-} 
 
 ////////////////////////////////////////
 // General GUI
@@ -624,9 +597,7 @@ function device_remove(adapterName){
 
 function clear_button(){
     Settings_database = []
-    Settings_id = 0
     Homey.set('myDevices', Settings_database)
-    Homey.set('myId', Settings_id)
     devices_refresh_display()
     gui_view_selection('devices')
 } 
@@ -646,7 +617,7 @@ function clear_brain_button(){
 
 function newDevice(manufacturer, name, type) {
     let _newdevice = {};
-    _newdevice.id = useMyId();
+    _newdevice.id = (Date.now() - 1512590738651);
     _newdevice.adapterName = 'homey_' + name.replace(/ /gm,"-") + '_' + _newdevice.id;
     _newdevice.type = type.toUpperCase();  
     _newdevice.manufacturer = manufacturer;

@@ -3,6 +3,7 @@ const Homey = require('homey');
 const homeyTokens = require('./homey-tokens');
 const tools = require('./tools');
 const neeoDatabase = require('./neeo-database');
+const httpmin = require('http.min');
 
 const TCP_PORT = 6336;
 const NEEO_CONNECT_INTERVAL= 60000;	//1 Min
@@ -133,23 +134,14 @@ function downloadConfiguration(neeoBrainQ){
 		for (let neeoBrain of neeoBrains) {
 			if (!neeoBrainQ || neeoBrain.host === neeoBrainQ.host) {
 				console.log ('[DATABASE]\t'+neeoBrain.host+', Downloading configuration...');
-				const options = {
-					hostname: neeoBrain.host,
-					port: 3000,
-					path: '/v1/projects/home',
-					method: 'GET',
-					headers: {'Content-Type': 'application/json'}
-				};
-				tools.httpRequest(options, null, (response, responseData)=>{
+
+				httpmin.json('http://'+neeoBrain.host+':3000/v1/projects/home').then(brainConfiguration => {
 					console.log ('[DATABASE]\t'+neeoBrain.host+', Download complete.');
-					let brainConfiguration = {};
-					try {
-						brainConfiguration = JSON.parse(responseData);
-						neeoBrain.brainConfiguration = brainConfiguration;
-						Homey.ManagerSettings.set('neeoBrains', neeoBrains);
-					} catch (e) {
-						Homey.log ('[EVENTS]\tERROR: '+e);
-					}
+					neeoBrain.brainConfiguration = brainConfiguration;
+					Homey.ManagerSettings.set('neeoBrains', neeoBrains);
+					neeoDatabase.refreshEventRegisters();	//need to be made a more elegant sol
+				}).catch(error => {
+					console.log ('[ERROR]\tDownloading configuration from: '+neeoBrain.host+', ERROR: '+ error);
 				});
 			}
 		}
@@ -195,22 +187,11 @@ module.exports.notifyStateChange = function (adapterName, capabilitieName, value
 	const capabilitie = neeoDatabase.capabilitie(adapterName, capabilitieName)
 	if (capabilitie && capabilitie.eventservers) {
 		for (let eventserver of capabilitie.eventservers) {
-			const content = {
-				type: eventserver.eventKey, 
-				data: value
-			};
-			const options = {
-				hostname: eventserver.host,
-				port: 3000,
-				path: '/v1/notifications', 
-				method: 'POST', 
-				headers: {'Content-Type': 'application/json'}
-			};
-			tools.httpRequest(options, content, (response, responseData)=>{
-				if (responseData === '{"success":true}'){
-					console.log ('[NOTIFICATIONS]\tSuccesfully sent notification with value '+content.data+' to eventkey '+content.type+' @'+options.hostname);
+			httpmin.post('http://'+eventserver.host+':3000/v1/notifications',{type : eventserver.eventKey , data : value }).then(result => {
+				if (result.data === '{"success":true}'){
+					console.log ('[NOTIFICATIONS]\tSuccesfully sent notification with value '+value+' to eventkey '+eventserver.eventKey+' @'+eventserver.host);
 				} else {
-					console.log ('[ERROR]\t\tError sending notification with value '+content.data+' to eventkey '+content.type+' @'+options.hostname+'. Got response: '+responseData);
+					console.log ('[ERROR]\t\tError sending notification with value '+value+' to eventkey '+eventserver.eventKey+' @'+eventserver.host+'. Got response: '+result.data);
 				}
 			});
 		}
@@ -238,15 +219,9 @@ module.exports.shutdownAllRecipes = function (){
 	} 
 }
 
-module.exports.isRecipeActive = function (brainIp, roomKey, recipeKey, callback) {
-	tools.httpRequest({hostname: brainIp, port: 3000, path: '/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/isactive', method: 'GET', headers: {'Content-Type': 'application/json'}},false, (response, answer) =>{
-		if (answer === '{"active":true}'){
-			callback(true);
-		} else if (answer === '{"active":false}'){
-			callback(false);
-		} else {
-			callback('ERROR');
-		}
+module.exports.isRecipeActive = function (brainHostname, roomKey, recipeKey) {
+	return httpmin.json('http://'+brainHostname+':3000/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/isactive').then(result => {
+		return result.active;
 	});
 }
 

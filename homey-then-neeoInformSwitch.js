@@ -22,18 +22,3 @@ neeoInformSwitchDevice.registerAutocompleteListener(( query, args ) => { return 
 
 let neeoInformSwitchCapabilitie = neeoInformSwitch.getArgument('capabilitie');
 neeoInformSwitchCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "binary"); });
-/* 		//inform_switch
-		Homey.manager('flow').on('action.inform_switch.device.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.devices(args));
-		});
-		Homey.manager('flow').on('action.inform_switch.capabilitie.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.capabilities(args, "binary"));
-		});
-		Homey.manager('flow').on('action.inform_switch', function (callback, args, state) {
-			Homey.log  ('[HOMEY FLOW]\taction.inform_switch');
-			args.value = tools.stringToBoolean(args.value);
-			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
-			neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
-			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
-			callback( null, true ); 
-		}); */

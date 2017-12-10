@@ -50,7 +50,7 @@ module.exports.device = function device(deviceName, deviceFunction, deviceParame
 	}
 	else if (capabilitie.type === 'button') {
 		console.log ('[EVENTS]\tButton pressed: ' + deviceName + ', ' + deviceFunction + '.');
-		neeoButtonPressed.trigger( 'button_pressed', {}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
+		neeoButtonPressed.trigger({}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
 	}
 	else if (capabilitie.type === 'slider') {
 		console.log ('[EVENTS]\tSlider state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);

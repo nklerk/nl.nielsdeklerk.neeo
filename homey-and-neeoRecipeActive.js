@@ -4,10 +4,8 @@ const homeyAutocomplete = require('./homey-autocomplete');
 const neeoBrain = require('./neeo-brain');
 
 let neeoRecipeActive = new Homey.FlowCardCondition('recipe_active');
-neeoRecipeActive.register().registerRunListener((args, state)=>{	
-	neeoBrain.isRecipeActive(args.room.brainip, args.room.key, args.recipe.key, (answer)=>{
-		return answer;
-	});
+neeoRecipeActive.register().registerRunListener((args, state)=>{
+	return neeoBrain.isRecipeActive(args.room.brainip, args.room.key, args.recipe.key);
 });
 
 let neeoRecipeActiveRoom = neeoRecipeActive.getArgument('room');

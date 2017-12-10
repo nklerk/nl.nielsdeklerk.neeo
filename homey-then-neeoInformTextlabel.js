@@ -30,18 +30,3 @@ neeoInformTextlabelDevice.registerAutocompleteListener(( query, args ) => { retu
 
 let neeoInformTextlabelCapabilitie = neeoInformTextlabel.getArgument('capabilitie');
 neeoInformTextlabelCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "custom"); });
-
-/* 		//inform_textlabel
-		Homey.manager('flow').on('action.inform_textlabel.device.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.devices(args));
-		});
-		Homey.manager('flow').on('action.inform_textlabel.capabilitie.autocomplete', function( callback, args ){
-			callback(null, homeyAutocomplete.capabilities(args, "custom"));
-		});
-		Homey.manager('flow').on('action.inform_textlabel', function (callback, args, state) {
-			Homey.log  ('[HOMEY FLOW]\taction.inform_textlabel');
-			neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
-			neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
-			homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
-			callback( null, true ); 
-		}); */

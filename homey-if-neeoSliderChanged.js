@@ -18,7 +18,7 @@ neeoSliderChangedDevice.registerAutocompleteListener( ( query, args ) => {return
 let neeoSliderChangedCapabilitie = neeoSliderChanged.getArgument('capabilitie');
 neeoSliderChangedCapabilitie.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "slider");});
 
-module.exports.Trigger = function (args, state){
+module.exports.trigger = function (args, state){
     neeoSliderChanged.trigger(args, state)
     .then( this.log )
     .catch( this.error );

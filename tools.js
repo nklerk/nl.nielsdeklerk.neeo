@@ -58,26 +58,6 @@ function httpRequest(options, content, callback){
 module.exports.httpRequest = httpRequest;
 
 
-/* function httpPromReq(options, content){
-	return new Promise((resolve, reject) => {
-		let responseData = '';
-		const http = require('http');
-		const req = http.request(options, function(response) {
-			response.setEncoding('utf8');
-			response.on('data', (body) => {
-				responseData = responseData + body;
-			});
-			response.on('end', () => {
-				resolve(responseData);
-			});
-		});
-		req.on('error', (err) => reject(err))
-		if (content) { req.write(JSON.stringify(content));}
-		req.end();
-	})
-}
-module.exports.httpPromReq = httpPromReq; */
-
 
 module.exports.stringCleanForMatch = function (textstring){
 	textstring = textstring.toLowerCase();

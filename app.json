@@ -116,17 +116,19 @@
 				},
 				"tokens": [{
 					"name": "value",
+					"type": "number",
 					"title": {
 						"en": "Value"
 					},
-					"type": "number"
+					"example": 45
 				},
 				{
 					"name": "decimalvalue",
+					"type": "number",
 					"title": {
 						"en": "Decimal Value"
 					},
-					"type": "number"
+					"example": 0.45
 				}],
 				"args": [{
 					"name": "device",
@@ -153,50 +155,50 @@
 				},
 				"tokens": [{
 					"name": "Action",
+					"type": "string",
 					"title": {
 						"en": "Action"
 					},
-					"type": "string",
 					"example": {
 						"en": "VOLUME UP"
 					}
 				},
 				{
 					"name": "Device",
+					"type": "string",
 					"title": {
 						"en": "Device"
 					},
-					"type": "string",
 					"example": {
 						"en": "Receiver"
 					}
 				},
 				{
 					"name": "Room",
+					"type": "string",
 					"title": {
 						"en": "Room"
 					},
-					"type": "string",
 					"example": {
 						"en": "Living room"
 					}
 				},
 				{
 					"name": "Parameter",
+					"type": "string",
 					"title": {
 						"en": "Parameter"
 					},
-					"type": "string",
 					"example": {
 						"en": "Parameter"
 					}
 				},
 				{
 					"name": "Json",
+					"type": "string",
 					"title": {
 						"en": "JSON"
 					},
-					"type": "string",
 					"example": {
 						"en": "{\"action\":\"brightness\",\"device\":\"Badkamer\",\"room\":\"Verlichting\",\"actionparameter\":48}"
 					}

@@ -34,41 +34,41 @@ module.exports.device = function device(deviceName, deviceFunction, deviceParame
 		type: {'Content-Type': 'application/json'},
 		content: ''
 	};
-	const capabilitie = neeoDatabase.capabilitie(deviceName, deviceFunction);
-	if (!capabilitie.type){
-		capabilitie.type = 'error';
+	const capability = neeoDatabase.capability(deviceName, deviceFunction);
+	if (!capability.type){
+		capability.type = 'error';
 	}
-	if (capabilitie.type === 'sensor') {
+	if (capability.type === 'sensor') {
 		if (deviceParameter === 'base64') {
-			let buf = Buffer.from(capabilitie.sensor.base64, 'base64');
+			let buf = Buffer.from(capability.sensor.base64, 'base64');
 			responseData = {'code': 200,'Type': {'Content-Type': 'image'}, 'content': buf};
 			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded with image buffer.');
 		} else {
-			responseData.content = JSON.stringify({value: capabilitie.sensor.value});
-			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capabilitie.sensor.value);
+			responseData.content = JSON.stringify({value: capability.sensor.value});
+			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capability.sensor.value);
 		}
 	}
-	else if (capabilitie.type === 'button') {
+	else if (capability.type === 'button') {
 		console.log ('[EVENTS]\tButton pressed: ' + deviceName + ', ' + deviceFunction + '.');
 		neeoButtonPressed.trigger({}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
 	}
-	else if (capabilitie.type === 'slider') {
+	else if (capability.type === 'slider') {
 		console.log ('[EVENTS]\tSlider state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);
 		deviceParameter = parseInt(deviceParameter, 10);
-		const decimalvalue = tools.mathRound(deviceParameter / capabilitie.slider.range[1],2);
+		const decimalvalue = tools.mathRound(deviceParameter / capability.slider.range[1],2);
 		neeoBrain.notifyStateChange(deviceName, deviceFunction + '_SENSOR', deviceParameter, () => { });
 		homeyTokens.set(deviceName, deviceFunction, deviceParameter, () => { });
 		neeoSliderChanged.trigger({'value': deviceParameter, 'decimalvalue': decimalvalue}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
-		responseData.content = neeoDatabase.capabilitieSetValue(deviceName, deviceFunction, deviceParameter)
+		responseData.content = neeoDatabase.capabilitySetValue(deviceName, deviceFunction, deviceParameter)
 	}
-	else if (capabilitie.type === 'switch') {
+	else if (capability.type === 'switch') {
 		console.log ('[EVENTS]\tSwitch state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);
 		if (deviceParameter === 'true') { deviceParameter = true}
 		if (deviceParameter === 'false') { deviceParameter = false} 
 		neeoSwitchChanged.trigger({'value': deviceParameter}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
 		homeyTokens.set(deviceName, deviceFunction, deviceParameter);
 		neeoBrain.notifyStateChange(deviceName, deviceFunction + '_SENSOR', deviceParameter)
-		responseData.content = neeoDatabase.capabilitieSetValue(deviceName, deviceFunction, deviceParameter)
+		responseData.content = neeoDatabase.capabilitySetValue(deviceName, deviceFunction, deviceParameter)
 	}
 	else {
 		console.log (" !! Warning !!");

@@ -19,17 +19,6 @@ The NEEO Remote can be (Pre)ordered at https://neeo.com/pre-order/
 Please note that this is not an official NEEO app made by NEEO and there will be no support from NEEO concerning this App.
 
 
-You may leave me a donation if you love my work.
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/nl_NL/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-
-
 
 ## Features
 
@@ -78,21 +67,26 @@ When... flow cards:
 
 
 # To Do
-## My next focus will be on
-- Adding feature to check specific sensor values in NEEO.
-- setting brain's as seperate devices to Homey.
 
-## Lower priority.
-- Adding favorite editing tool.
-- Adding a tool to debug ir commands.
-- Removing the download NEEO config, instead use live data.
+- Adding feature to check specific sensor values in NEEO.
 - Add new firmware availeble card.
+- Adding favorite editing tool.
+- Adding a tool to debug/test ir commands.
+- Removing the download NEEO config, instead use live data. (need specific API calls on NEEO side.)
 - Update firmware card.
+- Multibrain mesh feature.
+- setting brain's as seperate devices to Homey.
 
 
 # Changelog.
-## Version 0.48.00
 
+## Version 0.48.01
+- Fixed some typo's thanks to Mark Swift.
+- Fixed device naming in Homey settings. thanks to Mark Swift.
+- App settings UI changes.
+- App settings can now be used with Homey AppV2
+
+## Version 0.48.00
 This has been a huge change and issues are to be expected.
 - Changed from Homey SDKv1 to SDKv2
 - Settings page now show more system information details.
@@ -116,7 +110,7 @@ This has been a huge change and issues are to be expected.
 ## Version 0.9.4
 - Fixed an issue with a corupted neeobrains save.
 ## Version 0.9.3
-- Fixed an issue when NEEO requests a unknown capabilitie.
+- Fixed an issue when NEEO requests a unknown capability.
 ## Version 0.9.2
 - Rewritten event notifications.
 ## Version 0.9.1
@@ -128,13 +122,13 @@ This has been a huge change and issues are to be expected.
 - Added token support (Tags)
 ## Version 0.7.6
 - Fixed a critical bug that rendered all NEEO flows unusable.
-- Added textlabels as capabilitie, You can now display textual inforamation. like what did homey say :-)
+- Added textlabels as capability, You can now display textual inforamation. like what did homey say :-)
 - Cleaned settings code.
 - Changed icons on app settings
 - Added textlabel icon for app settings.
 - Changed initial bonjour interval from unlimited every 10 seconds to 10 times 1 minute.
 ## Version 0.7.5
-- Default Capabilities will now be added when adding a new virtual device.
+- Default capabilities will now be added when adding a new virtual device.
 - Settings page look and feel changed.
 - Added a download configuration button so you can make a backup.
 - Added setting to view connected NEEO brains.
@@ -142,7 +136,7 @@ This has been a huge change and issues are to be expected.
 - Added a delete NEEO brain function to settings.
 ## Version 0.7.4
 - Fixed a bug where switches didn't work.
-- changed name of "drivers" to "Virtual Devices"
+- Changed name of "drivers" to "Virtual Devices"
 - Fixed a bug that causes bonjour error's.
 - Added a way to turn off all active recipies.
 ## Version 0.7.3

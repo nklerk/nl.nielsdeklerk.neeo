@@ -17,5 +17,5 @@ neeoCommandButtonRoom.registerAutocompleteListener(( query, args ) => { return h
 let neeoCommandButtonDevice = neeoCommandButton.getArgument('device');
 neeoCommandButtonDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.roomDevices(query, args); });
 
-let neeoCommandButtonCapabilitie = neeoCommandButton.getArgument('capabilitie');
-neeoCommandButtonCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.macros(query, args); });
+let neeoCommandButtonCapability = neeoCommandButton.getArgument('capabilitie');
+neeoCommandButtonCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.macros(query, args); });

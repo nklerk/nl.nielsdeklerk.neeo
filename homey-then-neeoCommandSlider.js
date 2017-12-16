@@ -16,5 +16,5 @@ neeoCommandSliderRoom.registerAutocompleteListener(( query, args ) => { return h
 let neeoCommandSliderDevice = neeoCommandSlider.getArgument('device');
 neeoCommandSliderDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.roomDevices(query, args); });
 
-let neeoCommandSliderCapabilitie = neeoCommandSlider.getArgument('capabilitie');
-neeoCommandSliderCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.sliders(query, args); });
+let neeoCommandSliderCapability = neeoCommandSlider.getArgument('capabilitie');
+neeoCommandSliderCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.sliders(query, args); });

@@ -12,7 +12,7 @@ neeoInformSlider.register().registerRunListener((args, state)=>{
     if (args.value >= 0 && args.value <= 1){
         const value = tools.percentage(args.value, args.capabilitie.range);
         neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, value);
-        neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, value);
+        neeoDatabase.capabilitySetValue(args.device.adapterName, args.capabilitie.realname, value);
         homeyTokens.set(args.device.name, args.capabilitie.name, value);
         return true;
     } else {
@@ -23,5 +23,5 @@ neeoInformSlider.register().registerRunListener((args, state)=>{
 let neeoInformSliderDevice = neeoInformSlider.getArgument('device');
 neeoInformSliderDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.devices(query, args); });
 
-let neeoInformSliderCapabilitie = neeoInformSlider.getArgument('capabilitie');
-neeoInformSliderCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });
+let neeoInformSliderCapability = neeoInformSlider.getArgument('capabilitie');
+neeoInformSliderCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });

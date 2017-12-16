@@ -19,7 +19,7 @@ neeoInformTextlabel.register().registerRunListener((args, state)=>{
 			args.value = 'http://'+tools.getLocalIp()+':6336/device/'+args.device.adapterName+'/'+args.capabilitie.realname+'/'+Date.now()+'/base64'
 		}
 	}
-	neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value, args.base64);
+	neeoDatabase.capabilitySetValue(args.device.adapterName, args.capabilitie.realname, args.value, args.base64);
     neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
     homeyTokens.set(args.device.name, args.capabilitie.name, args.value);		
     return true;
@@ -28,5 +28,5 @@ neeoInformTextlabel.register().registerRunListener((args, state)=>{
 let neeoInformTextlabelDevice = neeoInformTextlabel.getArgument('device');
 neeoInformTextlabelDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.devices(query, args); });
 
-let neeoInformTextlabelCapabilitie = neeoInformTextlabel.getArgument('capabilitie');
-neeoInformTextlabelCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "custom"); });
+let neeoInformTextlabelCapability = neeoInformTextlabel.getArgument('capabilitie');
+neeoInformTextlabelCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "custom"); });

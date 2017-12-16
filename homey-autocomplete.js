@@ -13,14 +13,14 @@ module.exports.capabilities = function(query, args, type){
 	if(devices.length>0){
 		for (const device of devices) {
 			if (device.adapterName == args.device.adapterName){
-				for (const capabilitie of device.capabilities) {
-					const capabilitieQ = tools.stringCleanForMatch(capabilitie.label);
-					if (capabilitieQ.indexOf(query) !== -1 ) {
-						if ((capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === type) || capabilitie.type == type){
-							if (capabilitie.sensor && capabilitie.sensor.type && capabilitie.sensor.type === 'range'){
-								foundcapa.push({name: capabilitie.label, realname: capabilitie.name, range: capabilitie.sensor.range});
+				for (const capability of device.capabilities) {
+					const capabilityQ = tools.stringCleanForMatch(capability.label);
+					if (capabilityQ.indexOf(query) !== -1 ) {
+						if ((capability.sensor && capability.sensor.type && capability.sensor.type === type) || capability.type == type){
+							if (capability.sensor && capability.sensor.type && capability.sensor.type === 'range'){
+								foundcapa.push({name: capability.label, realname: capability.name, range: capability.sensor.range});
 							} else {
-								foundcapa.push({name: capabilitie.label, realname: capabilitie.name});
+								foundcapa.push({name: capability.label, realname: capability.name});
 							}
 						}
 					}

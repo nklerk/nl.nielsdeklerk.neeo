@@ -15,8 +15,8 @@ neeoSliderChanged.register().registerRunListener((args, state)=>{
 let neeoSliderChangedDevice = neeoSliderChanged.getArgument('device');
 neeoSliderChangedDevice.registerAutocompleteListener( ( query, args ) => {return homeyAutocomplete.devices(query, args);});
 
-let neeoSliderChangedCapabilitie = neeoSliderChanged.getArgument('capabilitie');
-neeoSliderChangedCapabilitie.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "slider");});
+let neeoSliderChangedCapability = neeoSliderChanged.getArgument('capabilitie');
+neeoSliderChangedCapability.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "slider");});
 
 module.exports.trigger = function (args, state){
     neeoSliderChanged.trigger(args, state)

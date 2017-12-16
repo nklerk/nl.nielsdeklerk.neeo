@@ -15,8 +15,8 @@ neeoSwitchChanged.register().registerRunListener((args, state)=>{
 let neeoSwitchChangedDevice = neeoSwitchChanged.getArgument('device');
 neeoSwitchChangedDevice.registerAutocompleteListener( ( query, args ) => {return homeyAutocomplete.devices(query, args);});
 
-let neeoSwitchChangedCapabilitie = neeoSwitchChanged.getArgument('capabilitie');
-neeoSwitchChangedCapabilitie.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "switch");});
+let neeoSwitchChangedCapability = neeoSwitchChanged.getArgument('capabilitie');
+neeoSwitchChangedCapability.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "switch");});
 
 module.exports.trigger = function (args, state){
     neeoSwitchChanged.trigger(args, state)

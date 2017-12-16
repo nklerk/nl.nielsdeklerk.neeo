@@ -10,7 +10,7 @@ let neeoInformSliderValue = new Homey.FlowCardAction('inform_slider_value');
 neeoInformSliderValue.register().registerRunListener((args, state)=>{	
     console.log  ('[HOMEY FLOW]\taction.inform_slider_value');
     neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
-    neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
+    neeoDatabase.capabilitySetValue(args.device.adapterName, args.capabilitie.realname, args.value);
     homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
     return true;
 });
@@ -18,5 +18,5 @@ neeoInformSliderValue.register().registerRunListener((args, state)=>{
 let neeoInformSliderValueDevice = neeoInformSliderValue.getArgument('device');
 neeoInformSliderValueDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.devices(query, args); });
 
-let neeoInformSliderValueCapabilitie = neeoInformSliderValue.getArgument('capabilitie');
-neeoInformSliderValueCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });
+let neeoInformSliderValueCapability = neeoInformSliderValue.getArgument('capabilitie');
+neeoInformSliderValueCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "range"); });

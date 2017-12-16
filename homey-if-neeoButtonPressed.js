@@ -15,8 +15,8 @@ neeoButtonPressed.register().registerRunListener((args, state)=>{
 let neeoButtonPressedDevice = neeoButtonPressed.getArgument('device');
 neeoButtonPressedDevice.registerAutocompleteListener( ( query, args ) => {return homeyAutocomplete.devices(query, args);});
 
-let neeoButtonPressedCapabilitie = neeoButtonPressed.getArgument('capabilitie');
-neeoButtonPressedCapabilitie.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "button");});
+let neeoButtonPressedCapability = neeoButtonPressed.getArgument('capabilitie');
+neeoButtonPressedCapability.registerAutocompleteListener( ( query, args ) => {	return homeyAutocomplete.capabilities(query, args, "button");});
 
 module.exports.trigger = function (args, state){
     neeoButtonPressed.trigger(args, state)

@@ -7,10 +7,10 @@ module.exports.refreshEventRegisters = function (){
 	for (const a in devices) {
 		const device = devices[a];
 		for (const b in device.capabilities){
-			const capabilitie = device.capabilities[b];
-			if (capabilitie.type === 'sensor'){
-				console.log('[DATABASE]\tUpdating Event registers of '+device.name+' sensor: '+capabilitie.label);
-				devices[a].capabilities[b].eventservers = findEventServers(device.adapterName, capabilitie.name);
+			const capability = device.capabilities[b];
+			if (capability.type === 'sensor'){
+				console.log('[DATABASE]\tUpdating Event registers of '+device.name+' sensor: '+capability.label);
+				devices[a].capabilities[b].eventservers = findEventServers(device.adapterName, capability.name);
 			}
 		}
 	}
@@ -92,7 +92,7 @@ module.exports.deviceByAdaptername = function (adapterName){
 }
 
 
-module.exports.capabilitieSetValue = function (adapterName, capabilities_name, newvalue, base64) {
+module.exports.capabilitySetValue = function (adapterName, capabilities_name, newvalue, base64) {
 	const devices = allDevices();
 	capabilities_name = capabilities_name.replace(/(_SENSOR)/gm,"");  
 	for (let z in devices) {
@@ -114,14 +114,14 @@ module.exports.capabilitieSetValue = function (adapterName, capabilities_name, n
 }
 
 
-module.exports.capabilitie = function (adapterName, capabilitieName) {
+module.exports.capability = function (adapterName, capabilityName) {
 	const devices = allDevices();
 	let response = {};
 	for (const device of devices) {
 		if (device.adapterName == adapterName) {
-			for (const capabilitie of device.capabilities) {
-				if (capabilitie.name == capabilitieName) {
-					return capabilitie;
+			for (const capability of device.capabilities) {
+				if (capability.name == capabilityName) {
+					return capability;
 				}
 			}
 		}

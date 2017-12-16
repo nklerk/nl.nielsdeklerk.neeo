@@ -27,9 +27,9 @@ module.exports.setAll = function () {
 	const devices = neeoDatabase.devices();
 	if (devices.length>0) {
 		for (const device of devices) {
-			for (const capabilitie of device.capabilities) {
-				if (capabilitie.type === 'sensor' && capabilitie.sensor.value){
-					set(device.name, capabilitie.name, capabilitie.sensor.value);
+			for (const capability of device.capabilities) {
+				if (capability.type === 'sensor' && capability.sensor.value){
+					set(device.name, capability.name, capability.sensor.value);
 				}
 			}
 		}

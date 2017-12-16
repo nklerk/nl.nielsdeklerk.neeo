@@ -11,7 +11,7 @@ neeoInformSwitch.register().registerRunListener((args, state)=>{
     console.log ('[HOMEY FLOW]\taction.inform_switch');
     args.value = tools.stringToBoolean(args.value);
     neeoBrain.notifyStateChange(args.device.adapterName, args.capabilitie.realname, args.value);
-    neeoDatabase.capabilitieSetValue(args.device.adapterName, args.capabilitie.realname, args.value);
+    neeoDatabase.capabilitySetValue(args.device.adapterName, args.capabilitie.realname, args.value);
     homeyTokens.set(args.device.name, args.capabilitie.name, args.value);	
     return true;
 
@@ -20,5 +20,5 @@ neeoInformSwitch.register().registerRunListener((args, state)=>{
 let neeoInformSwitchDevice = neeoInformSwitch.getArgument('device');
 neeoInformSwitchDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.devices(query, args); });
 
-let neeoInformSwitchCapabilitie = neeoInformSwitch.getArgument('capabilitie');
-neeoInformSwitchCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "binary"); });
+let neeoInformSwitchCapability = neeoInformSwitch.getArgument('capabilitie');
+neeoInformSwitchCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.capabilities(query, args, "binary"); });

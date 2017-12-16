@@ -16,5 +16,5 @@ neeoCommandSwitchRoom.registerAutocompleteListener(( query, args ) => { return h
 let neeoCommandSwitchDevice = neeoCommandSwitch.getArgument('device');
 neeoCommandSwitchDevice.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.roomDevices(query, args); });
 
-let neeoCommandSwitchCapabilitie = neeoCommandSwitch.getArgument('capabilitie');
-neeoCommandSwitchCapabilitie.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.switches(query, args); });
+let neeoCommandSwitchCapability = neeoCommandSwitch.getArgument('capabilitie');
+neeoCommandSwitchCapability.registerAutocompleteListener(( query, args ) => { return homeyAutocomplete.switches(query, args); });

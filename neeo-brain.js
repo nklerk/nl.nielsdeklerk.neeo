@@ -36,7 +36,11 @@ function addNeeoBrainToDatabase(foundbrain) {
 	for (const i in neeoBrains) {
 		if (neeoBrains[i].host === foundbrain.host) {
 			console.log('[SERVER]\tUpdating settings: '+foundbrain.host);
+			console.log ("_____________________________________________");
+			console.log (foundbrain);
+			console.log ("_____________________________________________");
 			neeoBrains[i].ip = foundbrain.addresses;
+			neeoBrains[i].fullname = foundbrain.fullname.replace('._neeo._tcp.local','');
 			exist = exist + 1;
 		};
 	}
@@ -45,7 +49,7 @@ function addNeeoBrainToDatabase(foundbrain) {
 		console.log ("_____________________________________________");
 		console.log (foundbrain);
 		console.log ("_____________________________________________");
-		const neeoBrain = {host: foundbrain.host, ip: foundbrain.addresses};
+		const neeoBrain = {host: foundbrain.host, ip: foundbrain.addresses, fullname: foundbrain.fullname.replace('._neeo._tcp.local','')};
 		neeoBrains.push(neeoBrain);
 		registerAsDeviceDatabase(neeoBrain);
 		registerForwarderEvents(neeoBrain);
@@ -67,6 +71,10 @@ function connect() {
 			setTimeout(connect, NEEO_RECONNECT_INTERVAL);
 		}
 	} else {
+		if (neeoConnectionTries === 0) {
+			discover();
+		}
+		neeoConnectionTries++;
 		for (let neeoBrain of neeoBrains) {
 			console.log('[SERVER]\tConnecting: '+neeoBrain.host+' ('+neeoBrain.ip+')');
 			registerAsDeviceDatabase(neeoBrain);
@@ -171,7 +179,7 @@ function downloadSystemInfo(neeoBrainQ){
 					let systemInfo = {};
 					try {
 						systemInfo = JSON.parse(responseData);
-						//neeoBrain.systemInfo = systemInfo;
+						neeoBrain.systemInfo = systemInfo;
 						neeoBrain.ip = systemInfo.ip
 						Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 					} catch (e) {
@@ -183,10 +191,10 @@ function downloadSystemInfo(neeoBrainQ){
 	}
 }
 
-module.exports.notifyStateChange = function (adapterName, capabilitieName, value){
-	const capabilitie = neeoDatabase.capabilitie(adapterName, capabilitieName)
-	if (capabilitie && capabilitie.eventservers) {
-		for (let eventserver of capabilitie.eventservers) {
+module.exports.notifyStateChange = function (adapterName, capabilityName, value){
+	const capability = neeoDatabase.capability(adapterName, capabilityName)
+	if (capability && capability.eventservers) {
+		for (let eventserver of capability.eventservers) {
 			httpmin.post('http://'+eventserver.host+':3000/v1/notifications',{type : eventserver.eventKey , data : value }).then(result => {
 				if (result.data === '{"success":true}'){
 					console.log ('[NOTIFICATIONS]\tSuccesfully sent notification with value '+value+' to eventkey '+eventserver.eventKey+' @'+eventserver.host);
@@ -196,7 +204,7 @@ module.exports.notifyStateChange = function (adapterName, capabilitieName, value
 			});
 		}
 	} else {
-		console.log('[ERROR]\t\tneeoBrain_sensor_notify('+adapterName+', '+capabilitieName+', '+value+')');
+		console.log('[ERROR]\t\tneeoBrain_sensor_notify('+adapterName+', '+capabilityName+', '+value+')');
 	}
 }
 
@@ -229,16 +237,16 @@ module.exports.executeRecipe = function (brainIp, roomKey, recipeKey) {
 	tools.httpGetAndForget('GET', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/execute');
 }
 
-module.exports.commandButton = function (brainIp, roomKey, deviceKey, capabilitieKey){
-	tools.httpGetAndForget('GET', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/macros/'+capabilitieKey+'/trigger');
+module.exports.commandButton = function (brainIp, roomKey, deviceKey, capabilityKey){
+	tools.httpGetAndForget('GET', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/macros/'+capabilityKey+'/trigger');
 }
 
-module.exports.commandSwitch = function (brainIp, roomKey, deviceKey, capabilitieKey, value){
-	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/switches/'+capabilitieKey+'/'+value);
+module.exports.commandSwitch = function (brainIp, roomKey, deviceKey, capabilityKey, value){
+	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/switches/'+capabilityKey+'/'+value);
 }
 
-module.exports.commandSlider = function (brainIp, roomKey, deviceKey, capabilitieKey, value){
-	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/sliders/' + capabilitieKey, {value: value});
+module.exports.commandSlider = function (brainIp, roomKey, deviceKey, capabilityKey, value){
+	tools.httpGetAndForget('PUT', brainIp, 3000, '/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/sliders/' + capabilityKey, {value: value});
 }
 
 function blinkLed(brainIp, times){

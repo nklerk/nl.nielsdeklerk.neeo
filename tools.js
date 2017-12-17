@@ -26,11 +26,17 @@ module.exports.getLocalIp = function() {
   return '0.0.0.0';
 }
 
-module.exports.httpGetAndForget = function (method, host, port, path, content){
+/* module.exports.httpGetAndForget = function (method, host, port, path, content){
+	console.log ("/////////////////////////////////////////////");
+	console.log ("// module.exports.httpGetAndForget //////////");
+	console.log ("/////////////////////////////////////////////");
 	httpRequest({hostname: host, port: port, path: path, method: method, headers: {'Content-Type': 'application/json'}}, content);
-}
+} */
 
-function httpRequest(options, content, callback){
+/* function httpRequest(options, content, callback){
+	console.log ("///////////////////////////////////////////////////////////////");
+	console.log ("// function httpRequest(options, content, callback){ //////////");
+	console.log ("///////////////////////////////////////////////////////////////");
 	let responseData = '';
 	const http = require('http');
 	const req = http.request(options, function(response) {
@@ -55,7 +61,7 @@ function httpRequest(options, content, callback){
 		req = undefined;
 	});
 }
-module.exports.httpRequest = httpRequest;
+module.exports.httpRequest = httpRequest; */
 
 
 

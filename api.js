@@ -8,4 +8,11 @@ module.exports = [{
     fn: function( callback, args ){
         Homey.app.apiDiscover();
     }
+},{
+    description:	'Brain Deleted',
+    method: 		'GET',
+    path:			'/delete/',
+    fn: function( callback, args ){
+        Homey.app.apiDelete();
+    }
 }]

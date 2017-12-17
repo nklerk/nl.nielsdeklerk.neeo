@@ -36,5 +36,9 @@
 			const neeoBrain = require('./neeo-brain');
 			neeoBrain.discover(); 
 		}
+		apiDelete() {	
+			const neeoBrain = require('./neeo-brain');
+			neeoBrain.brainDelete(); 
+		}
 	}
 	module.exports = neeoAppV2;

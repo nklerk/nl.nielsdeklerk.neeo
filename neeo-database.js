@@ -2,7 +2,7 @@
 const Homey = require('homey');
 const tools = require('./tools');
 
-module.exports.refreshEventRegisters = function (){
+module.exports.refreshEventRegisters = function (neeoHost){
 	let devices = Homey.ManagerSettings.get('myDevices');
 	for (const a in devices) {
 		const device = devices[a];
@@ -10,7 +10,7 @@ module.exports.refreshEventRegisters = function (){
 			const capability = device.capabilities[b];
 			if (capability.type === 'sensor'){
 				console.log('[DATABASE]\tUpdating Event registers of '+device.name+' sensor: '+capability.label);
-				devices[a].capabilities[b].eventservers = findEventServers(device.adapterName, capability.name);
+				devices[a].capabilities[b].eventservers = findEventServers(device.adapterName, capability.name, neeoHost);
 			}
 		}
 	}
@@ -18,11 +18,11 @@ module.exports.refreshEventRegisters = function (){
 }
 
 
-function findEventServers (adapterName, capabilities_name){
+function findEventServers (adapterName, capabilities_name, neeoHost){
 	const neeoBrains = Homey.ManagerSettings.get( 'neeoBrains' );
 	let foundEventregisters = [];
 	for (const neeoBrain of neeoBrains) {
-		if (neeoBrain.brainConfiguration && neeoBrain.brainConfiguration.rooms) {
+		if (neeoBrain.host == neeoHost && neeoBrain.brainConfiguration && neeoBrain.brainConfiguration.rooms) {
 			for (const a in neeoBrain.brainConfiguration.rooms) {
 				const room = neeoBrain.brainConfiguration.rooms[a];
 				for (const b in room.devices) {

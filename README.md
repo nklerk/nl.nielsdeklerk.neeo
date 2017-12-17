@@ -80,22 +80,38 @@ When... flow cards:
 
 # Changelog.
 
-## Version 0.48.01
+## Version 0.48.1 - Beta
 - Fixed some typo's thanks to Mark Swift.
 - Fixed device naming in Homey settings. thanks to Mark Swift.
 - App settings UI changes.
 - App settings can now be used with Homey AppV2
+- Fixed possible memory leak
+- Reduced stress on NEEO brain and Homey
+- Detect when a brain is unreachable.
+- Detect when a brain is reachable again.
+- Only register homey as NEEO device database when needed.
+- Only register forward events when needed.
+- Fixed a bug where discovered data was not properly saved.
+- Changed to HTTPmin node package for better promise handling.
 
-## Version 0.48.00
+## Version 0.48.0 - Beta
 This has been a huge change and issues are to be expected.
 - Changed from Homey SDKv1 to SDKv2
 - Settings page now show more system information details.
 - Support base64 images (image Tag) to NEEO. just drag a image tag in the "Update textlabel or image state." card.
 
+## Version 0.47.17
+- Fixed an issue that would happen when searching a device in NEEO when no virtual devices where pressent on Homey.
+- Fixed an issue that would happen when searching capabilities in Homey when no virtual devices where pressent.
+- Fixed an issue that would happen when getting all devices in Homey when no virtual devices where pressent.
+- Fixed an issue that could happen while retreving brain configuration.
+
 ## Version 0.47.16
 - Fixed an issue where selecting a button would crash the app.
+
 ## Version 0.47.15
 - Fixed an issue where the app would crash when no NEEO brains where found.
+
 ## Version 0.47.14
 - Changed Version Numbering
 - Added ...And... card recipe is active/deactive.

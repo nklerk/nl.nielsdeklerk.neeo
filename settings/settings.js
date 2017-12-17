@@ -447,6 +447,7 @@ function capability_remove(adapterName, Capname){
     //} 
 }
 
+
 function device_view_selection(adapterName) {
     gui_view_selection("device");
     document.getElementById("DeviceCapabilities").innerHTML = "";
@@ -576,11 +577,16 @@ function settings_refresh_display() {
     for (let i in Settings_brains) {
         console.log(Settings_brains[i]);
         if (i > 0){dd = dd + '<hr class="subMenu" style="margin-bottom: 0;">';}
+
         dd = dd + '<button class="mi">';
         dd = dd + '  <i class="fa fa-trash-o faRight" style="font-size: 24px;    margin-top: 12px;" onclick="settings_brain_delete(\'' + Settings_brains[i].host + '\')"></i>';
-        dd = dd + '  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>';
-        //dd = dd + '  <span class="mt">'+Settings_brains[i].host +'</span><br>';
-        dd = dd + '  <span class="mt" style="margin-top: 10px;">'+Settings_brains[i].fullname+'</span><br>';
+        if (Settings_brains[i].available){
+            dd = dd + '  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>';
+            dd = dd + '  <span class="mt" style="margin-top: 10px;">'+Settings_brains[i].fullname+'</span><br>';
+        } else {
+            dd = dd + '  <img class="cicon" src="ico/ico_brain_offline.png" style="margin-top: 12px; "/>';
+            dd = dd + '  <span class="mt" style="margin-top: 10px; color: #D52000;">'+Settings_brains[i].fullname+' -Offline-</span><br>';
+        }
         dd = dd + '  <span class="mt" style="font-size: 10px;color: #673ab7; margin-top: -15px;">'+Settings_brains[i].host+'</span>';
         dd = dd + '</button>';
     }
@@ -589,8 +595,6 @@ function settings_refresh_display() {
     dd = dd + '';
     dd = dd + '';
     document.getElementById("brains").innerHTML = dd;
-    //document.getElementById("braininfo").innerHTML = '';
-    //document.getElementById('brains').style.display = 'block';
 }
 
 
@@ -635,6 +639,7 @@ function settings_brain_delete(selection){
     }
     Homey.set('neeoBrains', new_Settings_brains);
     Settings_brains = new_Settings_brains;
+    Homey.api( 'GET', '/delete/');
     settings_refresh_display();
 } // 
 

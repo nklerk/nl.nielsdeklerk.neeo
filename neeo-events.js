@@ -1,5 +1,6 @@
 'use strict'
 const Homey = require('homey');
+const neeoEventReceived = require('./homey-if-neeoEventReceived');
 
 module.exports.handle = function (body, clientIP){
 	let responseData = {'code': 200,'Type': {'Content-Type': 'application/json'}, 'content': ''};
@@ -21,7 +22,6 @@ module.exports.handle = function (body, clientIP){
 	if (myjson.room){
 		room = myjson.room;
 	};
-	let neeoReceivedEvent = new Homey.FlowCardTrigger('received_event');
-	neeoReceivedEvent.register().trigger('received_event', { Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body}).then(() => {}).catch( err => {});
+	neeoEventReceived.trigger({ Action: action, Device: device, Room: room, Parameter: actionparameter, Json: body});
 	return (responseData)
 } 

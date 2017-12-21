@@ -455,6 +455,7 @@ function device_view_selection(adapterName) {
     for (let i in Settings_database) {
         if(Settings_database[i].adapterName===adapterName){
             let dd = ""; //Display Devices Generated HTML
+            dd = dd + '<img class="cicon" src="ico/ico_'+Settings_database[i].type+'.png" style="margin-top: 0px;">'
             dd = dd + '<h1 class="h1" style="font-size: 11px; margin-bottom:0;">'+Settings_database[i].name+'</h1>';
             dd = dd + '<h1 class="h1" style="font-size: 8px; margin-top: -10px; margin-bottom: 0px;">'+Settings_database[i].type+'</h1>';
             let c = 0;

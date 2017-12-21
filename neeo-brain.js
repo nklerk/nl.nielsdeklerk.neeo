@@ -77,13 +77,17 @@ function addNeeoBrainToDatabase(foundbrain) {
 
 
 function connect() {
+	//First Connection upon app start.
 	if (neeoConnectionTries === 0){
 		neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 		homeyTokens.setAll();
 	}
 	
+	//If there are no NEEO brains.
 	if (!neeoBrains || neeoBrains.length === 0 ) {
 		discover();
+
+	//If there is atleast one NEEO brain, Do per Brain.
 	} else {
 		for (let neeoBrain of neeoBrains) {
 			console.log('[SERVER]\tConnecting: '+neeoBrain.host+' ('+neeoBrain.ip+')');
@@ -165,7 +169,6 @@ function downloadConfiguration(neeoBrainQ){
 }
 module.exports.downloadConfiguration = downloadConfiguration;
 
-
 function downloadSystemInfo(neeoBrainQ){
 	if (tools.isArray(neeoBrains) && neeoBrains.length !== 0) {
 		for (let i in neeoBrains) {
@@ -223,6 +226,12 @@ module.exports.shutdownAllRecipes = function (){
 module.exports.isRecipeActive = function (brainHostname, roomKey, recipeKey) {
 	return httpmin.json('http://'+brainHostname+':3000/v1/projects/home/rooms/'+roomKey+'/recipes/'+recipeKey+'/isactive').then(result => {
 		return result.active;
+	});
+}
+
+module.exports.isUpdateAvaileble = function (brainHostname, roomKey, recipeKey) {
+	return httpmin.json('http://'+brainHostname+':3000/v1/firmware').then(result => {
+		return result.updateAvailable;
 	});
 }
 

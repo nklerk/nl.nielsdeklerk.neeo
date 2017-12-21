@@ -69,16 +69,22 @@ When... flow cards:
 # To Do
 
 - Adding feature to check specific sensor values in NEEO.
-- Add new firmware availeble card.
 - Adding favorite editing tool.
 - Adding a tool to debug/test ir commands.
-- Removing the download NEEO config, instead use live data. (need specific API calls on NEEO side.)
-- Update firmware card.
-- Multibrain mesh feature.
 - setting brain's as seperate devices to Homey.
 
 
 # Changelog.
+
+## Version 0.48.2
+- Minor change to the offline brain icon. now has no status led.
+- Minor change to the image icon.
+- Fixed NEEO Events. should work again.
+- Added Firmware check. (...And... Card) 
+- Less logging for event registers.
+- Fixed settings information button, Wrong Icon removed.
+- Show device icon in settings device view.
+- Tested on firmware 0.48.13
 
 ## Version 0.48.1 - Beta
 - Fixed some typo's thanks to Mark Swift.

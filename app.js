@@ -7,12 +7,14 @@
 	const neeoServer = require('./neeo-server');
 
 //Initiate Homey [If...] Cards.
+	const neeoEventReceived = require('./homey-if-neeoEventReceived');
 	const neeoButtonPressed = require('./homey-if-neeoButtonPressed');
 	const neeoSliderChanged = require('./homey-if-neeoSliderChanged');
 	const neeoSwitchChanged = require('./homey-if-neeoSwitchChanged');
 
 //Initiate Homey [...And...] Cards.
 	const neeoRecipeActive = require('./homey-and-neeoRecipeActive');
+	const neeoUpdateAvailable = require('./homey-and-neeoUpdateAvailable');
 
 //Initiate Homey [...Then] Cards.
 	const neeoActivateRecipe = require('./homey-then-neeoActivateRecipe');

@@ -3,18 +3,19 @@ const Homey = require('homey');
 const tools = require('./tools');
 
 module.exports.refreshEventRegisters = function (neeoHost){
+	console.log('[DATABASE]\tUpdating Event registers ('+neeoHost+')');
 	let devices = Homey.ManagerSettings.get('myDevices');
 	for (const a in devices) {
 		const device = devices[a];
 		for (const b in device.capabilities){
 			const capability = device.capabilities[b];
 			if (capability.type === 'sensor'){
-				console.log('[DATABASE]\tUpdating Event registers of '+device.name+' sensor: '+capability.label);
 				devices[a].capabilities[b].eventservers = findEventServers(device.adapterName, capability.name, neeoHost);
 			}
 		}
 	}
 	Homey.ManagerSettings.set('myDevices', devices);
+	console.log('[DATABASE]\tUpdating Event registers ('+neeoHost+') Done.');
 }
 
 

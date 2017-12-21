@@ -225,6 +225,19 @@
 						"en": "Recipe"
 					}
 				}]
+			},
+			{
+				"id": "UpdateAvailable",
+				"title": {
+					"en": "Firmware update !{{is|isn't}} availeble"
+				},
+				"args": [{
+					"name": "brain",
+					"type": "autocomplete",
+					"placeholder": {
+						"en": "Brain"
+					}
+				}]
 			}
 		],
 		"actions": [

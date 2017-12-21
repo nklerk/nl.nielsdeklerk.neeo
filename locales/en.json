@@ -1,3 +1,7 @@
 {
-							
+    "title": "NEEO",
+    "settings": {
+        "title": "NEEO App settings.",
+        "intro": "This app brings the best of NEEO and Homey together."
+    }
 }

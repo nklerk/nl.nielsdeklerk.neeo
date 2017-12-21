@@ -1,4 +1,5 @@
 'use strict'
+const Homey = require('homey');
 
 module.exports.isArray = function(a) {
 	return (!!a) && (a.constructor === Array);
@@ -25,11 +26,17 @@ module.exports.getLocalIp = function() {
   return '0.0.0.0';
 }
 
-module.exports.httpGetAndForget = function (method, host, port, path, content){
+/* module.exports.httpGetAndForget = function (method, host, port, path, content){
+	console.log ("/////////////////////////////////////////////");
+	console.log ("// module.exports.httpGetAndForget //////////");
+	console.log ("/////////////////////////////////////////////");
 	httpRequest({hostname: host, port: port, path: path, method: method, headers: {'Content-Type': 'application/json'}}, content);
-}
+} */
 
-function httpRequest(options, content, callback){
+/* function httpRequest(options, content, callback){
+	console.log ("///////////////////////////////////////////////////////////////");
+	console.log ("// function httpRequest(options, content, callback){ //////////");
+	console.log ("///////////////////////////////////////////////////////////////");
 	let responseData = '';
 	const http = require('http');
 	const req = http.request(options, function(response) {
@@ -44,7 +51,7 @@ function httpRequest(options, content, callback){
 		});
 	});
 	req.on('error', (e) => { 
-		Homey.log ('problem with request: ' + e.message); 
+		console.log ('problem with request: ' + e.message); 
 	});
 	if (content) {
 		req.write(JSON.stringify(content));
@@ -54,7 +61,8 @@ function httpRequest(options, content, callback){
 		req = undefined;
 	});
 }
-module.exports.httpRequest = httpRequest;
+module.exports.httpRequest = httpRequest; */
+
 
 
 module.exports.stringCleanForMatch = function (textstring){
@@ -80,7 +88,7 @@ module.exports.percentage = function (value, range) {
 	if (value >= 0 && value <=1) {
 		return ((range[1]-range[0]) * value) + range[0];
 	} else {
-		Homey.log  ('[TOOLS]\tERROR CONVERTING % to Value expected number 0 to 1 but got: '+value);
+		console.log  ('[TOOLS]\tERROR CONVERTING % to Value expected number 0 to 1 but got: '+value);
 		return 0;
 	}
 }

@@ -1,8 +1,12 @@
 'use strict'
+const Homey = require('homey');
 const neeoDatabase = require('./neeo-database');
 const homeyTokens = require('./homey-tokens');
 const neeoBrain = require('./neeo-brain');
 const tools = require('./tools');
+const neeoSliderChanged = require('./homey-if-neeoSliderChanged');
+const neeoSwitchChanged = require('./homey-if-neeoSwitchChanged');
+const neeoButtonPressed = require('./homey-if-neeoButtonPressed');
 
 
 module.exports.db = function db(request){
@@ -30,41 +34,41 @@ module.exports.device = function device(deviceName, deviceFunction, deviceParame
 		type: {'Content-Type': 'application/json'},
 		content: ''
 	};
-	const capabilitie = neeoDatabase.capabilitie(deviceName, deviceFunction);
-	if (!capabilitie.type){
-		capabilitie.type = 'error';
+	const capability = neeoDatabase.capability(deviceName, deviceFunction);
+	if (!capability.type){
+		capability.type = 'error';
 	}
-	if (capabilitie.type === 'sensor') { 
-		responseData.content = JSON.stringify({value: capabilitie.sensor.value});
-		console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capabilitie.sensor.value);
+	if (capability.type === 'sensor') {
+		if (deviceParameter === 'base64') {
+			let buf = Buffer.from(capability.sensor.base64, 'base64');
+			responseData = {'code': 200,'Type': {'Content-Type': 'image'}, 'content': buf};
+			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded with image buffer.');
+		} else {
+			responseData.content = JSON.stringify({value: capability.sensor.value});
+			console.log ('[SENSOR]\tReceived request for sensor: ' + deviceName + ', ' + deviceFunction + '.  Responded: ' + capability.sensor.value);
+		}
 	}
-	else if (capabilitie.type === 'button') {
+	else if (capability.type === 'button') {
 		console.log ('[EVENTS]\tButton pressed: ' + deviceName + ', ' + deviceFunction + '.');
-		Homey.manager('flow').trigger( 'button_pressed', {}, {'adapterName': deviceName, 'capabilitie': deviceFunction}, function(err, result){
-			if( err ) return Homey.error(err);
-		});
+		neeoButtonPressed.trigger({}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
 	}
-	else if (capabilitie.type === 'slider') {
+	else if (capability.type === 'slider') {
 		console.log ('[EVENTS]\tSlider state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);
 		deviceParameter = parseInt(deviceParameter, 10);
-		const decimalvalue = tools.mathRound(deviceParameter / capabilitie.slider.range[1],2);
+		const decimalvalue = tools.mathRound(deviceParameter / capability.slider.range[1],2);
 		neeoBrain.notifyStateChange(deviceName, deviceFunction + '_SENSOR', deviceParameter, () => { });
 		homeyTokens.set(deviceName, deviceFunction, deviceParameter, () => { });
-		Homey.manager('flow').trigger( 'slider_changed', {'value': deviceParameter, 'decimalvalue': decimalvalue}, {'adapterName': deviceName, 'capabilitie': deviceFunction}, function(err, result){
-			if( err ) return console.log (err); 
-		});
-		responseData.content = neeoDatabase.capabilitieSetValue(deviceName, deviceFunction, deviceParameter)
+		neeoSliderChanged.trigger({'value': deviceParameter, 'decimalvalue': decimalvalue}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
+		responseData.content = neeoDatabase.capabilitySetValue(deviceName, deviceFunction, deviceParameter)
 	}
-	else if (capabilitie.type === 'switch') {
+	else if (capability.type === 'switch') {
 		console.log ('[EVENTS]\tSwitch state changed: ' + deviceName + ', ' + deviceFunction + '.  Value: ' + deviceParameter);
 		if (deviceParameter === 'true') { deviceParameter = true}
 		if (deviceParameter === 'false') { deviceParameter = false} 
-		Homey.manager('flow').trigger( 'switch_changed', {'value': deviceParameter}, {'adapterName': deviceName, 'capabilitie': deviceFunction}, function(err, result){ 
-			if( err ) return Homey.error(err);
-		});
+		neeoSwitchChanged.trigger({'value': deviceParameter}, {'adapterName': deviceName, 'capabilitie': deviceFunction});
 		homeyTokens.set(deviceName, deviceFunction, deviceParameter);
 		neeoBrain.notifyStateChange(deviceName, deviceFunction + '_SENSOR', deviceParameter)
-		responseData.content = neeoDatabase.capabilitieSetValue(deviceName, deviceFunction, deviceParameter)
+		responseData.content = neeoDatabase.capabilitySetValue(deviceName, deviceFunction, deviceParameter)
 	}
 	else {
 		console.log (" !! Warning !!");
@@ -105,6 +109,6 @@ module.exports.capabilities = function capabilities(uriparts){
 module.exports.unknown = function unknown(uriparts){
 	console.log ('[ERROR]\tRECEIVED UNKNOWN REQUEST.');
 	console.log (uriparts);
-	const responseData = {'code': 500,'Type': {'Content-Type': 'application/json'}, 'content': {'error': 'Unknown request.'}};
+	const responseData = {'code': 500,'Type': {'Content-Type': 'application/json'}, 'content': '{"error": "Unknown request."}'};
 	return (responseData);
 }

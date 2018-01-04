@@ -28,6 +28,7 @@
 	const neeoInformSwitch = require('./homey-then-neeoInformSwitch')
 	const neeoInformTextlabel = require('./homey-then-neeoInformTextlabel');
 	const neeoBrainBlinkLED = require('./homey-then-neeoBrainBlinkLED');
+	const neeoBrainUpdateFirmware = require('./homey-then-neeoBrainUpdateFirmware');
 
 //Homey.App Extension class.
 	class neeoAppV2 extends Homey.App {

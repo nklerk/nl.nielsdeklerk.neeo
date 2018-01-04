@@ -1,13 +1,15 @@
 {
 	"id": "nl.nielsdeklerk.neeo",
-	"version": "0.48.2",
+	"version": "0.48.3",
 	"compatibility": "1.x >=1.5.0",
 	"sdk": 2,
 	"name": {
-		"en": "NEEO"
+		"en": "NEEO",
+		"nl": "NEEO"
 	},
 	"description": {
-		"en": "This app brings the best of NEEO and Homey together."
+		"en": "This app brings the best of NEEO and Homey together.",
+		"nl": "Deze App brengt het beste van NEEO en Homey samen."
 	},
 	"category": [
 		"appliances",
@@ -22,6 +24,14 @@
 			"NEEO Remote",
 			"NEEO App",
 			"Remote",
+			"6336"
+		],
+		"nl": [
+			"NEEO",
+			"NEEO Brain",
+			"NEEO Remote",
+			"NEEO App",
+			"Afstandsbediening",
 			"6336"
 		]
 	},
@@ -209,7 +219,8 @@
 			{
 				"id": "recipe_active",
 				"title": {
-					"en": "Recipe !{{is|isn't}} active"
+					"en": "Recipe !{{is|isn't}} active",
+					"nl": "Recept is !{{|niet}} actief"
 				},
 				"args": [{
 					"name": "room",
@@ -229,7 +240,12 @@
 			{
 				"id": "UpdateAvailable",
 				"title": {
-					"en": "Firmware update !{{is|isn't}} availeble"
+					"en": "Firmware update !{{is|isn't}} availeble",
+					"nl": "Nieuwe software is !{{|niet}} beschikbaar"
+				},
+				"hint": {
+					"en": "This card will check if a new update is availeble for the selected NEEO Brain.",
+					"nl": "Deze kaart controleert of er nieuwe software beschikbaar is voor de geselecteede NEEO brain."
 				},
 				"args": [{
 					"name": "brain",
@@ -244,10 +260,12 @@
 			{
 				"id": "activate_recipe",
 				"title": {
-					"en": "Activate a recipe."
+					"en": "Start a recipe",
+					"nl": "start een recipe"
 				},
 				"hint": {
-					"en": "This card will start (Activate) the selected recipe."
+					"en": "This card will start (Activate) the selected recipe",
+					"nl": "Deze kaart start de geselecteerde recipe"
 				},
 				"args": [{
 					"name": "room",
@@ -267,10 +285,12 @@
 			{
 				"id": "poweroff_recipe",
 				"title": {
-					"en": "Shutdown a recipe."
+					"en": "Stop a recipe",
+					"nl": "Recipe stoppen"
 				},
 				"hint": {
-					"en": "This card will shutdown (deactivate) the selected recipe."
+					"en": "This card will stop (shutdown) the selected recipe.",
+					"nl": "Deze kaart stopt de geselecteerde recipe."
 				},
 				"args": [{
 					"name": "room",
@@ -290,19 +310,23 @@
 			{
 				"id": "poweroff_all_recipes",
 				"title": {
-					"en": "Shutdown all recipes."
+					"en": "Shutdown all recipes",
+					"nl": "alle recipes stoppen"
 				},
 				"hint": {
-					"en": "This card will shutdown all recipes."
+					"en": "This card will shutdown all recipes.",
+					"nl": "Deze kaart stopt alle recipes."
 				}
 			},
 			{
 				"id": "command_button",
 				"title": {
-					"en": "Press a button."
+					"en": "Press a button",
+					"nl": "Druk op een knop"
 				},
 				"hint": {
-					"en": "This card will press the selected button on the NEEO remote."
+					"en": "This card will press the selected button on the NEEO remote.",
+					"nl": "Deze kaart drukt op de geselecteerde knop op de NEEO remote."
 				},
 				"args": [{
 					"name": "room",
@@ -329,10 +353,12 @@
 			{
 				"id": "command_switch",
 				"title": {
-					"en": "Change a Switch."
+					"en": "Change a Switch to On/Off",
+					"nl": "Zet schakelaar Aan/Uit"
 				},
 				"hint": {
-					"en": "This card will set the selected switch on the NEEO remote to On/Off."
+					"en": "This card will set the selected switch on the NEEO remote to On/Off.",
+					"nl": "Deze kaart schakelt de geselecteerde schakelaar op de NEEO remote aan/uit."
 				},
 				"args": [{
 					"name": "room",
@@ -361,13 +387,15 @@
 					"values": [{
 						"id": "off",
 						"label": {
-							"en": "Off"
+							"en": "Off",
+							"nl": "Uit"
 						}
 					},
 					{
 						"id": "on",
 						"label": {
-							"en": "On"
+							"en": "On",
+							"nl": "Aan"
 						}
 					}]
 				}]
@@ -557,6 +585,21 @@
 					}
 				}
 			]
+		},{
+			"id": "neeoBrainUpdateFirmware",
+			"title": {
+				"en": "Update Firmware of Brain."
+			},
+			"hint": {
+				"en": "This card will upgrade the brain when a update is available"
+			},
+			"args": [{
+				"name": "brain",
+				"type": "autocomplete",
+				"placeholder": {
+					"en": "Brain"
+				}
+			}]
 		}]
 	}
 }

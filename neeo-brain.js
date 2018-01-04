@@ -153,7 +153,7 @@ function downloadConfiguration(neeoBrainQ){
 							Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 							neeoDatabase.refreshEventRegisters(neeoBrains[i].host);
 						}).catch(error => {
-							console.log ('[ERROR]\tDownloading configuration from: '+neeoBrains[i].host+', ERROR: '+ error);
+							console.log ('[ERROR]\tDownloading configuration from: '+neeoBrains[i].host);
 						});
 					} else {
 						console.log ('[DATABASE]\t'+neeoBrains[i].host+', No configuration changes.');
@@ -161,7 +161,7 @@ function downloadConfiguration(neeoBrainQ){
 				}).catch(error => {
 					neeoBrains[i].available = false;
 					Homey.ManagerSettings.set('neeoBrains', neeoBrains);
-					console.log ('[ERROR]\tGetting lastchange API from: '+neeoBrains[i].host+', ERROR: '+ error);
+					console.log ('[ERROR]\tGetting lastchange API from: '+neeoBrains[i].host);
 				});
 			}
 		}
@@ -184,7 +184,7 @@ function downloadSystemInfo(neeoBrainQ){
 					neeoBrains[i].ip = systemInfo.ip
 					Homey.ManagerSettings.set('neeoBrains', neeoBrains);
 				}).catch(error => {
-					console.log ('[SYSTEM INFO]\tERROR:  getting System Information, '+error);
+					console.log ('[SYSTEM INFO]\tERROR:  getting System Information from: '+neeoBrains[i].host);
 				});
 			}
 		}
@@ -229,10 +229,20 @@ module.exports.isRecipeActive = function (brainHostname, roomKey, recipeKey) {
 	});
 }
 
-module.exports.isUpdateAvaileble = function (brainHostname, roomKey, recipeKey) {
+function isUpdateAvaileble (brainHostname) {
 	return httpmin.json('http://'+brainHostname+':3000/v1/firmware').then(result => {
 		return result.updateAvailable;
 	});
+} module.exports.isUpdateAvaileble = isUpdateAvaileble;
+
+module.exports.updateFirmware = function (brainHostname) {
+	if (isUpdateAvaileble(brainHostname)){
+		httpmin.post('http://'+brainHostname+':3000/v1/firmware/update').then(result => {
+			return result.success;
+		});
+	} else {
+		return false;
+	}
 }
 
 module.exports.executeRecipe = function (brainHostname, roomKey, recipeKey) {
@@ -247,11 +257,11 @@ module.exports.commandSwitch = function (brainHostname, roomKey, deviceKey, capa
 	httpmin.put('http://'+brainHostname+':3000/v1/projects/home/rooms/'+roomKey+'/devices/'+deviceKey+'/switches/'+capabilityKey+'/'+value, {}).then({}).catch({});
 }
 
-module.exports.commandSlider = function (brainIp, roomKey, deviceKey, capabilityKey, value){
+module.exports.commandSlider = function (brainHostname, roomKey, deviceKey, capabilityKey, value){
 	httpmin.put('http://'+brainHostname+':3000/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/sliders/' + capabilityKey, {value: value}).then({}).catch({});
 }
 
-function blinkLed(brainIp, times){
+function blinkLed(brainHostname, times){
 	httpmin.get('http://'+brainHostname+':3000/v1/systeminfo/identbrain').then({}).catch({});
 	times--;
 	if (times > 0){

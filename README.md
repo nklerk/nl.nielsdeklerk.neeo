@@ -76,6 +76,11 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.48.3
+- bug fix, A copy past one.
+- Update Firmware card.
+- Re added a delete virtual device feature to the app settings. thanks for reporting Chris Sesier!
+
 ## Version 0.48.2
 - Minor change to the offline brain icon. now has no status led.
 - Minor change to the image icon.

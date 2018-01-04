@@ -455,9 +455,12 @@ function device_view_selection(adapterName) {
     for (let i in Settings_database) {
         if(Settings_database[i].adapterName===adapterName){
             let dd = ""; //Display Devices Generated HTML
+            dd = dd + '<i class="fa fa-trash-o faRight" style="font-size: 24px; color: red;" onclick="device_remove(\'' + Settings_database[i].adapterName + '\')"></i>';
             dd = dd + '<img class="cicon" src="ico/ico_'+Settings_database[i].type+'.png" style="margin-top: 0px;">'
             dd = dd + '<h1 class="h1" style="font-size: 11px; margin-bottom:0;">'+Settings_database[i].name+'</h1>';
             dd = dd + '<h1 class="h1" style="font-size: 8px; margin-top: -10px; margin-bottom: 0px;">'+Settings_database[i].type+'</h1>';
+            
+            //device_remove
             let c = 0;
             for (let ic in Settings_database[i].capabilities) {
                 let ctype = Settings_database[i].capabilities[ic].type;

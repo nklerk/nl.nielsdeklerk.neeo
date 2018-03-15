@@ -12,7 +12,7 @@ const sellectionoptions = [
     { value: 'DVB', name: 'DVB', supported: true },
     { value: 'AVRECEIVER', name: 'A/V Receiver', supported: true },
     { value: 'AUDIO', name: 'Audio', supported: true },
-    { value: 'HDMISWITCH', name: 'HDMI Switch', supported: false },
+    { value: 'HDMISWITCH', name: 'HDMI Switch', supported: true },
     { value: 'GAMECONSOLE', name: 'Game Console', supported: true },
     { value: 'MEDIAPLAYER', name: 'Media Player', supported: true },
     { value: 'SOUNDBAR', name: 'Soundbar', supported: false },
@@ -719,7 +719,7 @@ function newDevice(manufacturer, name, type) {
     _newdevice.manufacturer = manufacturer;
     _newdevice.name = name;
     _newdevice.tokens = "Homey";
-    _newdevice.device = {name: name, tokens: ["Homey", "Athom"]};
+    _newdevice.device = {name: name, specificname: name, tokens: ["Homey", "Athom"]};
     _newdevice.setup = {};
     _newdevice.capabilities = [];
     return (_newdevice);

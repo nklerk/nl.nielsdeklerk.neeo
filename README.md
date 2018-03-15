@@ -76,6 +76,10 @@ When... flow cards:
 
 # Changelog.
 
+
+## Version 0.49.1
+- Included "specificname" SDK feature. New virtual devices won't be added as MEDIA or GAME but just the name.
+
 ## Version 0.48.3
 - bug fix, A copy past one.
 - Update Firmware card.

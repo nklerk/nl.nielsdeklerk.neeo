@@ -53,6 +53,7 @@
 	"bugs": {
 		"url": "https://github.com/nklerk/nl.nielsdeklerk.neeo/issues"
 	},
+	"athomForumDiscussionId": 2819,
 	"flow": {
 		"triggers": [{
 			"id": "button_pressed",

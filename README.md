@@ -76,6 +76,9 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.49.3
+- Bug fix.
+
 ## Version 0.49.2
 - Bug fix.
 

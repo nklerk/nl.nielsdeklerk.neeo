@@ -9,7 +9,7 @@ module.exports.isObject = function(a) {
 	return (!!a) && (a.constructor === Object);
 };
 
-module.exports.isDefined - function(a){
+module.exports.isDefined = function(a){
 	return (typeof a !== 'undefined' && a !== null);
 }
 

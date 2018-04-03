@@ -78,8 +78,8 @@ When... flow cards:
 
 ## Version 0.49.4
 - Favorite edit tool. (Settings-> NEEO-> Configuration -> Brain, Favorites ->)
-- Included "specificname" SDK feature. New virtual devices won't be added as MEDIA or GAME but just the name.
-- Bug fix.
+- Included "specificname" SDK feature. New virtual devices won't be added as MEDIA or GAME but with their specific name.
+- Bug fixes.
 
 ## Version 0.48.3
 - bug fix, A copy past one.

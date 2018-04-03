@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>NEEOfav</title>
+    <script type="text/javascript" src="favorites.js"></script>
+</head>
+<style>
+          body {
+            background-color: #F0EFF5;
+            font-family: Roboto, sans-serif;
+        }
+
+        h1 {
+            color: #007AFF;
+            margin-bottom: 0;
+            font-size: 15px;
+            font-weight: 100;
+            text-transform: uppercase;
+            margin-left: 40px;
+            margin-bottom: 12px;
+        }
+        .h1 {
+            color: #007AFF;
+            margin-bottom: 0;
+            font-size: 15px;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-left: 40px;
+            margin-top: 80px;
+            margin-bottom: 12px;
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .cicon {
+            height: 25px;
+            width: 25px;
+            position: absolute;
+            left: 5px;
+            margin-top: 10px;
+        }
+
+        hr { 
+            display: block;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: 0;
+            border-style: inset;
+            border: 0;
+            margin-bottom: 0;
+            height: 0;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            -webkit-margin-start: 0;
+            -webkit-margin-end: 0;
+        } 
+
+        .Menu {
+            margin-left: 0px;
+            border-bottom: 1px solid #C9C8CD;
+        }
+
+        .subMenu {
+            margin-left: 40px;
+            border-bottom: 0px solid #C8C8CA;
+        }
+
+        .mi{
+            width: 100%;
+            font-family: Roboto, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            padding-left: 40px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            border: 0px solid #fff;
+            background-color: #fff;
+            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+            height: 48px;
+        }
+
+        .mi:hover{
+            background-color: #fff;
+        }
+
+        .mt{
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+
+        }
+
+        .mitxt{
+            float: left;
+            transform: translateY(9px);
+            padding-left: 10px;
+        }
+
+        .miico{
+            float: left;
+            transform: translateY(4px);
+        }
+
+        ul {
+            margin-top: 1em;
+            margin-left: 5%;
+        }
+
+        li {
+            background-color: #eee;
+            border-radius: 15px;
+            margin: 2px;
+            padding-left: 3px;
+            padding-right: 13px;
+        }
+
+        .deletedevice{
+            float: right;
+            color: #ddd;
+        }
+
+        .deletedevice:hover{
+            color: #44f;
+            cursor:pointer;
+            cursor:hand;
+        }
+
+        .deleteCapability{
+            float: right;
+            color: #aaa;
+        }
+
+        .addCapability{
+            margin-left: 40px;
+            margin-top:8px;
+            color: #444;
+        }
+
+        .saveCapability{
+            color: #444;
+            margin-bottom: 40px;
+            margin-right: 40px;
+            float: left;
+        }
+
+        .cancelCapability{
+            color: #444;
+            margin-bottom: 40px;
+            float: left
+        }
+
+        .jsontextarea{
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            height: 200px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .capview{
+            display: none; 
+            margin-bottom: 80px;
+            padding-left: 20px;
+        }
+
+        .bsh-xxx{
+            position: absolute;
+            left: 30px;
+        }
+
+        .bsi-xxx{
+            position: absolute;
+            left: 220px;
+        }
+
+        .selectbox{
+            float: left;
+        }
+
+        .delbrain{
+            float: right;
+        }
+
+        .braininfo{
+            margin: 20px;
+        }
+
+        .dblock{
+            padding:0px;
+        }
+
+        .faRight{
+            right: 0px;
+            position: absolute;
+            font-size: 24px;
+            color: #CCCBD0;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .faLeft{
+            left: 0px;
+            position: absolute;
+            font-size: 24px;
+            color: #037AFF;
+            margin-left: 20px;
+            margin-right: 20px;            
+        }
+
+    .inforow {
+        border: 2px solid rgb(250, 148, 32);
+        background-color: rgb(245, 211, 178);
+        border-radius: 4px;
+        height: 150px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .fieldrow {
+        height: 50px;
+        background-color: #f9f9f9;
+        border: 0px solid #fff;
+        border-radius: 10px;
+        position: relative;
+        margin-bottom: 6px;
+    }
+
+    .icon {
+        vertical-align: middle;
+        max-width: 46px;
+        max-height: 46px;
+    }
+
+    .iconhelper {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+    .brainip {
+        width: 100px;
+    }
+
+    .urlinput {
+        border: 0px solid #fff;
+        border-bottom: 2px solid #ddd;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        width: 700px;
+        left: 70px;
+        position: absolute;
+        bottom: 2px;
+    }
+
+    .channellabel {
+        top: 2px;
+        position: absolute;
+        left: 70px;
+        font-family: sans-serif;
+        font-size: large;
+    }
+
+    .imgbox {
+        height: 50px;
+        width: 50px;
+        text-align: center;
+        margin-left: 10px;
+    }
+
+    .setbutt {
+        left: 800px;
+        position: absolute;
+        bottom: 14px;
+
+    }
+
+    h1 {
+        font-family: sans-serif;
+    }
+</style>
+
+<body onload="connect();">
+<a href="index.html">
+    <div class="field row" style="background-color: #fff;margin: 0;">
+        <hr class="Menu" style="margin-bottom: 0;">
+        <button class="mi"><span class="mt" style="color:#037AFF;">Back to app menu.</span></button>
+        <hr class="Menu" style="margin-bottom: 0;">
+    </div>
+</a>
+<div class="row" id="Favorites"></div>
+</body>
+
+</html>

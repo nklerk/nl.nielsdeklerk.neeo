@@ -267,8 +267,6 @@ function device_capgrp_save(adapterName, capability){
             device_add_cap(adapterName, 'PLAY', 'button', 0, 0, false);
             device_add_cap(adapterName, 'PAUSE', 'button', 0, 0, false);
             device_add_cap(adapterName, 'STOP', 'button', 0, 0, false);
-            device_add_cap(adapterName, 'SKIP BACKWARD', 'button', 0, 0, false);
-            device_add_cap(adapterName, 'SKIP FORWARD', 'button', 0, 0, false);
             device_add_cap(adapterName, 'FORWARD', 'button', 0, 0, false);
             device_add_cap(adapterName, 'PREVIOUS', 'button', 0, 0, false);
             device_add_cap(adapterName, 'NEXT', 'button', 0, 0, false);

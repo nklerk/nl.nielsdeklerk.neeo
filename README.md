@@ -76,6 +76,9 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.49.5
+- removed depricated buttons 'SKIP BACKWARD' and 'SKIP FORWARD' for new virtual devices.
+
 ## Version 0.49.4
 - Favorite edit tool. (Settings-> NEEO-> Configuration -> Brain, Favorites ->)
 - Included "specificname" SDK feature. New virtual devices won't be added as MEDIA or GAME but with their specific name.

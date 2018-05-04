@@ -200,25 +200,28 @@ module.exports.switches = function(query, args){
     }
 	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
 	let foundswitches= [];
-	for (const neeoBrain of neeoBrains) {
-		for (const i in neeoBrain.brainConfiguration.rooms) {
-			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.room.key) {
-				for (const i in room.devices) {
-					const device = room.devices[i];
-					if (device.key === args.device.key) {
-						for (const i in device.switches) {
-							const switche = device.switches[i];
-							const switchQ = tools.stringCleanForMatch(switche.name);
-							if (switchQ.indexOf(query) !== -1) {
-								const item = {
-									name: switche.name,
-									key: switche.key
-								};
-								foundswitches.push(item);
+
+	if (tools.isDefined(args.room) && tools.isDefined(args.room.key) && tools.isDefined(args.device) && tools.isDefined(args.device.key)){
+		for (const neeoBrain of neeoBrains) {
+			for (const i in neeoBrain.brainConfiguration.rooms) {
+				const room = neeoBrain.brainConfiguration.rooms[i];
+				if (room.key === args.room.key) {
+					for (const i in room.devices) {
+						const device = room.devices[i];
+						if (device.key === args.device.key) {
+							for (const i in device.switches) {
+								const switche = device.switches[i];
+								const switchQ = tools.stringCleanForMatch(switche.name);
+								if (switchQ.indexOf(query) !== -1) {
+									const item = {
+										name: switche.name,
+										key: switche.key
+									};
+									foundswitches.push(item);
+								}
 							}
-						}
-					};
+						};
+					}
 				}
 			}
 		}
@@ -228,25 +231,29 @@ module.exports.switches = function(query, args){
 
 
 module.exports.recepies = function(query, args, stype){
-	if (Homey.ManagerSettings.get('downloading') != true) {
-        neeoBrain.downloadConfiguration();
-    }
+	let foundrecipes = [];
 	query = tools.stringCleanForMatch(query);
 	const neeoBrains = Homey.ManagerSettings.get('neeoBrains');
-	let foundrecipes = [];
-	for (const neeoBrain of neeoBrains) {
-		for (const i in neeoBrain.brainConfiguration.rooms) {
-			const room = neeoBrain.brainConfiguration.rooms[i];
-			if (room.key === args.room.key) {
-				for (const i in room.recipes) {
-					const recipe = room.recipes[i];
-					const recipeQ = tools.stringCleanForMatch(recipe.name);
-					if (recipeQ.indexOf(query) !== -1 && recipe.type == stype) {
-						const item = {
-							name: recipe.name,
-							key: recipe.key
-						};
-						foundrecipes.push(item);
+
+	if (Homey.ManagerSettings.get('downloading') != true) {
+		neeoBrain.downloadConfiguration();
+  }
+	
+	if (tools.isDefined(args.room) && tools.isDefined(args.room.key)){
+		for (const neeoBrain of neeoBrains) {
+			for (const i in neeoBrain.brainConfiguration.rooms) {
+				const room = neeoBrain.brainConfiguration.rooms[i];
+				if (room.key === args.room.key) {
+					for (const i in room.recipes) {
+						const recipe = room.recipes[i];
+						const recipeQ = tools.stringCleanForMatch(recipe.name);
+						if (recipeQ.indexOf(query) !== -1 && recipe.type == stype) {
+							const item = {
+								name: recipe.name,
+								key: recipe.key
+							};
+							foundrecipes.push(item);
+						}
 					}
 				}
 			}

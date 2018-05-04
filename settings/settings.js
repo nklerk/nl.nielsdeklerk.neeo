@@ -12,7 +12,7 @@ const sellectionoptions = [
     { value: 'DVB', name: 'DVB', supported: true },
     { value: 'AVRECEIVER', name: 'A/V Receiver', supported: true },
     { value: 'AUDIO', name: 'Audio', supported: true },
-    { value: 'HDMISWITCH', name: 'HDMI Switch', supported: false },
+    { value: 'HDMISWITCH', name: 'HDMI Switch', supported: true },
     { value: 'GAMECONSOLE', name: 'Game Console', supported: true },
     { value: 'MEDIAPLAYER', name: 'Media Player', supported: true },
     { value: 'SOUNDBAR', name: 'Soundbar', supported: false },
@@ -267,8 +267,6 @@ function device_capgrp_save(adapterName, capability){
             device_add_cap(adapterName, 'PLAY', 'button', 0, 0, false);
             device_add_cap(adapterName, 'PAUSE', 'button', 0, 0, false);
             device_add_cap(adapterName, 'STOP', 'button', 0, 0, false);
-            device_add_cap(adapterName, 'SKIP BACKWARD', 'button', 0, 0, false);
-            device_add_cap(adapterName, 'SKIP FORWARD', 'button', 0, 0, false);
             device_add_cap(adapterName, 'FORWARD', 'button', 0, 0, false);
             device_add_cap(adapterName, 'PREVIOUS', 'button', 0, 0, false);
             device_add_cap(adapterName, 'NEXT', 'button', 0, 0, false);
@@ -579,14 +577,15 @@ function settings_refresh_display() {
     dd = dd + '<hr class="Menu" style="margin-bottom: 0;">';
     dd = dd + '<div class="field row" style="background-color: #fff; margin: 0; width: 100%;left: 0px;">';
     for (let i in Settings_brains) {
-        console.log(Settings_brains[i]);
+        //console.log(Settings_brains[i]);
         if (i > 0){dd = dd + '<hr class="subMenu" style="margin-bottom: 0;">';}
 
         dd = dd + '<button class="mi">';
         dd = dd + '  <i class="fa fa-trash-o faRight" style="font-size: 24px;    margin-top: 12px;" onclick="settings_brain_delete(\'' + Settings_brains[i].host + '\')"></i>';
         if (Settings_brains[i].available){
             dd = dd + '  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>';
-            dd = dd + '  <span class="mt" style="margin-top: 10px;">'+Settings_brains[i].fullname+'</span><br>';
+            dd = dd + '  <span class="mt" style="margin-top: 10px;">'+Settings_brains[i].fullname+'</span>';
+            dd = dd + '  <span class="mt" style="margin-top: 10px;"><a href="favorites.html?BrainIP='+Settings_brains[i].ip+'">Favorites</a></span><br>'
         } else {
             dd = dd + '  <img class="cicon" src="ico/ico_brain_offline.png" style="margin-top: 12px; "/>';
             dd = dd + '  <span class="mt" style="margin-top: 10px; color: #D52000;">'+Settings_brains[i].fullname+' -Offline-</span><br>';
@@ -719,7 +718,7 @@ function newDevice(manufacturer, name, type) {
     _newdevice.manufacturer = manufacturer;
     _newdevice.name = name;
     _newdevice.tokens = "Homey";
-    _newdevice.device = {name: name, tokens: ["Homey", "Athom"]};
+    _newdevice.device = {name: name, specificname: name, tokens: ["Homey", "Athom"]};
     _newdevice.setup = {};
     _newdevice.capabilities = [];
     return (_newdevice);

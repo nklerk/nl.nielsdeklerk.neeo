@@ -9,6 +9,10 @@ module.exports.isObject = function(a) {
 	return (!!a) && (a.constructor === Object);
 };
 
+module.exports.isDefined = function(a){
+	return (typeof a !== 'undefined' && a !== null);
+}
+
 module.exports.mathRound = function (value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }

@@ -446,8 +446,14 @@
                 <div style="background-color: #fff;margin: 0;">
                     <div class="mi">
                         <span class="mt" style="height: 100%;"></span>
-                        Device type <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;">
+                        Device type <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Type_change()">
                         </select>
+                    </div>
+                    <div class="mi">
+                        <span class="mt" style="height: 100%;"></span>
+                        Device icon <select id="AddDevice_Icon" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Icon_change()">
+                        </select>
+                        <img class="cicon" id="AddDevice_Icon_Img" src="ico/ico_ACCESSOIRE.png" style="margin-top: 10px;">
                     </div>
                     <hr class="subMenu" style="margin-bottom: 0;">
                     <div class="mi">

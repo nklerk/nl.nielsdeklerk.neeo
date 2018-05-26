@@ -54,22 +54,24 @@ function printFavorites(device) {
 	}
 }
 function seturl(id, roomKey, deviceKey) {
-	let url = 'http://' + document.getElementById("brainIP").value + ':3000/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/favorites/';
+	let url = 'http://' + brainIP + ':3000/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/favorites/';
 	fetch(url).then(response => response.json()).then((favorites) => {
 		favorite = favorites[id];
 		let logoUrl = document.getElementById(roomKey + 'x' + deviceKey + 'y' + id).value;
 		favorite.channel.logoUrl = logoUrl;
 		let content = JSON.stringify(favorite);
 		let http = new XMLHttpRequest();
-		let purl = 'http://' + document.getElementById("brainIP").value + ':3000/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/favorites/' + id;
+		let purl = 'http://' + brainIP + ':3000/v1/projects/home/rooms/' + roomKey + '/devices/' + deviceKey + '/favorites/' + id;
 		http.open("POST", purl, true);
 		http.setRequestHeader("Content-type", "application/json");
 		http.onreadystatechange = function () {
 			if (http.readyState == 4 && http.status == 200) {
-				alert("Image is updated...");
+				//alert("Image is updated...");
+				console.log ("Image is updated...");
 				document.getElementById(roomKey + 'a' + deviceKey + 'b' + id).src = logoUrl;
 			} else if (http.readyState == 4 && http.status != 200) {
-				alert("Something went wrong...");
+				//alert("Something went wrong...");
+				console.log ("Something went wrong...");
 			}
 		}
 		http.send(content);

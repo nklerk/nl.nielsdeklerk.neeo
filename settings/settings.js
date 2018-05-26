@@ -15,11 +15,14 @@ const sellectionoptions = [
     { value: 'HDMISWITCH', name: 'HDMI Switch', supported: true },
     { value: 'GAMECONSOLE', name: 'Game Console', supported: true },
     { value: 'MEDIAPLAYER', name: 'Media Player', supported: true },
+    { value: 'MUSICPLAYER', name: 'Music Player', supported: true },
     { value: 'SOUNDBAR', name: 'Soundbar', supported: false },
     { value: 'TUNER', name: 'Tuner', supported: false },
     { value: 'THERMOSTAT', name: 'Thermostat', supported: false },
-    { value: 'CLIMA', name: 'climate control', supported: false }
+    { value: 'CLIMA', name: 'climate control', supported: true },
+    { value: 'SONOS', name: 'Sonos', supported: false }
 ];
+
 
 
 ////////////////////////////////////////
@@ -41,15 +44,26 @@ function onHomeyReady( HomeyReady){
     addDeviceTypeOptions();
 }
 
+function AddDevice_Type_change() {
+    document.getElementById('AddDevice_Icon').value = document.getElementById('AddDevice_Type').value;
+    document.getElementById('AddDevice_Icon_Img').src = 'ico/ico_' + document.getElementById('AddDevice_Icon').value+'.png';
+}
+
+function AddDevice_Icon_change() {
+    document.getElementById('AddDevice_Icon_Img').src = 'ico/ico_' + document.getElementById('AddDevice_Icon').value+'.png';
+}
 
 function addDeviceTypeOptions () {
-    var optStr = '';
+    let optStrType = '';
+    let optStrIcon = '';
     for (const i in sellectionoptions) {
         if (showUnsupported === true || sellectionoptions[i].supported === true) {
-            optStr = optStr + '<option value="'+sellectionoptions[i].value+'">'+sellectionoptions[i].name+'</option>';
+            optStrType = optStrType + '<option value="'+sellectionoptions[i].value+'">'+sellectionoptions[i].name+'</option>';
         }
+        optStrIcon = optStrIcon + '<option value="'+sellectionoptions[i].value+'">'+sellectionoptions[i].name+'</option>';
     }
-    document.getElementById('AddDevice_Type').innerHTML = optStr;
+    document.getElementById('AddDevice_Type').innerHTML = optStrType;
+    document.getElementById('AddDevice_Icon').innerHTML = optStrIcon;
 }
 
 
@@ -145,7 +159,7 @@ function gui_view_selection(displayWindow){
 
 
 function AddDecice_save(){
-    let mydevice = newDevice(document.getElementById('AddDevice_Manufactorer').value, document.getElementById('AddDevice_Name').value, document.getElementById('AddDevice_Type').value);
+    let mydevice = newDevice(document.getElementById('AddDevice_Manufactorer').value, document.getElementById('AddDevice_Name').value, document.getElementById('AddDevice_Type').value, document.getElementById('AddDevice_Icon').value);
     Settings_database.push(mydevice);
     device_capgrp_from_devicetype(mydevice.adapterName,mydevice.type);
     Homey.set('myDevices', Settings_database);
@@ -195,33 +209,45 @@ function device_capgrp_view_hide(adapterName){
 
 function device_cap_view_type_change(adapterName){
     if (document.getElementById('captype_' + adapterName).value == 'slider') {
-        document.getElementById('capslider_' + adapterName).style.display = 'block';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'block';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'block';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'block';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Volume';
     } 
     if (document.getElementById('captype_' + adapterName).value == 'button') {
-        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'none';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Power On';
     }
     if (document.getElementById('captype_' + adapterName).value == 'switch') {
-        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'none';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Power'
     }
     if (document.getElementById('captype_' + adapterName).value == 'textlabel') {
-        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'none';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'block';
         document.getElementById('capname_' + adapterName).value = 'Text label:'
     }
     if (document.getElementById('captype_' + adapterName).value == 'image') {
-        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'none';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Small image'
     }
     if (document.getElementById('captype_' + adapterName).value == 'large image') {
-        document.getElementById('capslider_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermin_' + adapterName).style.display = 'none';
+        document.getElementById('capslidermax_' + adapterName).style.display = 'none';
         document.getElementById('capsliderunit_' + adapterName).style.display = 'none';
+        document.getElementById('captextlabelvisible_' + adapterName).style.display = 'none';
         document.getElementById('capname_' + adapterName).value = 'Large Image'
     }
 }
@@ -230,13 +256,21 @@ function device_cap_view_type_change(adapterName){
 function device_cap_save(adapterName){
     let cname = document.getElementById('capname_' + adapterName).value
     let ctype = document.getElementById('captype_' + adapterName).value
-    let slmax = document.getElementById('capslider_max_' + adapterName).value
-    let slunit = document.getElementById('capslider_unit_' + adapterName).value
-    device_add_cap(adapterName, cname, ctype, slmax, slunit, true);
+    let paramA = "";
+    let paramB = "";
+    let paramC = "";
+    if (ctype == 'slider') {
+        paramA = document.getElementById('capslider_min_' + adapterName).value
+        paramB = document.getElementById('capslider_max_' + adapterName).value
+        paramC = document.getElementById('capslider_unit_' + adapterName).value
+    } else if (ctype == 'textlabel') {
+        paramA = document.getElementById('captextlabel_visible_' + adapterName).checked
+    }
+    device_add_cap(adapterName, cname, ctype, paramA, paramB, paramC, true);
 }
 
 
-function device_add_cap(adapterName, cname, ctype, slmax, slunit, alert){
+function device_add_cap(adapterName, cname, ctype, paramA, paramB, paramC, alert){
     for (let i in Settings_database) {
         if (Settings_database[i].adapterName === adapterName) {
             let found = 0
@@ -246,10 +280,10 @@ function device_add_cap(adapterName, cname, ctype, slmax, slunit, alert){
             if (found > 0) {
                 if (alert == true) {alert("There is allready a capability named: " + cname);}
             }else {
-                if (ctype == 'slider')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_slider(Settings_database[i], cname, [0,Number(slmax)], slunit)) }
+                if (ctype == 'slider')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_slider(Settings_database[i], cname, [Number(paramA),Number(paramB)], paramC)) }
                 if (ctype == 'button')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_button(Settings_database[i], cname)) }
                 if (ctype == 'switch')      { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_switch(Settings_database[i], cname)) }
-                if (ctype == 'textlabel')   { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_textlabel(Settings_database[i], cname)) }
+                if (ctype == 'textlabel')   { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_textlabel(Settings_database[i], cname, paramA)) }
                 if (ctype == 'image')       { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_image(Settings_database[i], cname, 'small')) }
                 if (ctype == 'large image') { Settings_database[i].capabilities.push.apply(Settings_database[i].capabilities, newCapability_image(Settings_database[i], cname, 'large')) }
                 Homey.set('myDevices', Settings_database);
@@ -393,11 +427,15 @@ function device_capgrp_from_devicetype(adapterName, type){
         case "MEDIAPLAYER":
             device_capgrp_save(adapterName,"power");
             device_capgrp_save(adapterName,"mediacontrolls");
-            device_capgrp_save(adapterName,"tuner");
             device_capgrp_save(adapterName,"digits");
             device_capgrp_save(adapterName,"directions");
             device_capgrp_save(adapterName,"video");
-            device_capgrp_save(adapterName,"volume");
+            break;
+        case "MUSICPLAYER":
+            device_capgrp_save(adapterName,"power");
+            device_capgrp_save(adapterName,"mediacontrolls");
+            device_capgrp_save(adapterName,"digits");
+            device_capgrp_save(adapterName,"directions");
             break;
         case "SOUNDBAR":
             device_capgrp_save(adapterName,"power");
@@ -454,7 +492,11 @@ function device_view_selection(adapterName) {
         if(Settings_database[i].adapterName===adapterName){
             let dd = ""; //Display Devices Generated HTML
             dd = dd + '<i class="fa fa-trash-o faRight" style="font-size: 24px; color: red;" onclick="device_remove(\'' + Settings_database[i].adapterName + '\')"></i>';
-            dd = dd + '<img class="cicon" src="ico/ico_'+Settings_database[i].type+'.png" style="margin-top: 0px;">'
+            if (typeof Settings_database[i].icon == "undefined"){
+                dd = dd + '<img class="cicon" src="ico/ico_'+Settings_database[i].type+'.png" style="margin-top: 0px;">'
+            } else {
+                dd = dd + '<img class="cicon" src="ico/ico_'+Settings_database[i].icon+'.png" style="margin-top: 0px;">'
+            }
             dd = dd + '<h1 class="h1" style="font-size: 11px; margin-bottom:0;">'+Settings_database[i].name+'</h1>';
             dd = dd + '<h1 class="h1" style="font-size: 8px; margin-top: -10px; margin-bottom: 0px;">'+Settings_database[i].type+'</h1>';
             
@@ -497,12 +539,18 @@ function device_view_selection(adapterName) {
             dd = dd + '  <div class="field row">';
             dd = dd + '    <label for="capname_' + adn + '">Capability name:</label>';
             dd = dd + '    <input  id="capname_' + adn + '" type="text" value="Power On" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
-            dd = dd + '  <div class="field row" id="capslider_' + adn + '" style="display: none;">';
+            dd = dd + '  <div class="field row" id="capslidermin_' + adn + '" style="display: none;">';
+            dd = dd + '    <label for="capslider_min_' + adn + '">Slider minimum value:</label>';
+            dd = dd + '    <input  id="capslider_min_' + adn + '" type="number" value="0" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
+            dd = dd + '  <div class="field row" id="capslidermax_' + adn + '" style="display: none;">';
             dd = dd + '    <label for="capslider_max_' + adn + '">Slider maximum value:</label>';
             dd = dd + '    <input  id="capslider_max_' + adn + '" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
             dd = dd + '  <div class="field row" id="capsliderunit_' + adn + '" style="display: none;">';
             dd = dd + '    <label for="capslider_unit_' + adn + '">Slider unit:</label>';
             dd = dd + '    <input  id="capslider_unit_' + adn + '" type="text" value="%" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
+            dd = dd + '  <div class="field row" id="captextlabelvisible_' + adn + '" style="display: none;">';
+            dd = dd + '    <label for="captextlabel_visible_' + adn + '">Label name visible:</label>';
+            dd = dd + '    <input  id="captextlabel_visible_' + adn + '" type="checkBox" checked=true style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>';
             dd = dd + '  <div class="saveCapability" onclick="device_cap_save(\'' + adn + '\')" id="cap_savebtn_' + adn + '"><i class="fa fa-check"></i> Save</div>';
             dd = dd + '  <div class="cancelCapability" onclick="device_cap_view_hide(\'' + adn + '\')" id="cap_savebtn_' + adn + '"><i class="fa fa-remove"></i> Cancel</div>';
             dd = dd + '</div>';
@@ -536,7 +584,11 @@ function devices_refresh_display() {
     for (let i in Settings_database) {
         dd = dd + '<button class="mi" onclick="device_view_selection(\''+Settings_database[i].adapterName+'\')">';
         dd = dd + '  <i class="fa fa-angle-right faRight" style="font-size: 24px;margin-top: 12px;"></i>';
-        dd = dd + '  <img class="cicon" src="ico/ico_' + Settings_database[i].type + '.png" />';
+        if (typeof Settings_database[i].icon == "undefined"){
+            dd = dd + '  <img class="cicon" src="ico/ico_' + Settings_database[i].type + '.png" />';
+        } else {
+            dd = dd + '  <img class="cicon" src="ico/ico_' + Settings_database[i].icon + '.png" />';
+        }
         dd = dd + '  <span class="mt" style="margin-top: 10px;">'+Settings_database[i].name+'</span><br>';
         dd = dd + '  <span class="mt" style="font-size: 10px;color: #673ab7; margin-top: -15px;">'+Settings_database[i].manufacturer+'</span>';
         dd = dd + '</button>';
@@ -710,13 +762,14 @@ function clear_brain_button(){
 ////////////////////////////////////////
  
 
-function newDevice(manufacturer, name, type) {
+function newDevice(manufacturer, name, type, icon) {
     let _newdevice = {};
     _newdevice.id = (Date.now() - 1512590738651);
     _newdevice.adapterName = 'homey_' + name.replace(/ /gm,"-") + '_' + _newdevice.id;
     _newdevice.type = type.toUpperCase();  
     _newdevice.manufacturer = manufacturer;
     _newdevice.name = name;
+    _newdevice.icon = icon;
     _newdevice.tokens = "Homey";
     _newdevice.device = {name: name, specificname: name, tokens: ["Homey", "Athom"]};
     _newdevice.setup = {};
@@ -776,7 +829,7 @@ function newCapability_switch(device, name ) {
 }
 
 
-function newCapability_textlabel(device, name ) {
+function newCapability_textlabel(device, name, isLabelVisible) {
     let _newCapability_sensor = {};
     _newCapability_sensor.type = 'sensor';
     _newCapability_sensor.name = name.toUpperCase() + "_SENSOR"; 
@@ -788,6 +841,7 @@ function newCapability_textlabel(device, name ) {
     _newCapability_textlabel.type = 'textlabel';
     _newCapability_textlabel.name = name.toUpperCase();
     _newCapability_textlabel.label = name;
+    _newCapability_textlabel.isLabelVisible = isLabelVisible;
     _newCapability_textlabel.path = "/device/" + device.adapterName + "/" + _newCapability_textlabel.name;
     _newCapability_textlabel.sensor = _newCapability_sensor.name
     return ([_newCapability_sensor, _newCapability_textlabel]);

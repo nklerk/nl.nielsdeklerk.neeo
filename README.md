@@ -76,6 +76,18 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.50.2
+- Added slider minimum value.
+- Added function while adding a new txtlabel, checkbox to hide/show label name.
+- Added new device type "CLIMA"
+- Added feature to select a custom icon while adding a new device.
+
+## Version 0.50.1
+- Fixed a bug in the favourite feature.
+- Added new device type "MUSICPLAYER"
+- Removed predefined TUNER capabilities from MEDIAPLAYER. can still be added manually. Existing drivers will be untouched.
+- Removed predefined VOLUME capabilities from MEDIAPLAYER. can still be added manually. Existing drivers will be untouched.
+
 ## Version 0.49.5
 - removed depricated buttons 'SKIP BACKWARD' and 'SKIP FORWARD' for new virtual devices.
 

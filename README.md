@@ -62,10 +62,7 @@ When... flow cards:
 # To Do
 
 - Adding feature to check specific sensor values in NEEO.
-- Adding favorite editing tool.
 - Adding a tool to debug/test ir commands.
-- setting brain's as seperate devices to Homey.
-- decreased amount of logging.
 
 # Changelog.
 

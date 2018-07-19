@@ -1,13 +1,14 @@
-'use strict';
-const Homey = require('homey');
+"use strict";
+const Homey = require("homey");
 
-let neeoEventReceived = new Homey.FlowCardTrigger('received_event');
-neeoEventReceived.register().registerRunListener((state)=>{	
-	return true;
+let neeoEventReceived = new Homey.FlowCardTrigger("received_event");
+neeoEventReceived.register().registerRunListener(state => {
+  return true;
 });
 
-module.exports.trigger = function (state){
-    neeoEventReceived.trigger(state)
-    .then( this.log )
-    .catch( this.error );
-}
+module.exports.trigger = function(state) {
+  neeoEventReceived
+    .trigger(state)
+    .then(this.log)
+    .catch(this.error);
+};

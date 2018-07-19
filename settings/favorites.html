@@ -6,209 +6,210 @@
     <script type="text/javascript" src="favorites.js"></script>
 </head>
 <style>
-          body {
-            background-color: #F0EFF5;
-            font-family: Roboto, sans-serif;
-        }
+    body {
+        background-color: #F0EFF5;
+        font-family: Roboto, sans-serif;
+    }
 
-        h1 {
-            color: #007AFF;
-            margin-bottom: 0;
-            font-size: 15px;
-            font-weight: 100;
-            text-transform: uppercase;
-            margin-left: 40px;
-            margin-bottom: 12px;
-        }
-        .h1 {
-            color: #007AFF;
-            margin-bottom: 0;
-            font-size: 15px;
-            font-weight: 300;
-            text-transform: uppercase;
-            margin-left: 40px;
-            margin-top: 80px;
-            margin-bottom: 12px;
-            border-bottom: 0;
-            padding-bottom: 0;
-        }
+    h1 {
+        color: #007AFF;
+        margin-bottom: 0;
+        font-size: 15px;
+        font-weight: 100;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-bottom: 12px;
+    }
 
-        .cicon {
-            height: 25px;
-            width: 25px;
-            position: absolute;
-            left: 5px;
-            margin-top: 10px;
-        }
+    .h1 {
+        color: #007AFF;
+        margin-bottom: 0;
+        font-size: 15px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-top: 80px;
+        margin-bottom: 12px;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
 
-        hr { 
-            display: block;
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-right: 0;
-            border-style: inset;
-            border: 0;
-            margin-bottom: 0;
-            height: 0;
-            -webkit-margin-before: 0;
-            -webkit-margin-after: 0;
-            -webkit-margin-start: 0;
-            -webkit-margin-end: 0;
-        } 
+    .cicon {
+        height: 25px;
+        width: 25px;
+        position: absolute;
+        left: 5px;
+        margin-top: 10px;
+    }
 
-        .Menu {
-            margin-left: 0px;
-            border-bottom: 1px solid #C9C8CD;
-        }
+    hr {
+        display: block;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-right: 0;
+        border-style: inset;
+        border: 0;
+        margin-bottom: 0;
+        height: 0;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        -webkit-margin-start: 0;
+        -webkit-margin-end: 0;
+    }
 
-        .subMenu {
-            margin-left: 40px;
-            border-bottom: 0px solid #C8C8CA;
-        }
+    .Menu {
+        margin-left: 0px;
+        border-bottom: 1px solid #C9C8CD;
+    }
 
-        .mi{
-            width: 100%;
-            font-family: Roboto, sans-serif;
-            font-size: 16px;
-            text-align: left;
-            padding-left: 40px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            border: 0px solid #fff;
-            background-color: #fff;
-            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
-            height: 48px;
-        }
+    .subMenu {
+        margin-left: 40px;
+        border-bottom: 0px solid #C8C8CA;
+    }
 
-        .mi:hover{
-            background-color: #fff;
-        }
+    .mi {
+        width: 100%;
+        font-family: Roboto, sans-serif;
+        font-size: 16px;
+        text-align: left;
+        padding-left: 40px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        border: 0px solid #fff;
+        background-color: #fff;
+        box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+        height: 48px;
+    }
 
-        .mt{
-            display: inline-block;
-            vertical-align: middle;
-            line-height: normal;
+    .mi:hover {
+        background-color: #fff;
+    }
 
-        }
+    .mt {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal;
 
-        .mitxt{
-            float: left;
-            transform: translateY(9px);
-            padding-left: 10px;
-        }
+    }
 
-        .miico{
-            float: left;
-            transform: translateY(4px);
-        }
+    .mitxt {
+        float: left;
+        transform: translateY(9px);
+        padding-left: 10px;
+    }
 
-        ul {
-            margin-top: 1em;
-            margin-left: 5%;
-        }
+    .miico {
+        float: left;
+        transform: translateY(4px);
+    }
 
-        li {
-            background-color: #eee;
-            border-radius: 15px;
-            margin: 2px;
-            padding-left: 3px;
-            padding-right: 13px;
-        }
+    ul {
+        margin-top: 1em;
+        margin-left: 5%;
+    }
 
-        .deletedevice{
-            float: right;
-            color: #ddd;
-        }
+    li {
+        background-color: #eee;
+        border-radius: 15px;
+        margin: 2px;
+        padding-left: 3px;
+        padding-right: 13px;
+    }
 
-        .deletedevice:hover{
-            color: #44f;
-            cursor:pointer;
-            cursor:hand;
-        }
+    .deletedevice {
+        float: right;
+        color: #ddd;
+    }
 
-        .deleteCapability{
-            float: right;
-            color: #aaa;
-        }
+    .deletedevice:hover {
+        color: #44f;
+        cursor: pointer;
+        cursor: hand;
+    }
 
-        .addCapability{
-            margin-left: 40px;
-            margin-top:8px;
-            color: #444;
-        }
+    .deleteCapability {
+        float: right;
+        color: #aaa;
+    }
 
-        .saveCapability{
-            color: #444;
-            margin-bottom: 40px;
-            margin-right: 40px;
-            float: left;
-        }
+    .addCapability {
+        margin-left: 40px;
+        margin-top: 8px;
+        color: #444;
+    }
 
-        .cancelCapability{
-            color: #444;
-            margin-bottom: 40px;
-            float: left
-        }
+    .saveCapability {
+        color: #444;
+        margin-bottom: 40px;
+        margin-right: 40px;
+        float: left;
+    }
 
-        .jsontextarea{
-            width: 100%;
-            padding: 10px;
-            border: 0;
-            height: 200px;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-        }
+    .cancelCapability {
+        color: #444;
+        margin-bottom: 40px;
+        float: left
+    }
 
-        .capview{
-            display: none; 
-            margin-bottom: 80px;
-            padding-left: 20px;
-        }
+    .jsontextarea {
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        height: 200px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
 
-        .bsh-xxx{
-            position: absolute;
-            left: 30px;
-        }
+    .capview {
+        display: none;
+        margin-bottom: 80px;
+        padding-left: 20px;
+    }
 
-        .bsi-xxx{
-            position: absolute;
-            left: 220px;
-        }
+    .bsh-xxx {
+        position: absolute;
+        left: 30px;
+    }
 
-        .selectbox{
-            float: left;
-        }
+    .bsi-xxx {
+        position: absolute;
+        left: 220px;
+    }
 
-        .delbrain{
-            float: right;
-        }
+    .selectbox {
+        float: left;
+    }
 
-        .braininfo{
-            margin: 20px;
-        }
+    .delbrain {
+        float: right;
+    }
 
-        .dblock{
-            padding:0px;
-        }
+    .braininfo {
+        margin: 20px;
+    }
 
-        .faRight{
-            right: 0px;
-            position: absolute;
-            font-size: 24px;
-            color: #CCCBD0;
-            margin-left: 20px;
-            margin-right: 20px;
-        }
+    .dblock {
+        padding: 0px;
+    }
 
-        .faLeft{
-            left: 0px;
-            position: absolute;
-            font-size: 24px;
-            color: #037AFF;
-            margin-left: 20px;
-            margin-right: 20px;            
-        }
+    .faRight {
+        right: 0px;
+        position: absolute;
+        font-size: 24px;
+        color: #CCCBD0;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .faLeft {
+        left: 0px;
+        position: absolute;
+        font-size: 24px;
+        color: #037AFF;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 
     .inforow {
         border: 2px solid rgb(250, 148, 32);
@@ -283,14 +284,16 @@
 </style>
 
 <body onload="connect();">
-<a href="index.html">
-    <div class="field row" style="background-color: #fff;margin: 0;">
-        <hr class="Menu" style="margin-bottom: 0;">
-        <button class="mi"><span class="mt" style="color:#037AFF;">Back to app menu.</span></button>
-        <hr class="Menu" style="margin-bottom: 0;">
-    </div>
-</a>
-<div class="row" id="Favorites"></div>
+    <a href="index.html">
+        <div class="field row" style="background-color: #fff;margin: 0;">
+            <hr class="Menu" style="margin-bottom: 0;">
+            <button class="mi">
+                <span class="mt" style="color:#037AFF;">Back to app menu.</span>
+            </button>
+            <hr class="Menu" style="margin-bottom: 0;">
+        </div>
+    </a>
+    <div class="row" id="Favorites"></div>
 </body>
 
 </html>

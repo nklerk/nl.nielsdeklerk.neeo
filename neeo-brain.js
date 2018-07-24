@@ -108,7 +108,7 @@ module.exports.connect = connect;
 function registerAsDeviceDatabase(neeoBrain) {
   //console.log ('[DRIVER]\t'+neeoBrain.host+', Registering Homey as NEEO device server...');
   const content = {
-    name: `Homey_Devicedatabase_ ${tools.getLocalIp()}`,
+    name: `Homey_Devicedatabase_${tools.getLocalIp()}`,
     baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
   };
 

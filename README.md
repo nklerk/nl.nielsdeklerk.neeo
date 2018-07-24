@@ -63,7 +63,15 @@ When... flow cards:
 - Adding feature to check specific sensor values in NEEO.
 - Adding a tool to debug/test ir commands.
 
+# Requirements
+
+- NEEO Firmware 0.51.x or newer installed.
+
 # Changelog.
+
+## Version 0.51.7
+
+- Bugfix, Corrupted SDK registration UID
 
 ## Version 0.51.6
 

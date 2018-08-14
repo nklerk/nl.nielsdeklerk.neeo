@@ -117,12 +117,6 @@ function gui_view_selection(displayWindow) {
     document.getElementById("Device_view").style.display = "none";
   }
 
-  if (displayWindow == "info") {
-    document.getElementById("Info_view").style.display = "block";
-  } else {
-    document.getElementById("Info_view").style.display = "none";
-  }
-
   if (displayWindow == "adddevice") {
     document.getElementById("AddDevice_view").style.display = "block";
   } else {
@@ -135,30 +129,24 @@ function gui_view_selection(displayWindow) {
   } else {
     document.getElementById("Settings_view").style.display = "none";
   }
-
-  if (displayWindow == "menu") {
-    document.getElementById("Menu_view").style.display = "block";
-  } else {
-    document.getElementById("Menu_view").style.display = "none";
-  }
 } // change active view.
 
 ////////////////////////////////////////
 // ADD Devices View
 ////////////////////////////////////////
 
-function AddDecice_save() {
+function AddDevice_save() {
   let mydevice = newDevice(document.getElementById("AddDevice_Manufactorer").value, document.getElementById("AddDevice_Name").value, document.getElementById("AddDevice_Type").value, document.getElementById("AddDevice_Icon").value);
   Settings_database.push(mydevice);
   device_capgrp_from_devicetype(mydevice.adapterName, mydevice.type);
   Homey.set("myDevices", Settings_database);
-  AddDecice_clear();
+  AddDevice_clear();
+  device_view_selection(mydevice.adapterName);
 } // GUI Add device save button.
 
-function AddDecice_clear() {
+function AddDevice_clear() {
   document.getElementById("AddDevice_Manufactorer").value = "";
   document.getElementById("AddDevice_Name").value = "";
-  gui_view_selection("devices");
 } // GUI Add device cancel button.
 
 ////////////////////////////////////////
@@ -293,75 +281,75 @@ function device_add_cap(adapterName, cname, ctype, paramA, paramB, paramC, alert
 function device_capgrp_save(adapterName, capability) {
   switch (capability) {
     case "mediacontrolls":
-      device_add_cap(adapterName, "PLAY", "button", 0, 0, false);
-      device_add_cap(adapterName, "PAUSE", "button", 0, 0, false);
-      device_add_cap(adapterName, "STOP", "button", 0, 0, false);
-      device_add_cap(adapterName, "FORWARD", "button", 0, 0, false);
-      device_add_cap(adapterName, "PREVIOUS", "button", 0, 0, false);
-      device_add_cap(adapterName, "NEXT", "button", 0, 0, false);
-      device_add_cap(adapterName, "REVERSE", "button", 0, 0, false);
-      device_add_cap(adapterName, "PLAY PAUSE TOGGLE", "button", 0, 0, false);
-      device_add_cap(adapterName, "INFO", "button", 0, 0, false);
-      device_add_cap(adapterName, "MY RECORDINGS", "button", 0, 0, false);
-      device_add_cap(adapterName, "RECORD", "button", 0, 0, false);
-      device_add_cap(adapterName, "LIVE", "button", 0, 0, false);
+      device_add_cap(adapterName, "PLAY", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "PAUSE", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "STOP", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FORWARD", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "PREVIOUS", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "NEXT", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "REVERSE", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "PLAY PAUSE TOGGLE", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "INFO", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "MY RECORDINGS", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "RECORD", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "LIVE", "button", 0, 0, 0, false);
       break;
     case "digits":
-      device_add_cap(adapterName, "DIGIT 0", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 1", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 2", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 3", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 4", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 5", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 6", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 7", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 8", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT 9", "button", 0, 0, false);
-      device_add_cap(adapterName, "DIGIT SEPARATOR", "button", 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 0", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 1", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 2", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 3", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 4", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 5", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 6", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 7", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 8", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT 9", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "DIGIT SEPARATOR", "button", 0, 0, 0, false);
       break;
     case "directions":
-      device_add_cap(adapterName, "BACK", "button", 0, 0, false);
-      device_add_cap(adapterName, "CURSOR DOWN", "button", 0, 0, false);
-      device_add_cap(adapterName, "CURSOR LEFT", "button", 0, 0, false);
-      device_add_cap(adapterName, "CURSOR RIGHT", "button", 0, 0, false);
-      device_add_cap(adapterName, "CURSOR UP", "button", 0, 0, false);
-      device_add_cap(adapterName, "CURSOR ENTER", "button", 0, 0, false);
-      device_add_cap(adapterName, "EXIT", "button", 0, 0, false);
-      device_add_cap(adapterName, "HOME", "button", 0, 0, false);
-      device_add_cap(adapterName, "MENU", "button", 0, 0, false);
+      device_add_cap(adapterName, "BACK", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CURSOR DOWN", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CURSOR LEFT", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CURSOR RIGHT", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CURSOR UP", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CURSOR ENTER", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "EXIT", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "HOME", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "MENU", "button", 0, 0, 0, false);
       break;
     case "power":
-      device_add_cap(adapterName, "POWER OFF", "button", 0, 0, false);
-      device_add_cap(adapterName, "POWER ON", "button", 0, 0, false);
-      device_add_cap(adapterName, "POWER TOGGLE", "button", 0, 0, false);
+      device_add_cap(adapterName, "POWER OFF", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "POWER ON", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "POWER TOGGLE", "button", 0, 0, 0, false);
       break;
     case "tuner":
-      device_add_cap(adapterName, "CHANNEL UP", "button", 0, 0, false);
-      device_add_cap(adapterName, "CHANNEL DOWN", "button", 0, 0, false);
-      device_add_cap(adapterName, "CHANNEL SEARCH", "button", 0, 0, false);
-      device_add_cap(adapterName, "FAVORITE", "button", 0, 0, false);
-      device_add_cap(adapterName, "GUIDE", "button", 0, 0, false);
-      device_add_cap(adapterName, "FUNCTION RED", "button", 0, 0, false);
-      device_add_cap(adapterName, "FUNCTION GREEN", "button", 0, 0, false);
-      device_add_cap(adapterName, "FUNCTION YELLOW", "button", 0, 0, false);
-      device_add_cap(adapterName, "FUNCTION BLUE", "button", 0, 0, false);
+      device_add_cap(adapterName, "CHANNEL UP", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CHANNEL DOWN", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "CHANNEL SEARCH", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FAVORITE", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "GUIDE", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FUNCTION RED", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FUNCTION GREEN", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FUNCTION YELLOW", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FUNCTION BLUE", "button", 0, 0, 0, false);
       break;
     case "video":
-      device_add_cap(adapterName, "FORMAT 16:9", "button", 0, 0, false);
-      device_add_cap(adapterName, "FORMAT 4:3", "button", 0, 0, false);
-      device_add_cap(adapterName, "FORMAT AUTO", "button", 0, 0, false);
+      device_add_cap(adapterName, "FORMAT 16:9", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FORMAT 4:3", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "FORMAT AUTO", "button", 0, 0, 0, false);
       break;
     case "volume":
-      device_add_cap(adapterName, "VOLUME UP", "button", 0, 0, false);
-      device_add_cap(adapterName, "VOLUME DOWN", "button", 0, 0, false);
-      device_add_cap(adapterName, "MUTE TOGGLE", "button", 0, 0, false);
+      device_add_cap(adapterName, "VOLUME UP", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "VOLUME DOWN", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "MUTE TOGGLE", "button", 0, 0, 0, false);
       break;
     case "input":
-      device_add_cap(adapterName, "INPUT TUNER 1", "button", 0, 0, false);
-      device_add_cap(adapterName, "INPUT HDMI 1", "button", 0, 0, false);
-      device_add_cap(adapterName, "INPUT HDMI 2", "button", 0, 0, false);
-      device_add_cap(adapterName, "INPUT HDMI 3", "button", 0, 0, false);
-      device_add_cap(adapterName, "INPUT HDMI 4", "button", 0, 0, false);
+      device_add_cap(adapterName, "INPUT TUNER 1", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "INPUT HDMI 1", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "INPUT HDMI 2", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "INPUT HDMI 3", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "INPUT HDMI 4", "button", 0, 0, 0, false);
       break;
     default:
       console.log("geen match");
@@ -443,9 +431,9 @@ function device_capgrp_from_devicetype(adapterName, type) {
       break;
     case "LIGHT":
       device_capgrp_save(adapterName, "power");
-      device_add_cap(adapterName, "POWER_ALL_OFF", "button", 0, 0, false);
-      device_add_cap(adapterName, "LIGHT", "switch", 0, 0, false);
-      device_add_cap(adapterName, "BRIGHTNESS", "slider", 100, "%", false);
+      device_add_cap(adapterName, "POWER_ALL_OFF", "button", 0, 0, 0, false);
+      device_add_cap(adapterName, "LIGHT", "switch", 0, 0, 0, false);
+      device_add_cap(adapterName, "BRIGHTNESS", "slider", 0, 100, "%", false);
       break;
     case "THERMOSTAT":
       break;
@@ -624,7 +612,7 @@ function settings_refresh_display() {
     if (Settings_brains[i].available) {
       dd = dd + '  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>';
       dd = dd + '  <span class="mt" style="margin-top: 10px;">' + Settings_brains[i].fullname + "</span>";
-      dd = dd + '  <span class="mt" style="margin-top: 10px;"><a href="favorites.html?BrainIP=' + Settings_brains[i].ip + '">Favorites</a></span><br>';
+      dd = dd + '  <span class="mt" style="margin-top: 10px;"><a href="favorites.html?BrainIP=' + Settings_brains[i].ip + '" style="right: 0px; position: absolute; color: #CCCBD0; margin-right: 100px;">Edit favorites</a></span><br>';
     } else {
       dd = dd + '  <img class="cicon" src="ico/ico_brain_offline.png" style="margin-top: 12px; "/>';
       dd = dd + '  <span class="mt" style="margin-top: 10px; color: #D52000;">' + Settings_brains[i].fullname + " -Offline-</span><br>";

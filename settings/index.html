@@ -213,319 +213,15 @@
 </style>
 
 <body>
-
-
-
-    <div id="Menu_view" class="dblock" style="display: block;">
-        <div style="top: 0%; text-align: center; position: absolute; width: 100%; font-family: inherit;">
-            <img alt="" border="0" src="./img/cup.png" style="width: 100%;
-                position: absolute;
-                left: 0;
-                top: 0;">
-
-        </div>
-        <div class="field row" style="background-color: #fff; margin: 0; top: 35%;position: absolute;width: 100%;left: 0px;">
-            <hr class="Menu" style="margin-bottom: 0;">
-            <button class="mi" onclick="gui_view_selection('info')">
-                <span class="mt">Information</span>
-                <i class="fa fa-angle-right faRight" style="font-size: 24px;"></i>
-            </button>
-            <hr class="subMenu" style="margin-bottom: 0;">
-            <button class="mi" onclick="gui_view_selection('devices')">
-                <span class="mt">Virtual devices</span>
-                <i class="fa fa-angle-right faRight" style="font-size: 24px;"></i>
-            </button>
-            <hr class="subMenu" style="margin-bottom: 0;">
-            <button class="mi" onclick="gui_view_selection('settings')">
-                <span class="mt">Configuration</span>
-                <i class="fa fa-angle-right faRight" style="font-size: 24px;"></i>
-            </button>
-            <hr class="Menu" style="margin-bottom: 0;">
-        </div>
-        <i>An intergration app by Niels de Klerk</i>
-    </div>
-
-
-
-
-
-
-
-
-
-    <div id="Info_view" class="dblock" style="display: none;">
-        <div style="top: -1px;position: absolute;width: 100%;left: 0px; background: #f0eff5;">
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('menu')">
-                    <span class="mt" style="color:#037AFF;">Back to app menu.</span>
-                </button>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-
-            <h1 class="h1"> NEEO App</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;"> This app brings the best of NEEO and Homey together.
-                <br> Controll every device or flow in Homey with the NEEO remote. Use sliders, buttons and switches to build
-                your own virtual device and use the Homey flow editor to hook it up to all kinds of Homey apps. The app supports
-                feedback of information as well. Change the volume of your receiver and the slider on your remote will change
-                in realtime.
-                <br> The NEEO Remote can be (Pre)ordered at: https://neeo.com/
-                <br> Please note that this is not an official NEEO app made by NEEO and there will be no support from NEEO concerning
-                this App.
-                <br>
-                <br> You may leave me a donation if you love my work.
-                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                    <input type="hidden" name="cmd" value="_s-xclick">
-                    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"
-                        style="border: 0px; width: 80px;">
-                    <img alt="" border="0" src="https://www.paypalobjects.com/nl_NL/i/scr/pixel.gif" width="1" height="1">
-                </form>
-            </div>
-            <hr class="Menu" style="margin-bottom: 0;">
-
-            <h1 class="h1">How to: Build a device driver for NEEO</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;"> With this app you're able to build your own drivers that become availeble to NEEO. to do this go to Settings
-                in the Homey UI. then go to this NEEO APP (for Homey) settings and click on "+ Add a virtual device"
-                <br> Here you can set the device type, name and device Manufacturer that you want to make availeble to NEEO.
-                <br>
-                <img alt="" border="0" src="./img/1.jpg">
-                <br> When the device is added it will automatically have the most common capabilities added for the device type.
-                <br>
-                <img alt="" border="0" src="./img/2.jpg">
-                <br>
-                <br>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-
-
-
-            <h1 class="h1">How to: Add capabilities to a virtual device</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;"> On the "virtual devices" section (A:) you will find all the virtual devices that are added with this APP.
-                <br> On the device section you see all capabilities that are added for this device. on the bottom of the device
-                section there are two links for adding capabilities named "Add a capability" and "Add a capability group".
-                <br> With "Add a Capability" (B:) you can add either a Button, Switch, Slider, Textlabel, Image or Large Image.
-                <br>
-                <img alt="" border="0" src="./img/4.jpg">
-                <br>
-                <br>
-
-                <B> Button </B>
-                <br> This will add a button to the NEEO virtual device driver. When pressed an event flow card can be triggered
-                "A button is pressed."
-                <br>
-
-                <B> Switch </B>
-                <br> This will add a (On/Off) Switch to the NEEO virtual device driver. When the state is changed, an event flow
-                card can be triggered.
-                <br> The "value" tag will have the state in either True or False
-                <br> With the "update Switch state." flow card, you can inform nee NEEO that the state has changed so it displays
-                the corect state. You can also drag a boolean TAG in the value field
-                <br>
-
-                <B> Slider </B>
-                <br> This will add a slider to the NEEO virtual device driver. When the state is changed, an event flow card
-                can be triggered.
-                <br> The "Decimal" tag will hold the the slider percentage value in the form of a decimal between 0 and 1. This
-                tag kan be dragged to another cards slider.
-                <br> The "Value" tag will hold the actual value that has been set.
-                <br> With the "update Slider state. (Percentage)" flow card, you can inform the NEEO that the state has changed
-                so it displays the corect state. You can also drag a number TAG on the slider but it must be a decimal representing
-                the percentage
-                <br> With the "update Slider state. (Value)" flow card, you can inform the NEEO that the state has changed so
-                it displays the corect state. You can also drag a number TAG on the value field
-                <br>
-                <br>
-                <br>
-
-                <B> Textlabel </B>
-                <br> This will add a textlabel to the NEEO virtual device driver.
-                <br> You can add the textlabel in to your NEEO as a shortcut and it will display the text value updated by this
-                NEEO app.
-                <br> To update the text value use the "Update textlabel or image state." flow card.
-                <br> You can use both text and TAGs tin the value field.
-                <br>
-                <br>
-                <br>
-
-                <B> Image </B>
-                <br> This will add a small image to the NEEO virtual device driver.
-                <br> You can add the image in to your NEEO as a shortcut and it will display the image updated by this NEEO app.
-                <br> To update the image use the "Update textlabel or image state." flow card. and set the URL to the image that
-                needs to be represented.
-                <br>
-                <br>
-                <br>
-
-                <B> Large Image </B>
-                <br> This will add a large image to the NEEO virtual device driver.
-                <br> You can add the image in to your NEEO as a shortcut and it will display the image updated by this NEEO app.
-                <br> To update the image use the "Update textlabel or image state." flow card. and set the URL to the image that
-                needs to be represented.
-                <br>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-
-
-
-
-            <h1 class="h1">When... Flow Cards</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;">
-                <b>A button is pressed.</b>
-                <br>
-                <img alt="" border="0" src="./img/5.png">
-                <br> This card is triggered when a button of a virtual device is pressed.
-                <br>
-                <br>
-
-                <b>A switch changed state.</b>
-                <br>
-                <img alt="" border="0" src="./img/6.png">
-                <br> This card is triggered when a switch of a virtual device has changed state.
-                <br> * The "value" tag will contain the boolean state
-                <br>
-                <br>
-
-                <b>A slider is changed.</b>
-                <br>
-                <img alt="" border="0" src="./img/8.png">
-                <br> This card is triggered when a slider of a virtual device is changed.
-                <br> * The "Decimal" tag will hold the the slider percentage value in the form of a decimal between 0 and 1.
-                <br> * The "Value" tag will hold the actual value that has been set.
-                <br>
-
-                <b>Event triggered.</b>
-                <br>
-                <img alt="" border="0" src="./img/12.png">
-                <br> This card is triggered when a NEEO event is triggered.
-                <br> This inludes button presses, activation of activities and changing states of various components.
-                <br> the events are not limited to the devices build with this app, every device event either a NEEO driver,
-                SDK driver or made by this app will be caught.
-                <br>
-                <br> To have a clear understanding of what events are being sent i advice to use my app "Simple log" that can
-                be freely downloaded on apps.athom.com.
-                <br> the "JSON" tag will hold the full event message.
-                <br> the other tags will hold the coresponding values.
-                <br>
-                <br> Example of posible events:
-                <br> {"action":"launch","recipe":"Motion Detected"}
-                <br> {"action":"VOLUME UP","device":"TV","room":"Livingroom"}
-                <br> {"action":"CHANNEL_301"}
-                <br> {"action":"launch","recipe":"Wii U"}
-                <br> The folowing flow will log all events as they happen.
-                <br>
-                <img alt="" border="0" src="./img/13.jpg">
-                <br>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-
-
-            <h1 class="h1">...And... Flow Cards</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;">
-                <b>Recipe is|isn't active.</b>
-                <br>
-                <img alt="" border="0" src="./img/20.png">
-                <br> This card will condition a recipe being active or deactive.
-                <br>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-
-
-
-            <h1 class="h1">...Then Flow Cards</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
-                <hr class="Menu" style="margin-bottom: 0;">
-                <b>Activate a recipe.</b>
-                <br>
-                <img alt="" border="0" src="./img/14.png">
-                <br> This card will start (Activate) the selected recipe.
-                <br>
-                <br>
-
-                <b>Shutdown a recipe.</b>
-                <br>
-                <img alt="" border="0" src="./img/15.png">
-                <br> This card will shutdown (deactivate) the selected recipe.
-                <br>
-                <br>
-
-                <b>Shutdown all recipes.</b>
-                <br>
-                <img alt="" border="0" src="./img/16.png">
-                <br> his card will shutdown all recipes.
-                <br>
-                <br>
-
-                <b>Press a button.</b>
-                <br>
-                <img alt="" border="0" src="./img/17.png">
-                <br> This card will press the selected button on the NEEO remote.
-                <br>
-                <br>
-
-                <b>Change a switch.</b>
-                <br>
-                <img alt="" border="0" src="./img/18.png">
-                <br> This card will set the selected switch on the NEEO remote to On/Off.
-                <br>
-                <br>
-
-                <b>Change a slider.</b>
-                <br>
-                <img alt="" border="0" src="./img/19.png">
-                <br> This card will set the selected slider on the NEEO remote to a specific value.r
-                <br>
-                <br>
-
-                <b>Inform slider state. (Percentage)</b>
-                <br>
-                <img alt="" border="0" src="./img/9.png">
-                <br> This card will inform the NEEO remote user interface of the given value in percentage for the selected virtual
-                device slider.
-                <br>
-                <br>
-
-                <b>Inform slider state. (Value)</b>
-                <br>
-                <img alt="" border="0" src="./img/10.png">
-                <br> This card will inform the NEEO remote user interface of the new value for the selected virtual device slider.
-                <br>
-                <br>
-
-                <b>Inform switch state</b>
-                <br>
-                <img alt="" border="0" src="./img/7.png">
-                <br> This card will inform the NEEO remote user interface of the new value for the selected virtual device switch.
-                <br>
-                <br>
-
-                <b>Inform label or image state.</b>
-                <br>
-                <img alt="" border="0" src="./img/11.png">
-                <br> This card will inform the NEEO remote user interface of the new value for the selected virtual device label
-                or set the image based on a URL.
-                <br> Use this card to update the text of the selected textlabel
-                <br> or use this card to update the URL of the selected image.
-                <br>
-                <hr class="Menu" style="margin-bottom: 0;">
-            </div>
-        </div>
-    </div>
-
     <div id="AddDevice_view" class="dblock" style="display: none;">
         <div style="top: -1px;position: absolute;width: 100%;left: 0px;">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="AddDecice_clear()" style="width:49%; padding-left: 40px;">
+                <button class="mi" onclick="AddDevice_clear()" style="width:49%; padding-left: 40px;">
                     <span class="mt" style="color:#037AFF;">
                         <i class="fa fa-remove faLeft"></i>Cancel</span>
                 </button>
-                <button id="save_device_button" class="mi" onclick="AddDecice_save()" style="width:49%; text-align: right; padding-right: 40px;">Add
+                <button id="save_device_button" class="mi" onclick="AddDevice_save()" style="width:49%; text-align: right; padding-right: 40px;">Add
                     <i class="fa fa-plus faRight"></i>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
@@ -537,15 +233,13 @@
                 <div class="mi">
                     <span class="mt" style="height: 100%;"></span>
                     Device type
-                    <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;"
-                        onchange="AddDevice_Type_change()">
+                    <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Type_change()">
                     </select>
                 </div>
                 <div class="mi">
                     <span class="mt" style="height: 100%;"></span>
                     Device icon
-                    <select id="AddDevice_Icon" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;"
-                        onchange="AddDevice_Icon_change()">
+                    <select id="AddDevice_Icon" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Icon_change()">
                     </select>
                     <img class="cicon" id="AddDevice_Icon_Img" src="ico/ico_ACCESSOIRE.png" style="margin-top: 10px;">
                 </div>
@@ -569,12 +263,12 @@
     </div>
 
 
-    <div id="Devices_view" class="dblock" style="display: none;">
-        <div style="top: -1px;position: absolute;width: 100%;left: 0px; background: #f0eff5;">
+    <div id="Devices_view" class="dblock" style="display: block;">
+        <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('menu')">
-                    <span class="mt" style="color:#037AFF;">Back to app menu.</span>
+                <button class="mi" onclick="gui_view_selection('settings')">
+                    <span class="mt" style="color:#037AFF;">Configuration.</span>
                 </button>
                 <hr class="subMenu" style="margin-bottom: 0;">
                 <button class="mi" onclick="gui_view_selection('adddevice')">
@@ -583,15 +277,17 @@
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
-            <div id="Devices" style="background-color: #F0EFF5;"></div>
+            <div id="Logo">
+                <img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 27%;">
+            </div>
+            <div id="Devices"></div>
         </div>
     </div>
-
     <div id="Device_view" class="dblock" style="display: none;">
-        <div style="top: -1px;position: absolute;width: 100%;left: 0px;">
+        <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="AddDecice_clear()" style="width:49%; padding-left: 40px;">
+                <button class="mi" onclick="gui_view_selection('devices')" style="width:49%; padding-left: 40px;">
                     <span class="mt" style="color:#037AFF;">
                         </i>Back to device view.</span>
                 </button>
@@ -602,11 +298,11 @@
     </div>
 
     <div id="Settings_view" class="dblock" style="display: none;">
-        <div style="top: -1px;position: absolute;width: 100%;left: 0px;">
+        <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('menu')">
-                    <span class="mt" style="color:#037AFF;">Back to app menu.</span>
+                <button class="mi" onclick="gui_view_selection('devices')">
+                    <span class="mt" style="color:#037AFF;">Back to device view.</span>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
@@ -619,7 +315,7 @@
             </td>
             <hr class="Menu" style="margin-bottom: 0;">
 
-            <h1 class="h1">JSON Configuration.</h1>
+            <h1 class="h1">JSON formated configuration file.</h1>
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <textarea id="jsonconfig" class="jsontextarea"></textarea>
@@ -628,7 +324,7 @@
                     <i class="fa fa-save"></i> Save</button>
                 <hr class="subMenu" style="margin-bottom: 0;">
                 <button class="mi" onclick="settings_btn_download()">
-                    <i class="fa fa-download"></i> Download</button>
+                    <i class="fa fa-download"></i> Download backup.</button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
 

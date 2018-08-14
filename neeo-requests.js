@@ -26,7 +26,7 @@ module.exports.db = function db(request) {
   return responseData;
 };
 
-module.exports.device = function device(adapterName, deviceFunction, deviceParameter) {
+module.exports.device = function device(adapterName, deviceFunction, deviceParameter, brainIP) {
   let responseData = {
     code: 200,
     type: { "Content-Type": "application/json" },
@@ -45,7 +45,7 @@ module.exports.device = function device(adapterName, deviceFunction, deviceParam
         content: buf
       };
     } else {
-      console.log(`DEBUG: returning value ${capability.sensor.value} as type ${typeof capability.sensor.value}`);
+      //console.log(`DEBUG: returning value ${capability.sensor.value} as type ${typeof capability.sensor.value}`);
       responseData.content = JSON.stringify({ value: capability.sensor.value });
     }
   } else if (capability.type === "button") {
@@ -71,6 +71,12 @@ module.exports.device = function device(adapterName, deviceFunction, deviceParam
     homeyTokens.set(adapterName, deviceFunction, deviceParameter);
     neeoBrain.notifyStateChange(adapterName, `${deviceFunction}_SENSOR`, deviceParameter);
     responseData.content = neeoDatabase.capabilitySetValue(adapterName, deviceFunction, deviceParameter);
+  } else if (deviceFunction === "subscribe") {
+    console.log(`[NOTIFICATIONS]\t${adapterName} added to ${brainIP}.`);
+    neeoBrain.downloadConfiguration();
+  } else if (deviceFunction === "unsubscribe") {
+    console.log(`[NOTIFICATIONS]\t${adapterName} removed from ${brainIP}.`);
+    neeoBrain.downloadConfiguration();
   } else {
     console.log(``);
     console.log(` !! Warning !! `);
@@ -85,7 +91,6 @@ module.exports.device = function device(adapterName, deviceFunction, deviceParam
 };
 
 module.exports.subscribe = function subscribe(uriparts, brainIP) {
-  brainIP = brainIP.replace(/^.*:/, "");
   console.log(`[NOTIFICATIONS]\tRequest for subscription from: ${brainIP}.`);
   const responseData = {
     code: 200,
@@ -96,7 +101,6 @@ module.exports.subscribe = function subscribe(uriparts, brainIP) {
 };
 
 module.exports.unsubscribe = function unsubscribe(uriparts, brainIP) {
-  brainIP = brainIP.replace(/^.*:/, "");
   console.log(`[NOTIFICATIONS]\tRequest for unsubscription from: ${brainIP}.`);
   const responseData = {
     code: 200,
@@ -117,8 +121,8 @@ module.exports.capabilities = function capabilities(uriparts) {
   return responseData;
 };
 
-module.exports.unknown = function unknown(uriparts) {
-  console.log(`[ERROR]\t\tRECEIVED UNKNOWN REQUEST. ${uriparts}`);
+module.exports.unknown = function unknown(uriparts, host) {
+  console.log(`[ERROR]\t\tRECEIVED UNKNOWN REQUEST. ${uriparts} from ${host}`);
   const responseData = {
     code: 500,
     Type: { "Content-Type": "application/json" },

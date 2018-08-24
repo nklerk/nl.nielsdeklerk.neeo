@@ -69,6 +69,10 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.51.9
+
+- Added Community ID.
+
 ## Version 0.51.8
 
 - Fixed default light slider 100/NaN to correct 0/100 %

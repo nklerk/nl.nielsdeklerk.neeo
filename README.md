@@ -69,6 +69,19 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.51.9
+
+- Added Community ID.
+
+## Version 0.51.8
+
+- Fixed default light slider 100/NaN to correct 0/100 %
+- Debuglog now shows hostname for Unknown request errors.
+- Code cleaning.
+- Fetch brain configurations after adding/removing a virtual device on NEEO.
+- Simplified and updated App settings UI.
+- After adding a device now shows the device and it's capabilities opposed to all devices.
+
 ## Version 0.51.7
 
 - Bugfix, Corrupted SDK registration UID

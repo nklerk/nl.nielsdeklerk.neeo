@@ -2,14 +2,14 @@
 //const Homey = require("homey");
 const neeoEventReceived = require("./homey-if-neeoEventReceived");
 
-module.exports.handle = function(body, clientIP) {
+module.exports.handle = function(body, clientIp) {
   let responseData = {
     code: 200,
     Type: { "Content-Type": "application/json" },
     content: ""
   };
   const myjson = JSON.parse(body);
-  console.log(`[EVENTS]\tNEEO event received: ${body}`);
+  console.log(`[EVENTS]\tNEEO event from ${clientIp}: ${body}`);
   let action = "",
     device = "",
     room = "",

@@ -199,7 +199,7 @@ module.exports.notifyStateChange = function(adapterName, capabilityName, value) 
   if (capability && capability.eventservers) {
     for (let eventserver of capability.eventservers) {
       //{"type":"DEVICE_SENSOR_UPDATE", "data":{"sensorEventKey":"6422412883295993856:POWER_SENSOR""sensorValue":true}}
-      // .post(`http://${eventserver.host}:3000/v1/notifications`, {type: eventserver.eventKey,data: value})
+      //.post(`http://${eventserver.host}:3000/v1/notifications`, {type: eventserver.eventKey,data: value})
       httpmin
         .post(`http://${eventserver.host}:3000/v1/notifications`, {
           type: "DEVICE_SENSOR_UPDATE",

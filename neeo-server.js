@@ -13,20 +13,23 @@ const neeoServer = http.createServer((req, res) => {
     type: { "Content-Type": "application/json" }
   };
   const uriparts = decodeURI(req.url).split("/");
+  const clientIp = req.connection.remoteAddress.replace(/^.*:/, "");
+
   if (req.method == "GET") {
     if (uriparts[1] === "db") {
       responseData = neeoRequests.db(uriparts[2]);
     } else if (uriparts[1] === "device") {
-      responseData = neeoRequests.device(uriparts[2], uriparts[3], uriparts[5]);
+      responseData = neeoRequests.device(uriparts[2], uriparts[3], uriparts[5], clientIp);
     } else if (uriparts[2] === "subscribe") {
-      responseData = neeoRequests.subscribe(uriparts, req.connection.remoteAddress);
+      responseData = neeoRequests.subscribe(uriparts, clientIp);
     } else if (uriparts[2] === "unsubscribe") {
-      responseData = neeoRequests.unsubscribe(uriparts, req.connection.remoteAddress);
+      responseData = neeoRequests.unsubscribe(uriparts, clientIp);
     } else if (uriparts[2] === "capabilities") {
       responseData = neeoRequests.capabilities(uriparts);
     } else {
-      responseData = neeoRequests.unknown(uriparts);
+      responseData = neeoRequests.unknown(uriparts, clientIp);
     }
+
     res.writeHead(responseData.code, responseData.type);
     res.end(responseData.content);
   } else if (req.method == "POST") {
@@ -36,7 +39,7 @@ const neeoServer = http.createServer((req, res) => {
     });
     req.on("end", function() {
       if (uriparts[1] === "Homey-By-Niels_de_Klerk") {
-        responseData = neeoEvents.handle(body, req.connection.remoteAddress);
+        responseData = neeoEvents.handle(body, clientIp);
         res.writeHead(responseData.code, responseData.type);
         res.end(responseData.content);
       }

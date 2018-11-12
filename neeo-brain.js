@@ -11,6 +11,7 @@ const NEEO_RECONNECT_INTERVAL = 60000; // 900000 = 15 Min   // 60000 = 1 Min
 let neeoConnectionTries = 0;
 let neeoBrains;
 let neeoBrainsChanged = false;
+let homeyId;
 
 // Needed fo when a brain is deleted in the settings. the data must be reloaded.
 Homey.ManagerSettings.on("set", key => {
@@ -47,7 +48,6 @@ function addNeeoBrainToDatabase(foundbrain) {
   }
   let exist = 0;
   const fullname = foundbrain.fullname.replace("._neeo._tcp.local", "");
-
   for (const i in neeoBrains) {
     if (neeoBrains[i].host === foundbrain.host) {
       console.log(`[SERVER]\tUpdating settings: ${foundbrain.host}`);
@@ -56,19 +56,16 @@ function addNeeoBrainToDatabase(foundbrain) {
       exist = exist + 1;
     }
   }
-
   if (exist === 0) {
     console.log(`[SERVER]\tNew NEEO Brain found: ${foundbrain.host}`);
     console.log(`        \t                    - ${foundbrain.addresses}`);
     console.log(`        \t                    - ${fullname}`);
     console.log(``);
-
     const neeoBrain = {
       host: foundbrain.host,
       ip: foundbrain.addresses,
       fullname
     };
-
     neeoBrains.push(neeoBrain);
     registerAsDeviceDatabase(neeoBrain);
     registerForwarderEvents(neeoBrain);
@@ -79,16 +76,17 @@ function addNeeoBrainToDatabase(foundbrain) {
 }
 
 function connect() {
+  getHomeyId();
+  Homey.ManagerSettings.set("sdkVersion", null); //Temporary fix.
+
   //First Connection upon app start.
   if (neeoConnectionTries === 0) {
     neeoBrains = Homey.ManagerSettings.get("neeoBrains");
     homeyTokens.setAll();
   }
-
   //If there are no NEEO brains.
   if (!neeoBrains || neeoBrains.length === 0) {
     discover();
-
     //If there is atleast one NEEO brain, Do per Brain.
   } else {
     for (let neeoBrain of neeoBrains) {
@@ -105,18 +103,69 @@ function connect() {
 }
 module.exports.connect = connect;
 
+function getHomeyId() {
+  if (Homey.ManagerSettings.get("homeyID") === null) {
+    Homey.ManagerCloud.getHomeyId().then(id => {
+      homeyId = id;
+      Homey.ManagerSettings.set("homeyID", id);
+    });
+  } else {
+    homeyId = Homey.ManagerSettings.get("homeyID");
+  }
+}
+
+function registerAsDeviceDatabaseAll() {
+  for (let neeoBrain of neeoBrains) {
+    registerAsDeviceDatabase(neeoBrain);
+  }
+}
+module.exports.registerAsDeviceDatabaseAll = registerAsDeviceDatabaseAll;
+
+function unregisterAsDeviceDatabaseAll() {
+  for (let neeoBrain of neeoBrains) {
+    unregisterAsDeviceDatabaseApi(neeoBrain);
+  }
+}
+module.exports.unregisterAsDeviceDatabaseAll = unregisterAsDeviceDatabaseAll;
+
 function registerAsDeviceDatabase(neeoBrain) {
-  //console.log ('[DRIVER]\t'+neeoBrain.host+', Registering Homey as NEEO device server...');
+  if (Homey.ManagerSettings.get("sdkVersion") == "v1") {
+    //Register as the new SDK adapter.
+    const content = {
+      name: `src-${homeyId}`,
+      baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
+    };
+    registerAsDeviceDatabaseApi(neeoBrain, content);
+  } else {
+    //Register as the old SDK adapter.
+    const content = {
+      name: `Homey_Devicedatabase_${tools.getLocalIp()}`,
+      baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
+    };
+    registerAsDeviceDatabaseApi(neeoBrain, content);
+  }
+}
+
+function registerAsDeviceDatabaseApi(neeoBrain, content) {
+  httpmin.post(`http://${neeoBrain.host}:3000/v1/api/registerSdkDeviceAdapter`, content).then(response => {
+    if (response.data === '{"success":true}') {
+      console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter registration succesfull as ${content.name}.`);
+    } else {
+      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter registration unsuccesfull! ${response.data}`);
+    }
+  });
+}
+
+function unregisterAsDeviceDatabaseApi(neeoBrain) {
   const content = {
     name: `Homey_Devicedatabase_${tools.getLocalIp()}`,
     baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
   };
-
-  httpmin.post(`http://${neeoBrain.host}:3000/v1/api/registerSdkDeviceAdapter`, content).then(response => {
+  httpmin.post(`http://${neeoBrain.host}:3000/v1/api/unregisterSdkDeviceAdapter`, content).then(response => {
     if (response.data === '{"success":true}') {
-      console.log(`[DRIVER]\t${neeoBrain.host}, device registration succesfull.`);
+      console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter ${content.name} sucssesvol unregistered..`);
     } else {
-      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, device registration unsuccesfull!`);
+      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter unregistration NOT succesfull! ${response.data}`);
     }
   });
 }
@@ -130,9 +179,9 @@ function registerForwarderEvents(neeoBrain) {
 
   httpmin.post(`http://${neeoBrain.host}:3000/v1/forwardactions`, content).then(response => {
     if (response.data === '{"success":true}') {
-      console.log(`[EVENTS]\t${neeoBrain.host}, events registration succesfull.`);
+      console.log(`[EVENTS]\t${neeoBrain.host}, "Forward brain events" registration succesfull.`);
     } else {
-      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, events registration unsuccesfull!`);
+      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, "Forward brain events" registration unsuccesfull! ${response.data}`);
     }
   });
 }
@@ -141,7 +190,6 @@ function downloadConfiguration(neeoBrainQ) {
   if (tools.isArray(neeoBrains) && neeoBrains.length !== 0) {
     for (let i in neeoBrains) {
       if (!neeoBrainQ || neeoBrains[i].host === neeoBrainQ.host) {
-        //console.log ('[DATABASE]\t'+neeoBrains[i].host+', Updating configuration...');
         httpmin
           .json(`http://${neeoBrains[i].host}:3000/v1/projects/home/lastchange`)
           .then(lastchange => {
@@ -198,23 +246,20 @@ module.exports.notifyStateChange = function(adapterName, capabilityName, value) 
   const capability = neeoDatabase.capability(adapterName, capabilityName);
   if (capability && capability.eventservers) {
     for (let eventserver of capability.eventservers) {
-      //{"type":"DEVICE_SENSOR_UPDATE", "data":{"sensorEventKey":"6422412883295993856:POWER_SENSOR""sensorValue":true}}
-      //.post(`http://${eventserver.host}:3000/v1/notifications`, {type: eventserver.eventKey,data: value})
-      httpmin
-        .post(`http://${eventserver.host}:3000/v1/notifications`, {
-          type: "DEVICE_SENSOR_UPDATE",
-          data: {
-            sensorEventKey: eventserver.eventKey,
-            sensorValue: value
-          }
-        })
-        .then(result => {
-          if (result.data === '{"success":true}') {
-            console.log(`[NOTIFICATIONS]\tSuccesfully sent notification with value ${value} to eventkey ${eventserver.eventKey} @${eventserver.host}.`);
-          } else {
-            console.log(`[ERROR]\t\tError sending notification with value ${value} to eventkey ${eventserver.eventKey} @${eventserver.host}. Got response: ${result.data}.`);
-          }
-        });
+      const notificationData = {
+        type: "DEVICE_SENSOR_UPDATE",
+        data: {
+          sensorEventKey: eventserver.eventKey,
+          sensorValue: value
+        }
+      };
+      httpmin.post(`http://${eventserver.host}:3000/v1/notifications`, notificationData).then(result => {
+        if (result.data === '{"success":true}') {
+          console.log(`[NOTIFICATIONS]\tSuccesfully sent notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}.`);
+        } else {
+          console.log(`[ERROR]\t\tError sending notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}. Got response: ${result.data}.`);
+        }
+      });
     }
   } else {
     console.log(`[ERROR]\t\tneeoBrain_sensor_notify(${adapterName}, ${capabilityName}, ${value})`);

@@ -2,6 +2,7 @@
 
 //Mandatory Homey App.
 const Homey = require("homey");
+const neeoBrain = require("./neeo-brain");
 
 //NEEO Server
 require("./neeo-server");
@@ -36,12 +37,18 @@ class neeoAppV2 extends Homey.App {
     console.log("init neeoAppV2");
   }
   apiDiscover() {
-    const neeoBrain = require("./neeo-brain");
     neeoBrain.discover();
   }
   apiDelete() {
-    const neeoBrain = require("./neeo-brain");
     neeoBrain.brainDelete();
+  }
+  apiRegister() {
+    neeoBrain.registerAsDeviceDatabaseAll();
+  }
+  upgradeToSDKv1() {
+    Homey.ManagerSettings.set("sdkVersion", "v1");
+    neeoBrain.unregisterAsDeviceDatabaseAll();
+    neeoBrain.registerAsDeviceDatabaseAll();
   }
 }
 module.exports = neeoAppV2;

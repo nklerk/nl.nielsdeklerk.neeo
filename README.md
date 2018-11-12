@@ -65,9 +65,21 @@ When... flow cards:
 
 # Requirements
 
-- NEEO Firmware 0.51.x or newer installed.
+- NEEO Firmware 0.52.x or newer installed.
 
 # Changelog.
+
+## Version 0.52.0
+
+- Added migration text and button in settings to support the newer features. Open the settings and read carefully.
+- Added component rename feature.
+- Added versioning to virtual drivers.
+- Added version number of the driver is now shown when viewing a virtual device.
+- Added support for NEEO device driver updates when ading or renaming capabilities. (Removing capabilities is currently not (yet?) supported by NEEO)
+- Changed adapter naming (virtual devices) to be more in line with the NEEO SDK.
+- Changed Driver naming, Needed for future NEEO SDK support.
+- Code cleaning.
+- Bug fixes.
 
 ## Version 0.51.9
 

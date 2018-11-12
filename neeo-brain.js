@@ -77,7 +77,6 @@ function addNeeoBrainToDatabase(foundbrain) {
 
 function connect() {
   getHomeyId();
-  Homey.ManagerSettings.set("sdkVersion", null); //Temporary fix.
 
   //First Connection upon app start.
   if (neeoConnectionTries === 0) {

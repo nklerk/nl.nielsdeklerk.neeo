@@ -69,7 +69,7 @@ When... flow cards:
 
 # Changelog.
 
-## Version 0.52.0
+## Version 0.52.1
 
 - Added migration text and button in settings to support the newer features. Open the settings and read carefully.
 - Added component rename feature.

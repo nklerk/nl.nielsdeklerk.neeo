@@ -69,8 +69,9 @@ When... flow cards:
 
 # Changelog.
 
-## Version 0.52.1
+## Version 0.52.2
 
+- Fixed an issue where where virtual devices where allowed to have no name or manufacturer name. (Device could not be found in NEEO app.)
 - Added migration text and button in settings to support the newer features. Open the settings and read carefully.
 - Added component rename feature.
 - Added versioning to virtual drivers.

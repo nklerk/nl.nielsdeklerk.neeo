@@ -1,11 +1,36 @@
 function AddDevice_save() {
-  let mydevice = newDevice(document.getElementById("AddDevice_Manufactorer").value, document.getElementById("AddDevice_Name").value, document.getElementById("AddDevice_Type").value, document.getElementById("AddDevice_Icon").value);
-  Settings_database.push(mydevice);
-  device_capgrp_from_devicetype(mydevice.adapterName, mydevice.type);
-  setMyDevices(Settings_database);
-  AddDevice_clear();
-  device_view_selection(mydevice.adapterName);
+  let deviceName = document.getElementById("AddDevice_Name").value;
+  let deviceManufacturer = document.getElementById("AddDevice_Manufactorer").value;
+  let deviceType = document.getElementById("AddDevice_Type").value;
+  let deviceIcon = document.getElementById("AddDevice_Icon").value;
+
+  if (deviceName.trim() == "") {
+    ErrorTextfield(document.getElementById("AddDevice_Name"));
+  } else if (deviceManufacturer.trim() == "") {
+    ErrorTextfield(document.getElementById("AddDevice_Manufactorer"));
+  } else {
+    let mydevice = newDevice(deviceName, deviceManufacturer, deviceType, deviceIcon);
+    Settings_database.push(mydevice);
+    device_capgrp_from_devicetype(mydevice.adapterName, mydevice.type);
+    setMyDevices(Settings_database);
+    AddDevice_clear();
+    device_view_selection(mydevice.adapterName);
+  }
 } // GUI Add device save button.
+
+// Show error animation.
+function ErrorTextfield(element) {
+  element.addEventListener(
+    "webkitAnimationEnd",
+    function() {
+      this.style.webkitAnimationName = "";
+    },
+    false
+  );
+
+  element.style.WebkitAnimation = "textErrorAnimation 1s";
+  element.style.animation = "textErrorAnimation 1s";
+}
 
 function AddDevice_clear() {
   document.getElementById("AddDevice_Manufactorer").value = "";

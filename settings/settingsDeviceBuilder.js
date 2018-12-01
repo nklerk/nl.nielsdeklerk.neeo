@@ -184,18 +184,20 @@ function newDevice(manufacturer, name, type, icon) {
 }
 
 function newCapability_button(device, name) {
+  const uuid = uuidv4();
   let _newCapability_button = {};
   _newCapability_button.type = "button";
-  _newCapability_button.name = name.toUpperCase();
+  _newCapability_button.name = uuid;
   _newCapability_button.label = name; //my button
   _newCapability_button.path = "/device/" + device.adapterName + "/" + _newCapability_button.name;
   return [_newCapability_button];
 }
 
 function newCapability_slider(device, name, range, unit) {
+  const uuid = uuidv4();
   let _newCapability_sensor = {};
   _newCapability_sensor.type = "sensor";
-  _newCapability_sensor.name = name.toUpperCase() + "_SENSOR";
+  _newCapability_sensor.name = uuid + "_SENSOR";
   _newCapability_sensor.label = name;
   _newCapability_sensor.path = "/device/" + device.adapterName + "/" + _newCapability_sensor.name;
   _newCapability_sensor.sensor = { type: "range" };
@@ -204,7 +206,7 @@ function newCapability_slider(device, name, range, unit) {
   _newCapability_sensor.sensor.value = 0;
   let _newCapability_slider = {};
   _newCapability_slider.type = "slider";
-  _newCapability_slider.name = name.toUpperCase();
+  _newCapability_slider.name = uuid;
   _newCapability_slider.label = name;
   _newCapability_slider.path = "/device/" + device.adapterName + "/" + _newCapability_slider.name;
   _newCapability_slider.slider = { type: "range" };
@@ -215,16 +217,17 @@ function newCapability_slider(device, name, range, unit) {
 }
 
 function newCapability_switch(device, name) {
+  const uuid = uuidv4();
   let _newCapability_sensor = {};
   _newCapability_sensor.type = "sensor";
-  _newCapability_sensor.name = name.toUpperCase() + "_SENSOR";
+  _newCapability_sensor.name = uuid + "_SENSOR";
   _newCapability_sensor.label = name;
   _newCapability_sensor.path = "/device/" + device.adapterName + "/" + _newCapability_sensor.name;
   _newCapability_sensor.sensor = { type: "binary" };
   _newCapability_sensor.sensor.value = false;
   let _newCapability_switch = {};
   _newCapability_switch.type = "switch";
-  _newCapability_switch.name = name.toUpperCase();
+  _newCapability_switch.name = uuid;
   _newCapability_switch.label = name;
   _newCapability_switch.path = "/device/" + device.adapterName + "/" + _newCapability_switch.name;
   _newCapability_switch.sensor = _newCapability_sensor.name;
@@ -232,16 +235,17 @@ function newCapability_switch(device, name) {
 }
 
 function newCapability_textlabel(device, name, isLabelVisible) {
+  const uuid = uuidv4();
   let _newCapability_sensor = {};
   _newCapability_sensor.type = "sensor";
-  _newCapability_sensor.name = name.toUpperCase() + "_SENSOR";
+  _newCapability_sensor.name = uuid + "_SENSOR";
   _newCapability_sensor.label = name;
   _newCapability_sensor.path = "/device/" + device.adapterName + "/" + _newCapability_sensor.name;
   _newCapability_sensor.sensor = { type: "custom" };
   _newCapability_sensor.sensor.value = "My Text Here";
   let _newCapability_textlabel = {};
   _newCapability_textlabel.type = "textlabel";
-  _newCapability_textlabel.name = name.toUpperCase();
+  _newCapability_textlabel.name = uuid;
   _newCapability_textlabel.label = name;
   _newCapability_textlabel.isLabelVisible = isLabelVisible;
   _newCapability_textlabel.path = "/device/" + device.adapterName + "/" + _newCapability_textlabel.name;
@@ -250,20 +254,29 @@ function newCapability_textlabel(device, name, isLabelVisible) {
 }
 
 function newCapability_image(device, name, size) {
+  const uuid = uuidv4();
   let _newCapability_sensor = {};
   _newCapability_sensor.type = "sensor";
-  _newCapability_sensor.name = name.toUpperCase() + "_SENSOR";
+  _newCapability_sensor.name = uuid + "_SENSOR";
   _newCapability_sensor.label = name;
   _newCapability_sensor.path = "/device/" + device.adapterName + "/" + _newCapability_sensor.name;
   _newCapability_sensor.sensor = { type: "custom" };
   _newCapability_sensor.sensor.value = "My Text Here";
   let _newCapability_image = {};
   _newCapability_image.type = "imageurl";
-  _newCapability_image.name = name.toUpperCase();
+  _newCapability_image.name = uuid;
   _newCapability_image.label = name;
   _newCapability_image.imageUri = null;
   _newCapability_image.size = size;
   _newCapability_image.path = "/device/" + device.adapterName + "/" + _newCapability_image.name;
   _newCapability_image.sensor = _newCapability_sensor.name;
   return [_newCapability_sensor, _newCapability_image];
+}
+
+function uuidv4() {
+  return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }

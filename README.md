@@ -69,18 +69,18 @@ When... flow cards:
 
 # Changelog.
 
-## Version 0.52.2
+## Version 0.52.3
 
-- Fixed an issue where where virtual devices where allowed to have no name or manufacturer name. (Device could not be found in NEEO app.)
 - Added migration text and button in settings to support the newer features. Open the settings and read carefully.
 - Added component rename feature.
 - Added versioning to virtual drivers.
 - Added version number of the driver is now shown when viewing a virtual device.
 - Added support for NEEO device driver updates when ading or renaming capabilities. (Removing capabilities is currently not (yet?) supported by NEEO)
 - Changed adapter naming (virtual devices) to be more in line with the NEEO SDK.
+- Changed capability naming, Now using UUID's for capabilitynames opposed to readable names. (makes more sense with the rename feature)
 - Changed Driver naming, Needed for future NEEO SDK support.
 - Code cleaning.
-- Bug fixes.
+- Fixed an issue where virtual devices where allowed to have no name or manufacturer name. (Device then could not be found in the NEEO app.)
 
 ## Version 0.51.9
 

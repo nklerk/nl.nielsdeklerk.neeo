@@ -17,18 +17,8 @@
         font-family: Roboto, sans-serif;
     }
 
-    h1 {
-        color: #007AFF;
-        margin-bottom: 0;
-        font-size: 15px;
-        font-weight: 100;
-        text-transform: uppercase;
-        margin-left: 40px;
-        margin-bottom: 12px;
-    }
-
     .h1 {
-        color: #007AFF;
+        color: #6997ca;
         margin-bottom: 0;
         font-size: 15px;
         font-weight: 300;
@@ -36,6 +26,32 @@
         margin-left: 5px;
         margin-top: 40px;
         margin-bottom: 12px;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .h2 {
+        color: #6997ca;
+        margin-bottom: 0;
+        font-size: 11px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-top: 40px;
+        margin-bottom: 0px;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .h3 {
+        color: rgb(36, 45, 54);
+        margin-bottom: 0;
+        font-size: 8px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-top: -10px;
+        margin-bottom: 0px;
         border-bottom: 0;
         padding-bottom: 0;
     }
@@ -104,7 +120,7 @@
         display: inline-block;
         vertical-align: middle;
         line-height: normal;
-
+        width: 100%;
     }
 
     .mitxt {
@@ -137,7 +153,7 @@
     }
 
     .deletedevice:hover {
-        color: #44f;
+        color: #6997ca;
         cursor: pointer;
         cursor: hand;
     }
@@ -172,11 +188,14 @@
     .jsontextarea {
         width: 100%;
         padding: 10px;
-        border: 0;
+        border: 1px;
+        border-color: #444;
         height: 200px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+        font-size: 8px;
+        padding: 1px;
     }
 
     .capview {
@@ -225,7 +244,7 @@
         left: 0px;
         position: absolute;
         font-size: 24px;
-        color: #037AFF;
+        color: #6997ca;
         margin-left: 20px;
         margin-right: 20px;
     }
@@ -267,7 +286,7 @@
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <button class="mi" onclick="AddDevice_clear()" style="width:49%; padding-left: 40px;">
-                    <span class="mt" style="color:#037AFF;">
+                    <span class="mt" style="color:#6997ca;">
                         <i class="fa fa-remove faLeft"></i>Cancel</span>
                 </button>
                 <button id="save_device_button" class="mi" onclick="AddDevice_save()" style="width:49%; text-align: right; padding-right: 40px;">Add
@@ -319,17 +338,17 @@
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <button class="mi" onclick="gui_view_selection('settings')" style="height: 48px !important; ">
-                    <span class="mt" style="color:#037AFF;">Configuration.</span>
+                    <span class="mt" style="color:#6997ca;">Configuration.</span>
                 </button>
                 <hr class="subMenu" style="margin-bottom: 0;">
                 <button class="mi" onclick="gui_view_selection('adddevice')" style="height: 48px !important; ">
+                        <i class="fa fa-plus faLeft" style="font-size: 24px;     margin-left: 10px;     color: #6997ca; "></i>
                     <span class="mt">Add a virtual device</span>
-                    <i class="fa fa-plus faRight" style="font-size: 24px;"></i>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
             <div id="Logo">
-                <img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 27%;">
+                <img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 70%;">
             </div>
             <div id="Devices"></div>
         </div>
@@ -343,7 +362,7 @@
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <button class="mi" onclick="gui_view_selection('devices')" style="width:49%; padding-left: 40px; height: 48px !important;">
-                    <span class="mt" style="color:#037AFF;">
+                    <span class="mt" style="color:#6997ca;">
                         </i>Back to device view.</span>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
@@ -360,7 +379,7 @@
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <button class="mi" onclick="gui_view_selection('devices')" style="height: 48px !important;">
-                    <span class="mt" style="color:#037AFF;">Back to device view.</span>
+                    <span class="mt" style="color:#6997ca;">Back to device view.</span>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>

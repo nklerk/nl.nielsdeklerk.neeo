@@ -12,8 +12,9 @@ function device_view_selection(adapterName) {
       //dd = dd + `<i class="fa fa-trash-o faRight" style="font-size: 24px; color: red;" onclick="device_remove('${adapterName}')"></i>`;
       dd = dd + `<img class="ciconr" src="ico/ico_binr.png" style="margin-top: 0px;" onclick="device_remove('${adapterName}')">`;
       dd = dd + `<img class="cicon" src="${getDeviceIconPath(device)}" style="margin-top: 0px;">`;
-      dd = dd + `<h1 class="h1" style="font-size: 11px; margin-bottom:0;">${device.name}</h1>`;
-      dd = dd + `<h1 class="h1" style="font-size: 8px; margin-top: -10px; margin-bottom: 0px;">TYPE:${device.type}  VERSION:${device.driverVersion}</h1>`;
+      dd = dd + `<h1 class="h2">${device.name}</h1>`;
+      dd = dd + `<h1 class="h3">TYPE: ${device.type}</h1>`;
+      dd = dd + `<h1 class="h3">VERSION: ${device.driverVersion}</h1>`;
 
       //
       let c = 0; //capability counter
@@ -57,7 +58,7 @@ function device_view_selection(adapterName) {
       dd = dd + `    <input  id="capslider_min_${adapterName}" type="number" value="0" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 32px; margin-bottom: 20px;"/></div>`;
       dd = dd + `  <div class="field row" id="capslidermax_${adapterName}" style="display: none;">`;
       dd = dd + `    <label for="capslider_max_${adapterName}">Slider maximum value:</label>`;
-      dd = dd + `    <input  id="capslider_max_${adapterName}" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 32px; margin-bottom: 20px;"/></div>`;
+      dd = dd + `    <input  id="capslider_max_${adapterName}" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 32px; "/></div>`;
       dd = dd + `  <div class="field row" id="capsliderunit_${adapterName}" style="display: none;">`;
       dd = dd + `    <label for="capslider_unit_${adapterName}">Slider unit:</label>`;
       dd = dd + `    <input  id="capslider_unit_${adapterName}" type="text" value="%" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 22px; margin-bottom: 20px;"/></div>`;
@@ -97,7 +98,7 @@ function getDeviceIconPath(device) {
 ///////////////////////////////////////
 function devices_refresh_display() {
   let dd = ""; //Display Devices Generated HTML
-  dd = dd + `<h1 class="h1">Virtual devices<i style="font-size: 11px;"></h1>`;
+  dd = dd + `<h1 class="h1">Virtual devices</h1>`;
   dd = dd + `<hr class="Menu" style="margin-bottom: 0;">`;
   dd = dd + `<div class="field row" style="background-color: #fff; margin: 0; width: 100%;left: 0px; margin-bottom: 2em;">`;
   for (let i in Settings_database) {
@@ -130,11 +131,11 @@ function settings_refresh_display() {
 
     dd = dd + `<button class="mi" style="height: 48px !important;">`; //
     //dd = dd + `  <i class="fa fa-trash-o faRight" style="font-size: 24px;    margin-top: 12px;" onclick="settings_brain_delete('${Settings_brains[i].host}')"></i>`;
-    dd = dd + `  <img class="ciconr" src="ico/ico_bin.png" style="margin-top: 0px;" onclick="settings_brain_delete('${Settings_brains[i].host}')">`;
+    dd = dd + `  <img class="ciconr" src="ico/ico_bin.png" onclick="settings_brain_delete('${Settings_brains[i].host}')">`;
     if (Settings_brains[i].available) {
       dd = dd + `  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>`;
       dd = dd + `  <span class="mt" style="margin-top: 10px;">${Settings_brains[i].fullname}</span>`;
-      dd = dd + `  <span class="mt" style="margin-top: 10px;"><a href="favorites.html?BrainIP=${Settings_brains[i].ip}" style="right: 0px; position: absolute; color: #CCCBD0; margin-right: 100px;">Edit favorites</a></span><br>`;
+      //dd = dd + `  <span class="mt" style="margin-top: 10px;"><a href="favorites.html?BrainIP=${Settings_brains[i].ip}" style="right: 0px; position: absolute; color: #CCCBD0; margin-right: 100px;">Edit favorites</a></span><br>`;
     } else {
       dd = dd + `  <img class="cicon" src="ico/ico_brain_offline.png" style="margin-top: 12px; "/>`;
       dd = dd + `  <span class="mt" style="margin-top: 10px; color: #D52000;">${Settings_brains[i].fullname} -Offline-</span><br>`;

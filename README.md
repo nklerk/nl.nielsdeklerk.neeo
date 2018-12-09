@@ -79,6 +79,8 @@ When... flow cards:
 - Changed adapter naming (virtual devices) to be more in line with the NEEO SDK.
 - Changed capability naming, Now using UUID's for capabilitynames opposed to readable names. (makes more sense with the rename feature)
 - Changed Driver naming, Needed for future NEEO SDK support.
+- Changed Appstore logo(s).
+- Changed in app settings picture.
 - Code cleaning.
 - Fixed unhandled promise rejections.
 - Fixed an issue where virtual devices where allowed to have no name or manufacturer name. (Device then could not be found in the NEEO app.)

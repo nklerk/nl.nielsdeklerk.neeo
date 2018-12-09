@@ -146,13 +146,18 @@ function registerAsDeviceDatabase(neeoBrain) {
 }
 
 function registerAsDeviceDatabaseApi(neeoBrain, content) {
-  httpmin.post(`http://${neeoBrain.host}:3000/v1/api/registerSdkDeviceAdapter`, content).then(response => {
-    if (response.data === '{"success":true}') {
-      console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter registration succesfull as ${content.name}.`);
-    } else {
-      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter registration unsuccesfull! ${response.data}`);
-    }
-  });
+  httpmin
+    .post(`http://${neeoBrain.host}:3000/v1/api/registerSdkDeviceAdapter`, content)
+    .then(response => {
+      if (response.data === '{"success":true}') {
+        console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter registration succesfull as ${content.name}.`);
+      } else {
+        console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter registration unsuccesfull! ${response.data}`);
+      }
+    })
+    .catch(e => {
+      console.log(`[ERROR] \t${neeoBrain.host}, SdkDeviceAdapter registration unsuccesfull!`);
+    });
 }
 
 function unregisterAsDeviceDatabaseApi(neeoBrain) {
@@ -160,13 +165,18 @@ function unregisterAsDeviceDatabaseApi(neeoBrain) {
     name: `Homey_Devicedatabase_${tools.getLocalIp()}`,
     baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
   };
-  httpmin.post(`http://${neeoBrain.host}:3000/v1/api/unregisterSdkDeviceAdapter`, content).then(response => {
-    if (response.data === '{"success":true}') {
-      console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter ${content.name} sucssesvol unregistered..`);
-    } else {
-      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter unregistration NOT succesfull! ${response.data}`);
-    }
-  });
+  httpmin
+    .post(`http://${neeoBrain.host}:3000/v1/api/unregisterSdkDeviceAdapter`, content)
+    .then(response => {
+      if (response.data === '{"success":true}') {
+        console.log(`[DRIVER]\t${neeoBrain.host}, SdkDeviceAdapter ${content.name} sucssesvol unregistered..`);
+      } else {
+        console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter unregistration NOT succesfull! ${response.data}`);
+      }
+    })
+    .catch(e => {
+      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, SdkDeviceAdapter unregistration NOT succesfull!`);
+    });
 }
 
 function registerForwarderEvents(neeoBrain) {
@@ -176,13 +186,18 @@ function registerForwarderEvents(neeoBrain) {
     path: "/Homey-By-Niels_de_Klerk"
   };
 
-  httpmin.post(`http://${neeoBrain.host}:3000/v1/forwardactions`, content).then(response => {
-    if (response.data === '{"success":true}') {
-      console.log(`[EVENTS]\t${neeoBrain.host}, "Forward brain events" registration succesfull.`);
-    } else {
-      console.log(`[EVENTS]\tERROR: ${neeoBrain.host}, "Forward brain events" registration unsuccesfull! ${response.data}`);
-    }
-  });
+  httpmin
+    .post(`http://${neeoBrain.host}:3000/v1/forwardactions`, content)
+    .then(response => {
+      if (response.data === '{"success":true}') {
+        console.log(`[EVENTS]\t${neeoBrain.host}, "Forward brain events" registration succesfull.`);
+      } else {
+        console.log(`[ERROR] \t${neeoBrain.host}, "Forward brain events" registration unsuccesfull! ${response.data}`);
+      }
+    })
+    .catch(e => {
+      console.log(`[ERROR] \t${neeoBrain.host}, "Forward brain events" registration unsuccesfull!`);
+    });
 }
 
 function downloadConfiguration(neeoBrainQ) {
@@ -234,7 +249,7 @@ function downloadSystemInfo(neeoBrainQ) {
             Homey.ManagerSettings.set("neeoBrains", neeoBrains);
           })
           .catch(error => {
-            console.log(`[SYSTEM INFO]\tERROR: getting System Information from: ${neeoBrains[i].host}.`);
+            console.log(`[ERROR] \t${neeoBrains[i].host}, Getting "systeminfo" unsuccesfull!`);
           });
       }
     }
@@ -252,13 +267,18 @@ module.exports.notifyStateChange = function(adapterName, capabilityName, value) 
           sensorValue: value
         }
       };
-      httpmin.post(`http://${eventserver.host}:3000/v1/notifications`, notificationData).then(result => {
-        if (result.data === '{"success":true}') {
-          console.log(`[NOTIFICATIONS]\tSuccesfully sent notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}.`);
-        } else {
-          console.log(`[ERROR]\t\tError sending notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}. Got response: ${result.data}.`);
-        }
-      });
+      httpmin
+        .post(`http://${eventserver.host}:3000/v1/notifications`, notificationData)
+        .then(result => {
+          if (result.data === '{"success":true}') {
+            console.log(`[NOTIFICATIONS]\tSuccesfully sent notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}.`);
+          } else {
+            console.log(`[ERROR]\t\tError sending notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}. Got response: ${result.data}.`);
+          }
+        })
+        .catch(error => {
+          console.log(`[ERROR]\t\tError sending notification with value "${value}" to eventkey "${eventserver.eventKey}" @${eventserver.host}.`);
+        });
     }
   } else {
     console.log(`[ERROR]\t\tneeoBrain_sensor_notify(${adapterName}, ${capabilityName}, ${value})`);
@@ -267,40 +287,52 @@ module.exports.notifyStateChange = function(adapterName, capabilityName, value) 
 
 module.exports.shutdownAllRecipes = function() {
   for (const neeoBrain of neeoBrains) {
-    httpmin.json(`http://${neeoBrain.host}:3000/v1/api/Recipes`).then(recipies => {
-      if (typeof recipies !== "undefined") {
-        for (const recipie of recipies) {
-          if (recipie.isPoweredOn === true) {
-            console.log(`[RECIPE]\tPowering off ${recipie.detail.devicename}`);
-            httpmin
-              .get(recipie.url.setPowerOff)
-              .then({})
-              .catch({});
+    httpmin
+      .json(`http://${neeoBrain.host}:3000/v1/api/Recipes`)
+      .then(recipies => {
+        if (typeof recipies !== "undefined") {
+          for (const recipie of recipies) {
+            if (recipie.isPoweredOn === true) {
+              console.log(`[RECIPE]\tPowering off ${recipie.detail.devicename}`);
+              httpmin
+                .get(recipie.url.setPowerOff)
+                .then({})
+                .catch({});
+            }
           }
         }
-      }
-    });
+      })
+      .catch(error => {});
   }
 };
 
 module.exports.isRecipeActive = function(brainHostname, roomKey, recipeKey) {
-  return httpmin.json(`http://${brainHostname}:3000/v1/projects/home/rooms/${roomKey}/recipes/${recipeKey}/isactive`).then(result => {
-    return result.active;
-  });
+  return httpmin
+    .json(`http://${brainHostname}:3000/v1/projects/home/rooms/${roomKey}/recipes/${recipeKey}/isactive`)
+    .then(result => {
+      return result.active;
+    })
+    .catch(error => {});
 };
 
 function isUpdateAvaileble(brainHostname) {
-  return httpmin.json(`http://${brainHostname}:3000/v1/firmware`).then(result => {
-    return result.updateAvailable;
-  });
+  return httpmin
+    .json(`http://${brainHostname}:3000/v1/firmware`)
+    .then(result => {
+      return result.updateAvailable;
+    })
+    .catch(error => {});
 }
 module.exports.isUpdateAvaileble = isUpdateAvaileble;
 
 module.exports.updateFirmware = function(brainHostname) {
   if (isUpdateAvaileble(brainHostname)) {
-    httpmin.post(`http://${brainHostname}:3000/v1/firmware/update`).then(result => {
-      return result.success;
-    });
+    httpmin
+      .post(`http://${brainHostname}:3000/v1/firmware/update`)
+      .then(result => {
+        return result.success;
+      })
+      .catch(error => {});
   } else {
     return false;
   }

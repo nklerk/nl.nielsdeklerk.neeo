@@ -77,24 +77,26 @@ function capability_remove(adapterName, Capname) {
   device_view_selection(adapterName);
 }
 
-function capability_rename(adapterName, Capname) {
-  let label = document.getElementsByName(Capname)[0].value;
-  document.getElementsByName(Capname)[0].style.WebkitAnimation = "textSavedAnimation 1s"; // Code for Safari 4.0 - 8.0
-  document.getElementsByName(Capname)[0].style.animation = "textSavedAnimation 1s";
-  for (let i in Settings_database) {
-    if (Settings_database[i].adapterName === adapterName) {
-      Settings_database[i] = updateDriverVersion(Settings_database[i]);
-      for (let z in Settings_database[i].capabilities) {
-        if (Settings_database[i].capabilities[z].name === Capname || Settings_database[i].capabilities[z].name === Capname + "_SENSOR") {
-          Settings_database[i].capabilities[z].label = label;
+function capability_rename(event, adapterName, Capname) {
+  if (event.keyCode === 13) {
+    let label = document.getElementsByName(Capname)[0].value;
+    document.getElementsByName(Capname)[0].style.WebkitAnimation = "textSavedAnimation 1s"; // Code for Safari 4.0 - 8.0
+    document.getElementsByName(Capname)[0].style.animation = "textSavedAnimation 1s";
+    for (let i in Settings_database) {
+      if (Settings_database[i].adapterName === adapterName) {
+        Settings_database[i] = updateDriverVersion(Settings_database[i]);
+        for (let z in Settings_database[i].capabilities) {
+          if (Settings_database[i].capabilities[z].name === Capname || Settings_database[i].capabilities[z].name === Capname + "_SENSOR") {
+            Settings_database[i].capabilities[z].label = label;
+          }
         }
       }
     }
+    setMyDevices(Settings_database);
+    setTimeout(function() {
+      device_view_selection(adapterName);
+    }, 1000);
   }
-  setMyDevices(Settings_database);
-  setTimeout(function() {
-    device_view_selection(adapterName);
-  }, 1000);
 }
 
 function device_remove(adapterName) {

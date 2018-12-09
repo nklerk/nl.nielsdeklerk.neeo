@@ -9,7 +9,8 @@ function device_view_selection(adapterName) {
     if (Settings_database[i].adapterName === adapterName) {
       const device = Settings_database[i];
       let dd = ""; //Display Devices generic information.
-      dd = dd + `<i class="fa fa-trash-o faRight" style="font-size: 24px; color: red;" onclick="device_remove('${adapterName}')"></i>`;
+      //dd = dd + `<i class="fa fa-trash-o faRight" style="font-size: 24px; color: red;" onclick="device_remove('${adapterName}')"></i>`;
+      dd = dd + `<img class="ciconr" src="ico/ico_binr.png" style="margin-top: 0px;" onclick="device_remove('${adapterName}')">`;
       dd = dd + `<img class="cicon" src="${getDeviceIconPath(device)}" style="margin-top: 0px;">`;
       dd = dd + `<h1 class="h1" style="font-size: 11px; margin-bottom:0;">${device.name}</h1>`;
       dd = dd + `<h1 class="h1" style="font-size: 8px; margin-top: -10px; margin-bottom: 0px;">TYPE:${device.type}  VERSION:${device.driverVersion}</h1>`;
@@ -31,11 +32,12 @@ function device_view_selection(adapterName) {
           c++;
 
           //Line displaying one capability
-          dd = dd + `<button class="mi">`;
-          dd = dd + `  <i class="fa fa-trash-o faRight" style="font-size: 24px;" onclick="capability_remove('${adapterName}', '${capabilityName}')"></i>`;
-          dd = dd + `  <i class="faLeft" style="font-size: 11px; left: 180px; margin-top:6px; color: #CCCBD0;" onclick="capability_rename('${adapterName}', '${capabilityName}')">Rename</i>`;
+          dd = dd + `<button class="mi" style="height: 48px !important;">`;
+          //dd = dd + `  <i class="fa fa-trash-o faRight" style="font-size: 24px;" onclick="capability_remove('${adapterName}', '${capabilityName}')"></i>`;
+          //dd = dd + `  <i class="faLeft" style="font-size: 11px; left: 75%; margin-top:6px; color: #CCCBD0;" onclick="capability_rename('${adapterName}', '${capabilityName}')">Rename</i>`;
+          dd = dd + `  <img class="ciconr" src="ico/ico_bin.png" style="margin-top: 0px;" onclick="capability_remove('${adapterName}', '${capabilityName}')">`;
           dd = dd + `  <img class="cicon" src="ico/ico_${capabilityType}.png" style="margin-top: 0px;"/>`;
-          dd = dd + `  <input type="text" name="${capabilityName}" value="${capabilityLabel}" style="border-style: none;">`;
+          dd = dd + `  <input type="text" name="${capabilityName}" value="${capabilityLabel}" style="border-style: none; font-family: Roboto, sans-serif !important; font-size: 13px !important;" onkeypress="capability_rename(event, '${adapterName}', '${capabilityName}')">`;
           dd = dd + `</button>`;
         }
       }
@@ -45,25 +47,25 @@ function device_view_selection(adapterName) {
       dd = dd + `<div id="cap_view_${adapterName}" class="capview">`;
       dd = dd + `  <div class="field row">`;
       dd = dd + `    <label for="captype_${adapterName}">Capability type:</label>`;
-      dd = dd + `    <select id="captype_${adapterName}" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 260px;" onchange="device_cap_view_type_change('${adapterName}')">`;
+      dd = dd + `    <select id="captype_${adapterName}" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 35px; margin-bottom: 20px;" onchange="device_cap_view_type_change('${adapterName}')">`;
       dd = dd + `    <option value="button">Button</option><option value="switch">Switch</option><option value="slider">Slider</option><option value="textlabel">textlabel</option><option value="image">image</option><option value="large image">large image</option></select></div>`;
       dd = dd + `  <div class="field row">`;
       dd = dd + `    <label for="capname_${adapterName}">Capability name:</label>`;
-      dd = dd + `    <input  id="capname_${adapterName}" type="text" placeholder="Button name" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>`;
+      dd = dd + `    <input  id="capname_${adapterName}" type="text" placeholder="Button name" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 23px; margin-bottom: 20px;"/></div>`;
       dd = dd + `  <div class="field row" id="capslidermin_${adapterName}" style="display: none;">`;
       dd = dd + `    <label for="capslider_min_${adapterName}">Slider minimum value:</label>`;
-      dd = dd + `    <input  id="capslider_min_${adapterName}" type="number" value="0" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>`;
+      dd = dd + `    <input  id="capslider_min_${adapterName}" type="number" value="0" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 32px; margin-bottom: 20px;"/></div>`;
       dd = dd + `  <div class="field row" id="capslidermax_${adapterName}" style="display: none;">`;
       dd = dd + `    <label for="capslider_max_${adapterName}">Slider maximum value:</label>`;
-      dd = dd + `    <input  id="capslider_max_${adapterName}" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>`;
+      dd = dd + `    <input  id="capslider_max_${adapterName}" type="number" value="100" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 32px; margin-bottom: 20px;"/></div>`;
       dd = dd + `  <div class="field row" id="capsliderunit_${adapterName}" style="display: none;">`;
       dd = dd + `    <label for="capslider_unit_${adapterName}">Slider unit:</label>`;
-      dd = dd + `    <input  id="capslider_unit_${adapterName}" type="text" value="%" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>`;
+      dd = dd + `    <input  id="capslider_unit_${adapterName}" type="text" value="%" style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 90%; height: 22px; margin-bottom: 20px;"/></div>`;
       dd = dd + `  <div class="field row" id="captextlabelvisible_${adapterName}" style="display: none;">`;
-      dd = dd + `    <label for="captextlabel_visible_${adapterName}">Label name visible:</label>`;
-      dd = dd + `    <input  id="captextlabel_visible_${adapterName}" type="checkBox" checked=true style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 240px;"/></div>`;
-      dd = dd + `  <div class="saveCapability" onclick="device_cap_save('${adapterName}')" id="cap_savebtn_${adapterName}"><i class="fa fa-check"></i> Save</div>`;
-      dd = dd + `  <div class="cancelCapability" onclick="device_cap_view_hide('${adapterName}')" id="cap_savebtn_${adapterName}"><i class="fa fa-remove"></i> Cancel</div>`;
+      dd = dd + `    <label for="captextlabel_visible_${adapterName}">Label name visible:</label><br>`;
+      dd = dd + `    <input  id="captextlabel_visible_${adapterName}" type="checkBox" checked=true style="border: 0px solid #fff; border-bottom: 2px solid #ddd; background-color: #fff; border-radius: 4px; width: 22px; height: 22px;  margin-bottom: 20px;"/></div>`;
+      dd = dd + `  <div class="saveCapability" onclick="device_cap_save('${adapterName}')" id="cap_savebtn_${adapterName}">SAVE</div>`;
+      dd = dd + `  <div class="cancelCapability" onclick="device_cap_view_hide('${adapterName}')" id="cap_savebtn_${adapterName}">CANCEL</div>`;
       dd = dd + ` </div>`;
       dd = dd + `<div id="capgrp_view_${adapterName}" class="capview">`;
       dd = dd + `  <div class="addCapability" onclick="device_capgrp_save('${adapterName}', 'mediacontrolls')\">Add media controlls.</div>`;
@@ -99,8 +101,8 @@ function devices_refresh_display() {
   dd = dd + `<hr class="Menu" style="margin-bottom: 0;">`;
   dd = dd + `<div class="field row" style="background-color: #fff; margin: 0; width: 100%;left: 0px; margin-bottom: 2em;">`;
   for (let i in Settings_database) {
-    dd = dd + `<button class="mi" onclick="device_view_selection('${Settings_database[i].adapterName}')">`;
-    dd = dd + `  <i class="fa fa-angle-right faRight" style="font-size: 24px;margin-top: 12px;"></i>`;
+    dd = dd + `<button class="mi" onclick="device_view_selection('${Settings_database[i].adapterName}')" style="height: 48px !important;">`;
+    //dd = dd + `  <i class="fa fa-angle-right faRight" style="font-size: 24px;margin-top: 12px;"></i>`;
     dd = dd + `  <img class="cicon" src="${getDeviceIconPath(Settings_database[i])}" />`;
     dd = dd + `  <span class="mt" style="margin-top: 10px;">${Settings_database[i].name}</span><br>`;
     dd = dd + `  <span class="mt" style="font-size: 10px;color: #673ab7; margin-top: -15px;">${Settings_database[i].manufacturer}</span>`;
@@ -126,8 +128,9 @@ function settings_refresh_display() {
       dd = dd + `<hr class="subMenu" style="margin-bottom: 0;">`;
     }
 
-    dd = dd + `<button class="mi">`;
-    dd = dd + `  <i class="fa fa-trash-o faRight" style="font-size: 24px;    margin-top: 12px;" onclick="settings_brain_delete('${Settings_brains[i].host}')"></i>`;
+    dd = dd + `<button class="mi" style="height: 48px !important;">`; //
+    //dd = dd + `  <i class="fa fa-trash-o faRight" style="font-size: 24px;    margin-top: 12px;" onclick="settings_brain_delete('${Settings_brains[i].host}')"></i>`;
+    dd = dd + `  <img class="ciconr" src="ico/ico_bin.png" style="margin-top: 0px;" onclick="settings_brain_delete('${Settings_brains[i].host}')">`;
     if (Settings_brains[i].available) {
       dd = dd + `  <img class="cicon" src="ico/ico_brain.png" style="margin-top: 12px; "/>`;
       dd = dd + `  <span class="mt" style="margin-top: 10px;">${Settings_brains[i].fullname}</span>`;

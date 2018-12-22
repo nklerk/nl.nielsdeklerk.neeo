@@ -312,7 +312,9 @@ module.exports.isRecipeActive = function(brainHostname, roomKey, recipeKey) {
     .then(result => {
       return result.active;
     })
-    .catch(error => {});
+    .catch(error => {
+      return false;
+    });
 };
 
 function isUpdateAvaileble(brainHostname) {

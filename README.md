@@ -69,8 +69,9 @@ When... flow cards:
 
 # Changelog.
 
-## Version 0.52.4
+## Version 0.52.5
 
+- Excluded homey virtual devices from cards that control NEEO to prevent infinate loops.
 - Updates for homey v2.0
 - Added migration text and button in settings to support the newer features. Open the settings and read carefully.
 - Added component rename feature. just tap the name of a component, change the text and tap the return button

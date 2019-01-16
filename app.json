@@ -3,6 +3,7 @@
   "version": "0.52.5",
   "compatibility": ">=1.5.0",
   "sdk": 2,
+  "brandColor": "#000000",
   "name": {
     "en": "NEEO",
     "nl": "NEEO"

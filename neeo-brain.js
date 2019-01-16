@@ -114,15 +114,23 @@ function getHomeyId() {
 }
 
 function registerAsDeviceDatabaseAll() {
-  for (let neeoBrain of neeoBrains) {
-    registerAsDeviceDatabase(neeoBrain);
+  try {
+    for (let neeoBrain of neeoBrains) {
+      registerAsDeviceDatabase(neeoBrain);
+    }
+  } catch (e) {
+    console.log(`[ERROR] \t${neeoBrain.host}`);
   }
 }
 module.exports.registerAsDeviceDatabaseAll = registerAsDeviceDatabaseAll;
 
 function unregisterAsDeviceDatabaseAll() {
-  for (let neeoBrain of neeoBrains) {
-    unregisterAsDeviceDatabaseApi(neeoBrain);
+  try {
+    for (let neeoBrain of neeoBrains) {
+      unregisterAsDeviceDatabaseApi(neeoBrain);
+    }
+  } catch (e) {
+    console.log(`[ERROR] \t${neeoBrain.host}`);
   }
 }
 module.exports.unregisterAsDeviceDatabaseAll = unregisterAsDeviceDatabaseAll;

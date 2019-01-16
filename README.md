@@ -69,6 +69,11 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.52.6
+
+- Represent NEEO logo collor.
+- Solved issue that could happen on first run.
+
 ## Version 0.52.5
 
 - Excluded homey virtual devices from cards that control NEEO to prevent infinate loops.

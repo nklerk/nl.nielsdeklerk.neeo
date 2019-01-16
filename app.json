@@ -1,20 +1,20 @@
 {
   "id": "nl.nielsdeklerk.neeo",
-  "version": "0.51.9",
-  "compatibility": "1.x >=1.5.0",
+  "version": "0.52.5",
+  "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
     "en": "NEEO",
     "nl": "NEEO"
   },
   "description": {
-    "en": "This app brings the best of NEEO and Homey together.",
-    "nl": "Deze App brengt het beste van NEEO en Homey samen."
+    "en": "This app brings the best of the NEEO remote and Homey together.",
+    "nl": "Deze App brengt het beste van de NEEO afstandsbediening en Homey samen."
   },
   "category": ["appliances", "video", "music", "lights"],
   "tags": {
-    "en": ["NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Remote", "6336"],
-    "nl": ["NEEO", "NEEO Brain", "NEEO Remote", "NEEO App", "Afstandsbediening", "6336"]
+    "en": ["brain", "remote", "app", "6336", "smart", "hdmi-cec", "home", "automation"],
+    "nl": ["brein", "afstandsbediening", "app", "6336", "slim", "hdmi-cec", "huis", "automatisering"]
   },
   "images": {
     "large": "assets/images/large.png",
@@ -49,10 +49,12 @@
       {
         "id": "button_pressed",
         "title": {
-          "en": "A button is pressed."
+          "en": "A button is pressed.",
+          "nl": "Een knop is ingedrukt."
         },
         "hint": {
-          "en": "This card is triggered when a button is pressed."
+          "en": "This card is triggered when a button is pressed.",
+          "nl": "Deze kaart wordt geactiveerd wanneer op een knop wordt gedrukt."
         },
         "args": [
           {
@@ -74,10 +76,12 @@
       {
         "id": "switch_changed",
         "title": {
-          "en": "A switch changed state."
+          "en": "A switch changed state.",
+          "nl": "Een schakelaar is omgezet."
         },
         "hint": {
-          "en": "This card is triggered when a switch changed state."
+          "en": "This card is triggered when a switch changed state.",
+          "nl": "Deze kaart wordt geactiveerd wanneer een schakelaar van status verandert."
         },
         "tokens": [
           {
@@ -108,10 +112,12 @@
       {
         "id": "slider_changed",
         "title": {
-          "en": "A slider is changed."
+          "en": "A slider is changed.",
+          "nl": "Een schuifregelaar is verplaatst."
         },
         "hint": {
-          "en": "This card is triggered when a slider of a virtual device is changed."
+          "en": "This card is triggered when a slider of a virtual device is changed.",
+          "nl": "Deze kaart wordt geactiveerd wanneer een schuif van een virtueel apparaat wordt gewijzigd."
         },
         "tokens": [
           {
@@ -151,10 +157,12 @@
       {
         "id": "received_event",
         "title": {
-          "en": "Event triggered"
+          "en": "Event triggered",
+          "nl": "Gebeurtenis geactiveerd"
         },
         "hint": {
-          "en": "This card is triggered when a NEEO event is triggered. (recipe activated, button pressed, slider changed, etc...)"
+          "en": "This card is triggered when a NEEO event is received. (recipe activated, button pressed, slider changed, etc...)",
+          "nl": "Deze kaart wordt geactiveerd wanneer een NEEO-gebeurtenis wordt ontvangen. (recept geactiveerd, knop ingedrukt, schuifregelaar gewijzigd, enz ...)"
         },
         "tokens": [
           {
@@ -260,7 +268,7 @@
         "id": "activate_recipe",
         "title": {
           "en": "Start a recipe",
-          "nl": "start een recipe"
+          "nl": "Start een recept"
         },
         "hint": {
           "en": "This card will start (Activate) the selected recipe",
@@ -287,7 +295,7 @@
         "id": "poweroff_recipe",
         "title": {
           "en": "Stop a recipe",
-          "nl": "Recipe stoppen"
+          "nl": "Recept stoppen"
         },
         "hint": {
           "en": "This card will stop (shutdown) the selected recipe.",
@@ -314,7 +322,7 @@
         "id": "poweroff_all_recipes",
         "title": {
           "en": "Shutdown all recipes",
-          "nl": "alle recipes stoppen"
+          "nl": "Alle recepten stoppen"
         },
         "hint": {
           "en": "This card will shutdown all recipes.",
@@ -412,10 +420,12 @@
       {
         "id": "command_slider",
         "title": {
-          "en": "Change a Slider."
+          "en": "Change a Slider.",
+          "nl": "Wijzig een schuifregelaar."
         },
         "hint": {
-          "en": "This card will set the selected slider on the NEEO remote to a specific value."
+          "en": "This card will set the selected slider on the NEEO remote to a specific value.",
+          "nl": "Met deze kaart wordt de geselecteerde schuifregelaar op de NEEO-afstandsbediening ingesteld op een specifieke waarde."
         },
         "args": [
           {
@@ -450,10 +460,12 @@
       {
         "id": "inform_slider",
         "title": {
-          "en": "Inform slider state. (Percentage)"
+          "en": "Inform slider state. (Percentage)",
+          "nl": "Informeer de schuifregelaar. (Percentage)"
         },
         "hint": {
-          "en": "This card will inform the NEEO remote user interface of the given value in percentage for the selected slider."
+          "en": "This card informs the NEEO remote that the slider value has been changed so it can represent the current value. (in percentage)",
+          "nl": "Deze kaart informeert de NEEO-afstandsbediening dat de schuifregelaarwaarde is gewijzigd, zodat deze de huidige waarde kan vertegenwoordigen. (in percentage)"
         },
         "args": [
           {
@@ -485,10 +497,12 @@
       {
         "id": "inform_slider_value",
         "title": {
-          "en": "Inform slider state. (Value)"
+          "en": "Inform slider state. (Value)",
+          "nl": "Informeer de schuifregelaar. (Waarde)"
         },
         "hint": {
-          "en": "This card will inform the NEEO remote user interface of the new value for the selected slider"
+          "en": "This card informs the NEEO remote that the slider value has been changed to a specific value so it can represent the current value.",
+          "nl": "Deze kaart informeert de NEEO-afstandsbediening dat de schuifregelaarwaarde is gewijzigd in een specifieke waarde, zodat deze de huidige waarde kan weergeven."
         },
         "args": [
           {
@@ -514,10 +528,12 @@
       {
         "id": "inform_switch",
         "title": {
-          "en": "Update switch state."
+          "en": "Inform switch state.",
+          "nl": "Informeer de schakelaar."
         },
         "hint": {
-          "en": "This card will inform the NEEO remote user interface of the new value for the selected switch."
+          "en": "This card informs the NEEO remote that the switch has been changed to a specific state so it can represent the current value.",
+          "nl": "Deze kaart informeert de NEEO-afstandsbediening dat de schakelaar in een specifieke staat is veranderd, zodat deze de huidige waarde kan weergeven."
         },
         "args": [
           {
@@ -557,10 +573,12 @@
       {
         "id": "inform_textlabel",
         "title": {
-          "en": "Update textlabel or image state."
+          "en": "Inform textlabel or image state.",
+          "nl": "Informeer tekstlabel of afbeelding status."
         },
         "hint": {
-          "en": "This card will inform the NEEO brain that the selected textlabel or image has a new value. For images use either a image URL or a image tag."
+          "en": "This card informs the NEEO remote that the text or image has been changed so it can represent the current value. Use the URL or image tag for images.",
+          "nl": "Deze kaart informeert de NEEO-afstandsbediening dat de tekst of afbeelding is gewijzigd, zodat deze de huidige waarde kan weergeven. Gebruik de URL of afbeeldingstag voor afbeeldingen."
         },
         "args": [
           {
@@ -586,10 +604,12 @@
       {
         "id": "neeobrain_blinkLED",
         "title": {
-          "en": "Blink the brain LED."
+          "en": "Blink the brain LED.",
+          "nl": "Knipper de LED van de NEEO brain"
         },
         "hint": {
-          "en": "This card will blink the LED of the selected NEEO brain (every x time blinks for 2 seconds.)"
+          "en": "This card will blink the LED of the selected NEEO brain (every x time blinks for 2 seconds.)",
+          "nl": "Deze kaart zal de LED van de geselecteerde NEEO-brain laten knipperen (knippert gedurende 2 seconden elke x-tijd)."
         },
         "args": [
           {
@@ -611,10 +631,12 @@
       {
         "id": "neeoBrainUpdateFirmware",
         "title": {
-          "en": "Update Firmware of Brain."
+          "en": "Update Firmware of Brain.",
+          "nl": "NEEO Brain firmware bijwerken."
         },
         "hint": {
-          "en": "This card will upgrade the brain when a update is available"
+          "en": "This card will upgrade the brain when a update is available",
+          "nl": "Deze kaart zal de NEEO brain upgraden wanneer een update beschikbaar is"
         },
         "args": [
           {

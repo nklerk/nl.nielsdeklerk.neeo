@@ -65,9 +65,26 @@ When... flow cards:
 
 # Requirements
 
-- NEEO Firmware 0.51.x or newer installed.
+- NEEO Firmware 0.52.x or newer installed.
 
 # Changelog.
+
+## Version 0.52.5
+
+- Excluded homey virtual devices from cards that control NEEO to prevent infinate loops.
+- Updates for homey v2.0
+- Added migration text and button in settings to support the newer features. Open the settings and read carefully.
+- Added component rename feature. just tap the name of a component, change the text and tap the return button
+- Added versioning to virtual device drivers.
+- Added support for NEEO device driver updates when ading or renaming capabilities. (Removing capabilities is currently not (yet?) supported by NEEO)
+- Changed adapter naming (virtual devices) to be more in line with the NEEO SDK.
+- Changed capability naming, Now using UUID's for capabilitynames opposed to readable names. (makes more sense with the rename feature)
+- Changed Driver naming, Needed for future NEEO SDK support.
+- Changed Appstore logo(s).
+- Changed in app settings picture.
+- Code cleaning.
+- Fixed unhandled promise rejections.
+- Fixed an issue where virtual devices where allowed to have no name or manufacturer name. (Device then could not be found in the NEEO app.)
 
 ## Version 0.51.9
 

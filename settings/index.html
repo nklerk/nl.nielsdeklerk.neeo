@@ -3,7 +3,13 @@
 
 <head>
     <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
-    <script type="text/javascript" src="settings.js"></script>
+    <script type="text/javascript" src="settingsBrains.js"></script>
+    <script type="text/javascript" src="settingsDevices.js"></script>
+    <script type="text/javascript" src="settingsDeviceBuilder.js"></script>
+    <script type="text/javascript" src="settingsGlobal.js"></script>
+    <script type="text/javascript" src="settingsGui.js"></script>
+    <script type="text/javascript" src="settingsGuiView.js"></script>
+    <script type="text/javascript" src="settingsHomey.js"></script>
 </head>
 <style>
     body {
@@ -11,25 +17,41 @@
         font-family: Roboto, sans-serif;
     }
 
-    h1 {
-        color: #007AFF;
-        margin-bottom: 0;
-        font-size: 15px;
-        font-weight: 100;
-        text-transform: uppercase;
-        margin-left: 40px;
-        margin-bottom: 12px;
-    }
-
     .h1 {
-        color: #007AFF;
+        color: #6997ca;
         margin-bottom: 0;
         font-size: 15px;
         font-weight: 300;
         text-transform: uppercase;
-        margin-left: 40px;
-        margin-top: 80px;
+        margin-left: 5px;
+        margin-top: 40px;
         margin-bottom: 12px;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .h2 {
+        color: #6997ca;
+        margin-bottom: 0;
+        font-size: 11px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-top: 40px;
+        margin-bottom: 0px;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .h3 {
+        color: rgb(36, 45, 54);
+        margin-bottom: 0;
+        font-size: 8px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-left: 40px;
+        margin-top: -10px;
+        margin-bottom: 0px;
         border-bottom: 0;
         padding-bottom: 0;
     }
@@ -39,6 +61,14 @@
         width: 25px;
         position: absolute;
         left: 5px;
+        margin-top: 10px;
+    }
+
+    .ciconr {
+        height: 25px;
+        width: 25px;
+        position: absolute;
+        right: 5px;
         margin-top: 10px;
     }
 
@@ -68,17 +98,18 @@
     }
 
     .mi {
-        width: 100%;
-        font-family: Roboto, sans-serif;
-        font-size: 16px;
-        text-align: left;
-        padding-left: 40px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        border: 0px solid #fff;
-        background-color: #fff;
-        box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
-        height: 48px;
+        
+        font-family: Roboto, sans-serif !important;
+        font-size: 16px !important;
+        text-align: left !important;
+        padding-left: 40px !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        border: 0px solid #fff !important;
+        background-color: #fff !important;
+        box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1) !important;
+        height: 60px !important;
+        margin-right: 0px !important;
     }
 
     .mi:hover {
@@ -89,7 +120,11 @@
         display: inline-block;
         vertical-align: middle;
         line-height: normal;
+        width: 100%;
+    }
 
+    .mc {
+        width: fit-content;
     }
 
     .mitxt {
@@ -122,7 +157,7 @@
     }
 
     .deletedevice:hover {
-        color: #44f;
+        color: #6997ca;
         cursor: pointer;
         cursor: hand;
     }
@@ -133,38 +168,45 @@
     }
 
     .addCapability {
-        margin-left: 40px;
-        margin-top: 8px;
+        margin-left: 15px;
+        margin-top: 15px;
         color: #444;
+        height: 35px;
     }
 
     .saveCapability {
         color: #444;
         margin-bottom: 40px;
-        margin-right: 40px;
         float: left;
+        margin-top: 20px;
     }
 
     .cancelCapability {
         color: #444;
         margin-bottom: 40px;
-        float: left
+        float: right;
+        margin-right: 20px;
+        margin-top: 20px;
     }
 
     .jsontextarea {
         width: 100%;
         padding: 10px;
-        border: 0;
+        border: 1px;
+        border-color: #444;
         height: 200px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+        font-size: 8px;
+        padding: 1px;
     }
 
     .capview {
         display: none;
         margin-bottom: 80px;
         padding-left: 20px;
+        margin-top: 20px;
     }
 
     .bsh-xxx {
@@ -206,56 +248,96 @@
         left: 0px;
         position: absolute;
         font-size: 24px;
-        color: #037AFF;
+        color: #6997ca;
         margin-left: 20px;
         margin-right: 20px;
     }
+
+    @keyframes textSavedAnimation {
+        from {background: MediumSeaGreen;}
+        to {background: white;}
+    } 
+    @-webkit-keyframes textSavedAnimation {
+        from {background: MediumSeaGreen;}
+        to {background: white;}
+    }   
+
+    @keyframes textErrorAnimation {
+        from {background: rgb(228, 89, 89);}
+        to {background: rgb(255, 255, 255);}
+    } 
+    @-webkit-keyframes textErrorAnimation {
+        from {background: rgb(228, 89, 89);}
+        to {background: rgb(255, 255, 255);}
+    }   
+
+    @media screen and (-webkit-min-device-pixel-ratio:0) { 
+        select,
+        textarea,
+        input {
+            font-size: 16px;
+        }
+    }
+
 </style>
 
 <body>
+
+
+    <!--Adding a new virtual device-->
     <div id="AddDevice_view" class="dblock" style="display: none;">
         <div style="top: -1px;position: absolute;width: 100%;left: 0px;">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="AddDevice_clear()" style="width:49%; padding-left: 40px;">
-                    <span class="mt" style="color:#037AFF;">
-                        <i class="fa fa-remove faLeft"></i>Cancel</span>
+                <button class="mi" onclick="AddDevice_clear()" style="height: 48px !important;">
+                    <div class="mc">
+                        <span class="mt" style="color:#6997ca;">Cancel.</span>
+                    </div>
                 </button>
-                <button id="save_device_button" class="mi" onclick="AddDevice_save()" style="width:49%; text-align: right; padding-right: 40px;">Add
-                    <i class="fa fa-plus faRight"></i>
+                <hr class="subMenu" style="margin-bottom: 0;">
+                <button id="save_device_button" class="mi" onclick="AddDevice_save()" style="height: 48px !important;">
+                    <div class="mc">
+                        <span class="mt" style="color:#6997ca;"><i class="fa fa-plus faLeft" style="font-size: 20px;     margin-left: 10px;     color: #6997ca; "></i>Add.</span>
+                    </div>
                 </button>
-                <hr class="Menu" style="margin-bottom: 0;">
             </div>
             <br>
             <h1 class="h1">Add a new virtual device.</h1>
             <hr class="Menu" style="margin-bottom: 0;">
             <div style="background-color: #fff;margin: 0;">
                 <div class="mi">
-                    <span class="mt" style="height: 100%;"></span>
-                    Device type
-                    <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Type_change()">
+                    <div class="mc">
+                    <span class="mt"></span>
+                    Type:
+                    <select id="AddDevice_Type" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: fit-content;" onchange="AddDevice_Type_change()">
                     </select>
                 </div>
-                <div class="mi">
-                    <span class="mt" style="height: 100%;"></span>
-                    Device icon
-                    <select id="AddDevice_Icon" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: 100px;" onchange="AddDevice_Icon_change()">
-                    </select>
-                    <img class="cicon" id="AddDevice_Icon_Img" src="ico/ico_ACCESSOIRE.png" style="margin-top: 10px;">
                 </div>
                 <hr class="subMenu" style="margin-bottom: 0;">
                 <div class="mi">
-                    <span class="mt" style="height: 100%;"></span>
-                    Device name
-                    <input id="AddDevice_Name" type="text" placeholder="Television" value="" style="border: 0px; background-color: #fff; width: 100px;"
-                    />
+                    <div class="mc">
+                        <span class="mt"></span>
+                        Icon:
+                        <select id="AddDevice_Icon" placeholder="Make a selection" style="border: 0px; background-color: #fff; width: fit-content;" onchange="AddDevice_Icon_change()">
+                        </select>
+                        <img class="cicon" id="AddDevice_Icon_Img" src="ico/ico_ACCESSOIRE.png" style="margin-top: -3px;">
+                    </div>
                 </div>
                 <hr class="subMenu" style="margin-bottom: 0;">
                 <div class="mi">
-                    <span class="mt" style="height: 100%;"></span>
-                    Device Manufacturer
-                    <input id="AddDevice_Manufactorer" type="text" placeholder="Clony" value="" style="border: 0px; background-color: #fff; width: 100px;"
-                    />
+                    <div class="mc">
+                        <span class="mt"></span>
+                        Name:
+                        <input id="AddDevice_Name" type="text" placeholder="Television" value="" style="border: 0px; background-color: #fff; width: 130px; padding: 0px 0 0px 0;"/>
+                    </div>
+                </div>
+                <hr class="subMenu" style="margin-bottom: 0;">
+                <div class="mi">
+                    <div class="mc">                    
+                        <span class="mt"></span>
+                        Manufacturer:
+                        <input id="AddDevice_Manufactorer" type="text" placeholder="Clony" value="" style="border: 0px; background-color: #fff; width: 110px; padding: 0px 0 0px 0;"/>
+                    </div>
                 </div>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
@@ -263,32 +345,38 @@
     </div>
 
 
+
+    <!--display all virtual devices (DEFAULT VIEW)-->
     <div id="Devices_view" class="dblock" style="display: block;">
         <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('settings')">
-                    <span class="mt" style="color:#037AFF;">Configuration.</span>
+                <button class="mi" onclick="gui_view_selection('settings')" style="height: 48px !important; ">
+                    <span class="mt" style="color:#6997ca;">Configuration.</span>
                 </button>
                 <hr class="subMenu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('adddevice')">
+                <button class="mi" onclick="gui_view_selection('adddevice')" style="height: 48px !important; ">
+                        <i class="fa fa-plus faLeft" style="font-size: 24px;     margin-left: 10px;     color: #6997ca; "></i>
                     <span class="mt">Add a virtual device</span>
-                    <i class="fa fa-plus faRight" style="font-size: 24px;"></i>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
             <div id="Logo">
-                <img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 27%;">
+                <img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 70%;">
             </div>
             <div id="Devices"></div>
         </div>
     </div>
+
+
+
+    <!--display a specific virtual device-->
     <div id="Device_view" class="dblock" style="display: none;">
         <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('devices')" style="width:49%; padding-left: 40px;">
-                    <span class="mt" style="color:#037AFF;">
+                <button class="mi" onclick="gui_view_selection('devices')" style="width:49%; padding-left: 40px; height: 48px !important;">
+                    <span class="mt" style="color:#6997ca;">
                         </i>Back to device view.</span>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
@@ -297,18 +385,21 @@
         </div>
     </div>
 
+
+
+     <!--Display settings-->
     <div id="Settings_view" class="dblock" style="display: none;">
         <div style="top: -1px;position: absolute;width: 100%;left: 0px; ">
             <div class="field row" style="background-color: #fff;margin: 0;">
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="gui_view_selection('devices')">
-                    <span class="mt" style="color:#037AFF;">Back to device view.</span>
+                <button class="mi" onclick="gui_view_selection('devices')" style="height: 48px !important;">
+                    <span class="mt" style="color:#6997ca;">Back to device view.</span>
                 </button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>
             <h1 class="h1">NEEO Brains</h1>
             <div id="brains"></div>
-            <button class="mi" onclick="settings_btn_discoverbrains()">
+            <button class="mi" onclick="settings_btn_discoverbrains()" style="height: 48px !important;">
                 <i class="fa fa-refresh faRight" style="font-size: 24px;"></i>
                 <span class="mt">Discover...</span>
             </button>
@@ -316,14 +407,14 @@
             <hr class="Menu" style="margin-bottom: 0;">
 
             <h1 class="h1">JSON formated configuration file.</h1>
-            <div class="field row" style="background-color: #fff;margin: 0;">
+            <div class="field row" style="background-color: #fff;margin: 0;" style="height: 48px !important;">
                 <hr class="Menu" style="margin-bottom: 0;">
                 <textarea id="jsonconfig" class="jsontextarea"></textarea>
                 <hr class="Menu" style="margin-bottom: 0;">
-                <button class="mi" onclick="settings_btn_saveconfig()">
+                <button class="mi" onclick="settings_btn_saveconfig()" style="height: 48px !important;">
                     <i class="fa fa-save"></i> Save</button>
                 <hr class="subMenu" style="margin-bottom: 0;">
-                <button class="mi" onclick="settings_btn_download()">
+                <button class="mi" onclick="settings_btn_download()" style="height: 48px !important;">
                     <i class="fa fa-download"></i> Download backup.</button>
                 <hr class="Menu" style="margin-bottom: 0;">
             </div>

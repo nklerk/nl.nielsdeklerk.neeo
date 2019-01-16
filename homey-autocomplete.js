@@ -93,13 +93,15 @@ module.exports.roomDevices = function(query, args) {
       if (room.key === args.room.key) {
         for (const i in room.devices) {
           const device = room.devices[i];
-          const deviceQ = tools.stringCleanForMatch(device.name);
-          if (deviceQ.indexOf(query) !== -1) {
-            const item = {
-              name: device.name,
-              key: device.key
-            };
-            founddevices.push(item);
+          if (!(device.details && device.details.adapterName && device.details.adapterName.indexOf("homey") > -1)) {
+            const deviceQ = tools.stringCleanForMatch(device.name);
+            if (deviceQ.indexOf(query) !== -1) {
+              const item = {
+                name: device.name,
+                key: device.key
+              };
+              founddevices.push(item);
+            }
           }
         }
       }

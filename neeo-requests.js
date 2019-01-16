@@ -26,6 +26,18 @@ module.exports.db = function db(request) {
   return responseData;
 };
 
+module.exports.dbAdapterDefenition = function dbAdapterDefenition(adapterName) {
+  let responseData = {
+    code: 200,
+    Type: { "Content-Type": "application/json" },
+    content: ""
+  };
+  console.log(`[DATABASE]\tReceived Adapter Defenition request: ${adapterName}.`);
+  const founddevice = neeoDatabase.deviceByAdaptername(adapterName);
+  responseData.content = JSON.stringify(founddevice);
+  return responseData;
+};
+
 module.exports.device = function device(adapterName, deviceFunction, deviceParameter, brainIP) {
   let responseData = {
     code: 200,
@@ -79,8 +91,8 @@ module.exports.device = function device(adapterName, deviceFunction, deviceParam
     neeoBrain.downloadConfiguration();
   } else {
     console.log(``);
-    console.log(` !! Warning !! `);
-    console.log(` The folowing request isn't expected:`);
+    console.log(` !! WARNING, DEVICE OR CAPABILITY DOES NOT EXIST !!`);
+    console.log(` The folowing request from ${brainIP} isn't expected:`);
     console.log(` - adapterName:      ${adapterName}`);
     console.log(` - deviceFunction:   ${deviceFunction}`);
     console.log(` - deviceParameter:  ${deviceParameter}`);

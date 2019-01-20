@@ -164,7 +164,7 @@ function device_capgrp_from_devicetype(adapterName, type) {
   }
 }
 
-function newDevice(manufacturer, name, type, icon) {
+function newDevice(name, manufacturer, type, icon) {
   let _newdevice = {};
   _newdevice.id = Date.now() - 1512590738651;
   _newdevice.adapterName = `apt-homey${_newdevice.id}`;

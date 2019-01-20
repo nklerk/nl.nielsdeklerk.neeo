@@ -69,6 +69,10 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.52.7
+
+- Solved issue where manufacturer name and device name where swapped.
+
 ## Version 0.52.6
 
 - Represent NEEO logo collor.

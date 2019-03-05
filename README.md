@@ -69,6 +69,12 @@ When... flow cards:
 
 # Changelog.
 
+## Version 0.52.8
+
+- Fixed TV device issues, Reverted to Fixed initial namings. (Workaround for NEEO CP6 bug.)
+- Cleaned up code
+- Removed migration tool -> dynamic naming.
+
 ## Version 0.52.7
 
 - Solved issue where manufacturer name and device name where swapped.

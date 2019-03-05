@@ -13,7 +13,6 @@ function onHomeyReady(HomeyReady) {
 function readsettings() {
   readMyDevices();
   readMyBrains();
-  readSdkVersion();
 }
 
 function readMyDevices() {
@@ -45,20 +44,7 @@ function readMyBrains() {
   });
 }
 
-function readSdkVersion() {
-  Homey.get("sdkVersion", function(err, sdkVersion) {
-    if (sdkVersion !== "v1") {
-      gui_show_migration();
-    }
-  });
-}
-
 function setMyDevices(Settings_database) {
   Homey.set("myDevices", Settings_database);
   Homey.api("GET", "/register/");
-}
-
-function upgradeToSDKv1() {
-  Homey.api("GET", "/upgradeToSDKv1/");
-  document.getElementById("Logo").innerHTML = `<img src="img/combo.png" style="margin-top: 40px;display: block;margin-left: auto;margin-right: auto;width: 27%;">`;
 }

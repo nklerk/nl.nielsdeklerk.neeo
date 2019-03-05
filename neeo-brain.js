@@ -136,21 +136,11 @@ function unregisterAsDeviceDatabaseAll() {
 module.exports.unregisterAsDeviceDatabaseAll = unregisterAsDeviceDatabaseAll;
 
 function registerAsDeviceDatabase(neeoBrain) {
-  if (Homey.ManagerSettings.get("sdkVersion") == "v1") {
-    //Register as the new SDK adapter.
-    const content = {
-      name: `src-${homeyId}`,
-      baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
-    };
-    registerAsDeviceDatabaseApi(neeoBrain, content);
-  } else {
-    //Register as the old SDK adapter.
-    const content = {
-      name: `Homey_Devicedatabase_${tools.getLocalIp()}`,
-      baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
-    };
-    registerAsDeviceDatabaseApi(neeoBrain, content);
-  }
+  const content = {
+    name: `src-${homeyId}`,
+    baseUrl: `http://${tools.getLocalIp()}:${TCP_PORT}`
+  };
+  registerAsDeviceDatabaseApi(neeoBrain, content);
 }
 
 function registerAsDeviceDatabaseApi(neeoBrain, content) {
